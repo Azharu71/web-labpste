@@ -8,25 +8,25 @@ export const load: PageServerLoad = async ({ locals: { supabase }, parent }) => 
         throw error(403, 'Access denied. Asisten role required.');
     }
     try {
-        const { data: praktikum, error } = await supabase
-            .from('list-praktikum')
-            .select('id, nama_praktikum, nama_lab, semester')
+        const { data: nilaiPraktikum, error } = await supabase
+            .from('nilai-praktikum')
+            .select('*')
             .order('id', { ascending: true });
 
         if (error) {
-            console.error('Error fetching praktikum data:', error);
+            console.error('Error fetching nilai praktikum data:', error);
             return {
-                praktikum: []
+                nilaiPraktikum: []
             };
         }
 
         return {
-            praktikum: praktikum || []
+            nilaiPraktikum: nilaiPraktikum || []
         };
     } catch (error) {
-        console.error('Unexpected error fetching praktikum data:', error);
+        console.error('Unexpected error fetching nilai praktikum data:', error);
         return {
-            praktikum: []
+            nilaiPraktikum: []
         };
     }
 };

@@ -5,6 +5,9 @@ import type { Handle } from '@sveltejs/kit'
 import type { Session, User } from '@supabase/supabase-js'
 
 export const handle: Handle = async ({ event, resolve }) => {
+    // Flag to track if we're in a cookie-safe context
+    let cookiesCanBeSet = true;
+
     event.locals.supabase = createServerClient(PUBLIC_SUPABASE_URL, PUBLIC_SUPABASE_PUBLISHABLE_KEY, {
         cookies: {
             getAll: () => event.cookies.getAll(),
@@ -15,9 +18,17 @@ export const handle: Handle = async ({ event, resolve }) => {
              * will replicate previous/standard behaviour (https://kit.svelte.dev/docs/types#public-types-cookies)
              */
             setAll: (cookiesToSet) => {
-                cookiesToSet.forEach(({ name, value, options }) => {
-                    event.cookies.set(name, value, { ...options, path: '/' })
-                })
+                // Only set cookies if we're still in a safe context
+                if (cookiesCanBeSet) {
+                    cookiesToSet.forEach(({ name, value, options }) => {
+                        try {
+                            event.cookies.set(name, value, { ...options, path: '/' })
+                        } catch (error) {
+                            // Silently ignore cookie setting errors after response generation
+                            console.warn(`Failed to set cookie ${name}:`, error);
+                        }
+                    })
+                }
             },
         },
     })
@@ -51,9 +62,17 @@ export const handle: Handle = async ({ event, resolve }) => {
         return sessionPromise;
     }
 
-    return resolve(event, {
+    // Eagerly get session to trigger any necessary cookie operations before response
+    await event.locals.safeGetSession();
+
+    const response = await resolve(event, {
         filterSerializedResponseHeaders(name: string) {
             return name === 'content-range' || name === 'x-supabase-api-version'
         },
-    })
+    });
+
+    // Mark that cookies can no longer be safely set
+    cookiesCanBeSet = false;
+
+    return response;
 }

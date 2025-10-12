@@ -1,21 +1,47 @@
 <script lang="ts" module>
 	import LayoutDashboardIcon from '@lucide/svelte/icons/layout-dashboard';
 	import BriefcaseBusinessIcon from '@lucide/svelte/icons/briefcase-business';
+	import FileInputIcon from '@lucide/svelte/icons/file-input';
+	import NotebookPenIcon from '@lucide/svelte/icons/notebook-pen';
 	
-	const data = {
-		navMain: [
-			{
-				name: 'Dashboard',
-				url: '/dashboard',
-				icon: LayoutDashboardIcon
-			},
-			{
-				name: 'Praktikum',
-				url: '/dashboard/praktikum',
-				icon: BriefcaseBusinessIcon
-			},
-		]
-	};
+	const allNavItems = [
+		{
+			name: 'Dashboard',
+			url: '/dashboard',
+			icon: LayoutDashboardIcon,
+			roles: ['Asisten', 'Praktikan']
+		},
+		{
+			name: 'Praktikum',
+			url: '/dashboard/praktikum',
+			icon: BriefcaseBusinessIcon,
+			roles: ['Asisten']
+		},
+		{
+			name: 'Nilai Praktikum',
+			url: '/dashboard/nilai-praktikum',
+			icon: FileInputIcon,
+			roles: ['Asisten']
+		},
+		{
+			name: 'Transparansi Nilai',
+			url: '/dashboard/transparansi-nilai',
+			icon: NotebookPenIcon,
+			roles: ['Asisten', 'Praktikan']
+		},
+	];
+	
+	function getFilteredNav(userRole: string | null) {
+		if (!userRole) {
+			return [];
+		}
+		
+		const filtered = allNavItems.filter(item => 
+			item.roles.includes(userRole)
+		);
+		
+		return filtered;
+	}
 </script>
 
 <script lang="ts">
@@ -34,9 +60,12 @@
 		userData: {
 			nim: string | undefined | null;
 			email: string | undefined | null;
-			role: any;
+			role: string | null;
 		}
 	} & ComponentProps<typeof Sidebar.Root> = $props();
+
+	// Get filtered navigation based on user role
+	const filteredNavMain = $derived(getFilteredNav(userData.role));
 </script>
 
 <Sidebar.Root {collapsible} {...restProps}>
@@ -52,7 +81,7 @@
 		</Sidebar.MenuButton>
 	</Sidebar.Header>
 	<Sidebar.Content>
-		<NavMain navMain={data.navMain} />
+		<NavMain navMain={filteredNavMain} />
 	</Sidebar.Content>
 	<Sidebar.Footer>
 		<NavUser user={userData} />

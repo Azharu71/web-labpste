@@ -9,8 +9,6 @@
 		navMain: {
 			name: string;
 			url: string;
-			// This should be `Component` after @lucide/svelte updates types
-			// eslint-disable-next-line @typescript-eslint/no-explicit-any
 			icon: any;
 		}[];
 	} = $props();
@@ -22,7 +20,7 @@
 	<Sidebar.Menu>
 		{#each navMain as item (item.name)}
 			<Sidebar.MenuItem>
-				<Sidebar.MenuButton isActive={$page.url.pathname === item.url }>
+				<Sidebar.MenuButton isActive={$page.url.pathname === item.url}>
 					{#snippet child({ props })}
 						<a href={item.url} {...props}>
 							<item.icon />
