@@ -9,6 +9,8 @@
 	import UsersIcon from "@lucide/svelte/icons/users";
 	import BookOpenIcon from "@lucide/svelte/icons/book-open";
 	import AwardIcon from "@lucide/svelte/icons/award";
+
+	import IconWhite from "$lib/assets/icon-pste-white.png";
 </script>
 
 <div class="min-h-screen bg-gradient-to-br from-blue-50 via-white to-indigo-50">
@@ -18,11 +20,10 @@
 			<div class="flex items-center justify-between h-16">
 				<div class="flex items-center space-x-3">
 					<div class="p-2 bg-blue-600 rounded-lg">
-						<ZapIcon class="h-6 w-6 text-white" />
+						<img src={IconWhite} alt="Icon" class="w-6">
 					</div>
 					<div>
-						<h1 class="text-xl font-bold text-gray-900">Lab Teknik Elektro</h1>
-						<p class="text-xs text-gray-600">Sistem Praktikum</p>
+						<h1 class="text-xl font-bold text-gray-900">Lab. PSTE</h1>
 					</div>
 				</div>
 				<div class="flex items-center space-x-3">
@@ -39,12 +40,12 @@
 			<div class="text-center">
 				<Badge variant="secondary" class="mb-6">
 					<FlaskConicalIcon class="h-4 w-4 mr-2" />
-					Sistem Manajemen Praktikum
+					Manajemen Praktikum
 				</Badge>
 				<h1 class="text-4xl md:text-6xl font-bold text-gray-900 mb-6">
 					Laboratorium<br />
-					<span class="bg-gradient-to-r from-blue-600 to-indigo-600 bg-clip-text text-transparent">
-						Teknik Elektro
+					<span class="bg-gradient-to-r from-blue-600 to-indigo-600 bg-clip-text text-transparent text-5xl">
+						Program Studi Teknik Elektro
 					</span>
 				</h1>
 				<p class="text-xl text-gray-600 max-w-3xl mx-auto mb-8">
@@ -77,7 +78,7 @@
 		<div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
 			<div class="text-center mb-16">
 				<h2 class="text-3xl md:text-4xl font-bold text-gray-900 mb-4">
-					Fitur Unggulan Sistem
+					Fitur Unggulan
 				</h2>
 				<p class="text-lg text-gray-600 max-w-2xl mx-auto">
 					Dirancang khusus untuk memudahkan pengelolaan praktikum dan meningkatkan pengalaman belajar mahasiswa
@@ -192,22 +193,17 @@
 	<footer class="bg-gray-900 text-white py-12">
 		<div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
 			<div class="text-center">
-				<div class="flex items-center justify-center space-x-3 mb-4">
-					<div class="p-2 bg-blue-600 rounded-lg">
-						<ZapIcon class="h-6 w-6 text-white" />
-					</div>
+				<div class="flex items-center justify-center">
 					<div>
-						<h3 class="text-xl font-bold">Laboratorium Teknik Elektro</h3>
-						<p class="text-sm text-gray-400">Program Studi Teknik Elektro</p>
+						<h3 class="text-xl font-bold">Laboratorium Program Studi Teknik Elektro</h3>
 					</div>
 				</div>
-				<p class="text-gray-400 mb-4">
-					Sistem Manajemen Praktikum Digital untuk pembelajaran yang lebih efektif dan transparan
-				</p>
-				<div class="flex justify-center space-x-6 text-sm text-gray-400">
-					<span>© 2025 Lab Teknik Elektro</span>
-					<span>•</span>
-					<span>Sistem Manajemen Praktikum</span>
+				<div class="flex flex-col justify-center text-gray-400">
+					<div class="flex flex-col justify-center text-gray-400 mb-3">
+						<span>Fakultas Teknik</span>
+						<span>Universitas Sultan Ageng Tirtayasa</span>
+					</div>
+					<span class="text-sm">Copyright &copy; 2025 Lab. PSTE Untirta</span>
 				</div>
 			</div>
 		</div>

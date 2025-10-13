@@ -39,6 +39,7 @@
 				<div class="grid gap-3">
 					<Label for="email-{id}">Email</Label>
 					<Input id="email-{id}" name="email" type="email" placeholder="m@example.com" value={form?.email || ''} required />
+					<p class="text-muted-foreground text-sm">*Disarankan menggunakan email untirta!</p>
 				</div>
 				<div class="grid gap-3">
 					<Label for="password-{id}">Password</Label>
