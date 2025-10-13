@@ -37,7 +37,7 @@
 		</header>
 		<div class="flex flex-1 flex-col gap-4 p-4 pt-0">
 			<div class="flex flex-col gap-1">
-                <h2 class="text-2xl font-semibold tracking-tight">Daftar Nilai Praktikum</h2>
+                <h2 class="text-3xl font-bold tracking-tight">Daftar Nilai Praktikum</h2>
                 <p class="text-muted-foreground">
                     Daftar Keseluruhan Nilai Praktikum Laboratorium Program Studi Teknik Elektro
                 </p>
