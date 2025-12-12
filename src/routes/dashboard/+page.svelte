@@ -18,40 +18,8 @@
 	let { data }: { data: PageData } = $props();
 
 	const userData = data.userData;
-
-	const topStudents = [
-		{
-			rank: 1,
-			nim: '3332220001',
-			name: 'Muhammad Rizki Nugraha',
-			grade: 'A',
-			score: 95.5,
-			praktikum: 'Pengolahan Sinyal Digital'
-		},
-		{
-			rank: 2,
-			nim: '3332220002', 
-			name: 'Siti Nurhaliza Putri',
-			grade: 'A',
-			score: 94.2,
-			praktikum: 'Sistem Kendali'
-		},
-		{
-			rank: 3,
-			nim: '3332220003',
-			name: 'Ahmad Fadhil Rahman',
-			grade: 'A',
-			score: 93.8,
-			praktikum: 'Elektronika Daya'
-		}
-	];
-
-	const stats = {
-		totalAsisten: 28,
-		totalPraktikan: 500,
-		totalPraktikum: 8,
-		completionRate: 92
-	};
+	const stats = data.stats;
+	const bestPraktikan = data.bestPraktikan;
 </script>
 
 <Sidebar.Provider>
@@ -88,7 +56,7 @@
 			</div>
 
 			<!-- Stats Cards -->
-			<div class="grid gap-4 md:grid-cols-2 lg:grid-cols-4">
+			<div class="grid gap-4 md:grid-cols-1 lg:grid-cols-3">
 				<Card.Root>
 					<Card.Header class="flex flex-row items-center justify-between space-y-0 pb-2">
 						<Card.Title class="text-sm font-medium">Total Asisten</Card.Title>
@@ -121,106 +89,85 @@
 						<p class="text-xs text-muted-foreground">Mata kuliah praktikum</p>
 					</Card.Content>
 				</Card.Root>
-
-				<Card.Root>
-					<Card.Header class="flex flex-row items-center justify-between space-y-0 pb-2">
-						<Card.Title class="text-sm font-medium">Tingkat Kelulusan</Card.Title>
-						<TrophyIcon class="h-4 w-4 text-muted-foreground" />
-					</Card.Header>
-					<Card.Content>
-						<div class="text-2xl font-bold">{stats.completionRate}%</div>
-						<p class="text-xs text-muted-foreground">Rata-rata kelulusan</p>
-					</Card.Content>
-				</Card.Root>
 			</div>
 
-			<!-- Top 3 Students Section -->
+			<!-- Top Students Section -->
 			<Card.Root>
 				<Card.Header>
 					<div class="flex items-center gap-2">
 						<TrophyIcon class="h-6 w-6 text-yellow-500" />
 						<div>
-							<Card.Title class="text-xl">Top 3 Praktikan Terbaik</Card.Title>
+							<Card.Title class="text-xl">Praktikan Terbaik</Card.Title>
 							<Card.Description>
-								Praktikan dengan performa terbaik semester Ganjil 2025/2026
+								Praktikan dengan performa terbaik dari masing-masing praktikum semester Ganjil 2025/2026
 							</Card.Description>
 						</div>
 					</div>
 				</Card.Header>
 				<Card.Content>
 					<div class="grid gap-4 md:grid-cols-3">
-						{#each topStudents as student}
-							<div class="relative">
-								<!-- Rank Badge -->
-								<div class="absolute -top-2 -right-2 z-10">
-									{#if student.rank === 1}
-										<Badge class="bg-yellow-500 text-white hover:bg-yellow-600">
-											<TrophyIcon class="h-3 w-3 mr-1" />
-											#{student.rank}
-										</Badge>
-									{:else if student.rank === 2}
-										<Badge class="bg-gray-400 text-white hover:bg-gray-500">
-											<MedalIcon class="h-3 w-3 mr-1" />
-											#{student.rank}
-										</Badge>
-									{:else}
-										<Badge class="bg-amber-600 text-white hover:bg-amber-700">
-											<MedalIcon class="h-3 w-3 mr-1" />
-											#{student.rank}
-										</Badge>
-									{/if}
-								</div>
-
-								<!-- Student Card -->
-								<Card.Root class={`transition-all hover:shadow-lg ${
-									student.rank === 1 ? 'ring-2 ring-yellow-500/20 bg-gradient-to-br from-yellow-50 to-white' :
-									student.rank === 2 ? 'ring-2 ring-gray-400/20 bg-gradient-to-br from-gray-50 to-white' :
-									'ring-2 ring-amber-600/20 bg-gradient-to-br from-amber-50 to-white'
+					{#each bestPraktikan as praktikan, index}
+						<div class="relative">
+							<!-- Badge -->
+							<div class="absolute -top-2 -right-2 z-10">
+								<Badge class={`text-white ${
+									index === 0 ? 'bg-yellow-500 hover:bg-yellow-600' :
+									index === 1 ? 'bg-blue-500 hover:bg-blue-600' :
+									index === 2 ? 'bg-green-500 hover:bg-green-600' :
+									index === 3 ? 'bg-purple-500 hover:bg-purple-600' :
+									index === 4 ? 'bg-pink-500 hover:bg-pink-600' :
+									'bg-orange-500 hover:bg-orange-600'
 								}`}>
-									<Card.Content class="pt-6">
-										<div class="flex flex-col items-center text-center space-y-4">
-											<!-- Avatar -->
-											<Avatar.Root class="h-16 w-16">
-												<Avatar.Fallback class={`text-lg font-bold ${
-													student.rank === 1 ? 'bg-yellow-500 text-white' :
-													student.rank === 2 ? 'bg-gray-400 text-white' :
-													'bg-amber-600 text-white'
-												}`}>
-													{student.name.split(' ').map(n => n[0]).join('').substring(0, 2)}
-												</Avatar.Fallback>
-											</Avatar.Root>
+									<MedalIcon class="h-5 w-5" />
+								</Badge>
+							</div>
 
-											<!-- Student Info -->
+							<!-- praktikan Card -->
+							<Card.Root class={`transition-all hover:shadow-lg ${
+								index === 0 ? 'ring-2 ring-yellow-500/30 bg-gradient-to-br from-yellow-50 to-white' :
+								index === 1 ? 'ring-2 ring-blue-500/30 bg-gradient-to-br from-blue-50 to-white' :
+								index === 2 ? 'ring-2 ring-green-500/30 bg-gradient-to-br from-green-50 to-white' :
+								index === 3 ? 'ring-2 ring-purple-500/30 bg-gradient-to-br from-purple-50 to-white' :
+								index === 4 ? 'ring-2 ring-pink-500/30 bg-gradient-to-br from-pink-50 to-white' :
+								'ring-2 ring-orange-500/30 bg-gradient-to-br from-orange-50 to-white'
+							}`}>
+								<Card.Content class="pt-6">
+									<div class="flex flex-col items-center text-center space-y-4">
+										<!-- Avatar -->
+										<Avatar.Root class="h-16 w-16">
+											<Avatar.Fallback class={`text-lg font-bold text-white ${
+												index === 0 ? 'bg-yellow-500' :
+												index === 1 ? 'bg-blue-500' :
+												index === 2 ? 'bg-green-500' :
+												index === 3 ? 'bg-purple-500' :
+												index === 4 ? 'bg-pink-500' :
+												'bg-orange-500'
+											}`}>
+												{praktikan.name.split(' ').map(n => n[0]).join('').substring(0, 2)}
+											</Avatar.Fallback>
+										</Avatar.Root>
+
+										<!-- praktikan Info -->
 											<div class="space-y-2">
 												<h3 class="font-semibold text-sm leading-tight">
-													{student.name}
+													{praktikan.name}
 												</h3>
 												<p class="text-xs text-muted-foreground">
-													{student.nim}
+													{praktikan.nim}
 												</p>
 											</div>
 
-											<!-- Score and Grade -->
-											<div class="flex flex-col items-center space-y-2">
-												<div class="text-2xl font-bold text-primary">
-													{student.score}
-												</div>
-												<Badge variant="secondary" class="text-xs">
-													Grade {student.grade}
-												</Badge>
-											</div>
-
-											<!-- Subject -->
-											<div class="text-center">
-												<p class="text-xs text-muted-foreground">
-													{student.praktikum}
-												</p>
-											</div>
+										<!-- Subject -->
+										<div class="text-center">
+											<p class="text-xs text-muted-foreground">
+												{praktikan.praktikum}
+											</p>
 										</div>
-									</Card.Content>
-								</Card.Root>
-							</div>
-						{/each}
+									</div>
+								</Card.Content>
+							</Card.Root>
+						</div>
+					{/each}
 					</div>
 				</Card.Content>
 			</Card.Root>

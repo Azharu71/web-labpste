@@ -18,14 +18,14 @@
 	<nav class="bg-white/80 backdrop-blur-md border-b border-gray-200 sticky top-0 z-50">
 		<div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
 			<div class="flex items-center justify-between h-16">
-				<div class="flex items-center space-x-3">
+				<a href="/" class="flex items-center space-x-3">
 					<div class="p-2 bg-blue-600 rounded-lg">
 						<img src={IconWhite} alt="Icon" class="w-6">
 					</div>
 					<div>
 						<h1 class="text-xl font-bold text-gray-900">Lab. PSTE</h1>
 					</div>
-				</div>
+				</a>
 				<div class="flex items-center space-x-3">
 					<Button variant="ghost" href="/auth/login">Masuk</Button>
 					<Button href="/auth/register">Daftar</Button>

@@ -123,26 +123,6 @@
 				return { color: 'text-gray-600', bgColor: 'bg-gray-100', variant: 'secondary' as const };
 		}
 	}
-
-	// Helper function to calculate average score
-	function calculateAverage(scoreData: PraktikumScore) {
-		const scores = [scoreData.sosialisasi, scoreData.responsi, scoreData.absolut].filter(
-			(score) => score !== null
-		) as number[];
-
-		if (scores.length === 0) return null;
-		return (scores.reduce((sum, score) => sum + score, 0) / scores.length).toFixed(2);
-	}
-
-	// Helper function to count completed units
-	function getCompletedUnits(scoreData: PraktikumScore) {
-		let completed = 0;
-		for (let i = 1; i <= 8; i++) {
-			const unitScores = getUnitScores(scoreData, i);
-			if (unitScores.hasData) completed++;
-		}
-		return completed;
-	}
 </script>
 
 <Sidebar.Provider>
@@ -202,29 +182,12 @@
 
 					<!-- Quick Stats -->
 					{#if praktikumScores.length > 0}
-						<div class="flex-1 grid grid-cols-2 sm:grid-cols-3 gap-4 sm:ml-auto">
+						<div class="flex-1 flex justify-center sm:justify-end sm:ml-auto">
 							<div class="text-center">
 								<div class="text-2xl font-bold text-primary">
 									{praktikumScores.length}
 								</div>
 								<p class="text-xs text-muted-foreground">Praktikum Diambil</p>
-							</div>
-							<div class="text-center">
-								<div class="text-2xl font-bold text-green-600">
-									{praktikumScores.filter((score) => score.grade === 'A' || score.grade === 'A-' || score.grade === 'B+' || score.grade === 'B' || score.grade === 'B-')
-										.length}
-								</div>
-								<p class="text-xs text-muted-foreground">Grade A/B</p>
-							</div>
-							<div class="text-center col-span-2 sm:col-span-1">
-								<div class="text-2xl font-bold text-blue-600">
-									{Math.round(
-										(praktikumScores.reduce((sum, score) => sum + getCompletedUnits(score), 0) /
-											(praktikumScores.length * 8)) *
-											100
-									)}%
-								</div>
-								<p class="text-xs text-muted-foreground">Progress Unit</p>
 							</div>
 						</div>
 					{/if}
@@ -243,8 +206,6 @@
 
 					<Accordion.Root type="single" class="space-y-4">
 						{#each praktikumScores as scoreData, index}
-							{@const completedUnits = getCompletedUnits(scoreData)}
-							{@const averageScore = calculateAverage(scoreData)}
 							{@const gradeStyle = getGradeStyle(scoreData.grade)}
 
 							<Card.Root class="overflow-hidden transition-all hover:shadow-md">
@@ -274,56 +235,16 @@
 														Grade {scoreData.grade}
 													</Badge>
 												{/if}
-												{#if averageScore}
+												{#if scoreData.absolut}
 													<div class="text-right">
-														<div class="text-lg font-bold text-primary">{averageScore}</div>
-														<div class="text-xs text-muted-foreground">Rata-rata</div>
+														<div class="text-lg font-bold text-primary">{scoreData.absolut?.toFixed(2) || '-'}</div>
+														<div class="text-xs text-muted-foreground">Absolut</div>
 													</div>
 												{/if}
-												<div class="text-right">
-													<div class="text-sm font-semibold">{completedUnits}/8</div>
-													<div class="text-xs text-muted-foreground">Unit</div>
-												</div>
 											</div>
 										</div>
 									</Accordion.Trigger>
 									<Accordion.Content class="px-6 pb-6">
-										<!-- Progress Overview -->
-										<div class="mb-6 p-4 bg-muted/20 rounded-lg">
-											<div class="grid grid-cols-2 md:grid-cols-4 gap-4">
-												<div class="text-center">
-													<div class="text-2xl font-bold text-primary">{completedUnits}</div>
-													<div class="text-sm text-muted-foreground">Unit Selesai</div>
-												</div>
-												{#if averageScore}
-													<div class="text-center">
-														<div class="text-2xl font-bold text-primary">{averageScore}</div>
-														<div class="text-sm text-muted-foreground">Rata-rata</div>
-													</div>
-												{/if}
-												{#if scoreData.grade}
-													<div class="text-center">
-														<Badge
-															class={gradeStyle.bgColor +
-																' ' +
-																gradeStyle.color +
-																' text-lg px-3 py-1'}
-															variant={gradeStyle.variant}
-														>
-															{scoreData.grade}
-														</Badge>
-														<div class="text-sm text-muted-foreground mt-1">Grade</div>
-													</div>
-												{/if}
-												<div class="text-center">
-													<div class="text-2xl font-bold text-primary">
-														{Math.round((completedUnits / 8) * 100)}%
-													</div>
-													<div class="text-sm text-muted-foreground">Progress</div>
-												</div>
-											</div>
-										</div>
-
 										<!-- Overall Scores -->
 										<div class="grid gap-4 md:grid-cols-2 lg:grid-cols-4 mb-6">
 											<Card.Root class="transition-all hover:shadow-sm">
