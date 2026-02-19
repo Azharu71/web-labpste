@@ -1,45 +1,53 @@
 import { fail, redirect } from '@sveltejs/kit';
 import type { Actions } from './$types';
+import { registerSchema } from '$lib/schemas/auth';
 
 export const actions: Actions = {
-    default: async ({ request, locals }) => {
-        const supabase = locals.supabase;
-        const data = await request.formData();
+	default: async ({ request, locals }) => {
+		const supabase = locals.supabase;
+		const data = await request.formData();
 
-        const nim = data.get('nim')?.toString();
-        const email = data.get('email')?.toString();
-        const password = data.get('password')?.toString();
-        const confirmPassword = data.get('confirmPassword')?.toString();
+		const nim = data.get('nim')?.toString();
+		const email = data.get('email')?.toString();
+		const password = data.get('password')?.toString();
+		const confirmPassword = data.get('confirmPassword')?.toString();
 
-        const returnData = { nim, email };
+		const returnData = { nim, email };
 
-        if (!nim || !email || !password || !confirmPassword) {
-            return fail(400, { ...returnData, error: 'Semua field wajib diisi.' });
-        }
+		const { error: validationError } = registerSchema.validate({ nim, email, password, confirmPassword });
 
-        if (password !== confirmPassword) {
-            return fail(400, { ...returnData, error: 'Password dan konfirmasi password tidak cocok.' });
-        }
+		if (validationError) {
+			return fail(400, { ...returnData, error: validationError.details[0].message });
+		}
 
-        const nimRegex = /^\d{10}$/;
-        if (!nimRegex.test(nim)) {
-            return fail(400, { ...returnData, error: 'NIM harus berupa 10 digit angka.' });
-        }
+		// 1. Register ke Supabase Auth (auth.users)
+		const { data: authData, error: authError } = await supabase.auth.signUp({
+			email: email!,
+			password: password!
+		});
 
-        const { error } = await supabase.auth.signUp({
-            email,
-            password,
-            options: {
-                data: {
-                    nim
-                }
-            }
-        });
+		if (authError) {
+			return fail(400, { ...returnData, error: authError.message });
+		}
 
-        if (error) {
-            return fail(400, { ...returnData, error: error.message });
-        }
+		// 2. Insert ke tabel profiles (public.profiles)
+		if (authData.user) {
+			const { error: profileError } = await supabase.from('profiles').insert({
+				id: authData.user.id, // Relasi ke auth.users
+				nim: nim!,
+				role_id: 1 // Default role: Praktikan (sesuai konteks dashboard)
+			});
+			if (profileError) {
+				return fail(400, {
+					...returnData,
+					error: 'Gagal menyimpan data profil: ' + profileError.message
+				});
+			}
+		}
 
-        throw redirect(303, '/auth/login');
-    }
+		// Logout user agar session dibersihkan dan tidak di-redirect otomatis ke dashboard oleh layout
+		await supabase.auth.signOut();
+
+		throw redirect(303, '/auth/login?registered=true');
+	}
 };

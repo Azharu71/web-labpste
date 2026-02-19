@@ -1,35 +1,37 @@
 import { fail, redirect } from '@sveltejs/kit';
 import type { Actions } from './$types';
+import { loginSchema } from '$lib/schemas/auth';
 
 export const actions: Actions = {
-    default: async ({ request, locals }) => {
-        const supabase = locals.supabase;
-        const formData = await request.formData();
+	default: async ({ request, locals }) => {
+		const supabase = locals.supabase;
+		const formData = await request.formData();
 
-        const email = formData.get('email')?.toString();
-        const password = formData.get('password')?.toString();
+		const email = formData.get('email')?.toString();
+		const password = formData.get('password')?.toString();
 
-        // Validasi dasar
-        if (!email || !password) {
-            return fail(400, {
-                error: 'Email dan password tidak boleh kosong.',
-            });
-        }
+		const { error: validationError } = loginSchema.validate({ email, password });
 
-        // Proses login menggunakan Supabase
-        const { error } = await supabase.auth.signInWithPassword({
-            email,
-            password
-        });
 
-        // Jika terjadi error (misal: password salah)
-        if (error) {
-            return fail(400, {
-                error: 'Email atau password salah. Silakan coba lagi.',
-            });
-        }
+		if (validationError) {
+			return fail(400, { email, error: validationError.details[0].message });
+		}
 
-        // Jika berhasil, redirect ke halaman dashboard
-        throw redirect(303, '/dashboard');
-    }
+		// Proses login menggunakan Supabase
+		const { error } = await supabase.auth.signInWithPassword({
+			email: email!,
+			password: password!
+		});
+
+		// Jika terjadi error (misal: password salah)
+		if (error) {
+			return fail(400, {
+				email,
+				error: error.message
+			});
+		}
+
+		// Jika berhasil, redirect ke halaman dashboard
+		throw redirect(303, '/dashboard');
+	}
 };

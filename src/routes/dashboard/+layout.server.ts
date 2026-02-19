@@ -2,65 +2,55 @@ import { redirect } from '@sveltejs/kit';
 import type { LayoutServerLoad } from './$types';
 import { getCachedProfile, setCachedProfile, cleanupExpiredCache } from '$lib/profile-cache';
 
-export const load: LayoutServerLoad = async ({ locals: { supabase, safeGetSession }, setHeaders }) => {
-    // Get user session
-    const { session } = await safeGetSession();
+export const load: LayoutServerLoad = async ({
+	locals: { supabase, safeGetSession },
+	setHeaders
+}) => {
+	// Get user session
+	const { session, user } = await safeGetSession();
 
-    // Redirect if no session
-    if (!session) {
-        throw redirect(303, '/auth/login');
-    }
+	// Redirect if no session
+	if (!session || !user) {
+		throw redirect(303, '/auth/login');
+	}
 
-    // Set cache headers to prevent unnecessary requests
-    setHeaders({
-        'Cache-Control': 'private, max-age=300, stale-while-revalidate=60',
-        'Vary': 'Cookie'
-    });
+	// Set cache headers to prevent unnecessary requests
+	setHeaders({
+		'Cache-Control': 'private, max-age=300, stale-while-revalidate=60',
+		Vary: 'Cookie'
+	});
 
-    const userId = session.user.id;
+	const userId = user.id;
 
-    // Try to get cached profile data
-    let userData = getCachedProfile(userId);
+	// Try to get cached profile data
+	const cachedData = getCachedProfile(userId);
+	if (cachedData) return { userData: cachedData };
 
-    if (userData) {
-        return { userData };
-    }
+	const { data: profile } = await supabase
+		.from('profiles')
+		.select('nim, roles ( name )')
+		.eq('id', userId)
+		.single();
 
-    let profile = null;
-    try {
-        const { data: profileData } = await supabase
-            .from('profiles')
-            .select(`nim, roles ( name )`)
-            .eq('id', userId)
-            .single();
-        profile = profileData;
-    } catch (error) {
-        console.error('❌ Error fetching profile:', error);
-    }
+	// Extract role name safely (handling array or object response)
+	const roleData = profile?.roles;
+	// eslint-disable-next-line @typescript-eslint/no-explicit-any
+	const roleName = Array.isArray(roleData) ? roleData[0]?.name : (roleData as any)?.name;
 
-    // Create clean user data object
-    let roleName: string | null = null;
-    if (profile?.roles) {
-        if (Array.isArray(profile.roles)) {
-            roleName = profile.roles[0]?.name || null;
-        } else {
-            roleName = (profile.roles as { name: string }).name || null;
-        }
-    }
+	const userData = {
+		nim: user.user_metadata?.nim || profile?.nim || null,
+		email: user.email || null,
+		role: roleName || null
+	};
 
-    userData = {
-        nim: session.user.user_metadata?.nim || profile?.nim || null,
-        email: session.user.email || null,
-        role: roleName
-    };
+	// Cache the result
+	setCachedProfile(userId, userData);
 
-    // Cache the result
-    setCachedProfile(userId, userData);
+	// Clean up expired cache entries periodically
+	if (Math.random() < 0.1) {
+		// 10% chance to cleanup
+		cleanupExpiredCache();
+	}
 
-    // Clean up expired cache entries periodically
-    if (Math.random() < 0.1) { // 10% chance to cleanup
-        cleanupExpiredCache();
-    }
-
-    return { userData };
+	return { userData };
 };

@@ -3,8 +3,8 @@
 	import { Button } from '$lib/components/ui/button';
 	import * as DropdownMenu from '$lib/components/ui/dropdown-menu';
 
-    import CopyIcon from '@lucide/svelte/icons/copy';
-    import TrashIcon from '@lucide/svelte/icons/trash-2';
+	import CopyIcon from '@lucide/svelte/icons/copy';
+	import TrashIcon from '@lucide/svelte/icons/trash-2';
 
 	let { id }: { id: string } = $props();
 </script>
@@ -22,7 +22,10 @@
 		<DropdownMenu.Group>
 			<DropdownMenu.Label>Actions</DropdownMenu.Label>
 			<DropdownMenu.Item onclick={() => navigator.clipboard.writeText(id)}>
-				<CopyIcon/> Copy id
+				<CopyIcon /> Copy id
+			</DropdownMenu.Item>
+			<DropdownMenu.Item onclick={() => navigator.clipboard.writeText(id)}>
+				<TrashIcon /> Delete
 			</DropdownMenu.Item>
 		</DropdownMenu.Group>
 	</DropdownMenu.Content>

@@ -1,9 +1,10 @@
 <script lang="ts" module>
 	import LayoutDashboardIcon from '@lucide/svelte/icons/layout-dashboard';
 	import BriefcaseBusinessIcon from '@lucide/svelte/icons/briefcase-business';
-	import FileInputIcon from '@lucide/svelte/icons/file-input';
+	import TablePropertiesIcon from '@lucide/svelte/icons/table-properties';
 	import NotebookPenIcon from '@lucide/svelte/icons/notebook-pen';
-	
+	import UsersRoundIcon from '@lucide/svelte/icons/users-round';
+
 	const allNavItems = [
 		{
 			name: 'Dashboard',
@@ -18,28 +19,38 @@
 			roles: ['Asisten']
 		},
 		{
-			name: 'Nilai Praktikum',
-			url: '/dashboard/nilai-praktikum',
-			icon: FileInputIcon,
-			roles: ['Asisten']
-		},
-		{
-			name: 'Transparansi Nilai',
-			url: '/dashboard/transparansi-nilai',
+			name: 'Daftar ulang ',
+			url: '/dashboard/pendaftaran-praktikum',
 			icon: NotebookPenIcon,
 			roles: ['Asisten', 'Praktikan']
 		},
+		{
+			name: 'Daftar praktikan',
+			url: '/dashboard/daftar-praktikan',
+			icon: TablePropertiesIcon,
+			roles: ['Asisten']
+		},
+		{
+			name: 'Kelompok praktikum',
+			url: '/dashboard/kelompok-praktikum',
+			icon: UsersRoundIcon,
+			roles: ['Asisten', 'Praktikan']
+		}
+		// {
+		// 	name: 'Transparansi Nilai',
+		// 	url: '/dashboard/transparansi-nilai',
+		// 	icon: NotebookPenIcon,
+		// 	roles: ['Asisten', 'Praktikan']
+		// }
 	];
-	
+
 	function getFilteredNav(userRole: string | null) {
 		if (!userRole) {
 			return [];
 		}
-		
-		const filtered = allNavItems.filter(item => 
-			item.roles.includes(userRole)
-		);
-		
+
+		const filtered = allNavItems.filter((item) => item.roles.includes(userRole));
+
 		return filtered;
 	}
 </script>
@@ -49,19 +60,19 @@
 	import NavUser from './nav-user.svelte';
 	import * as Sidebar from '$lib/components/ui/sidebar';
 	import type { ComponentProps } from 'svelte';
-	import icon from '$lib/assets/icon-pste.png';
+	import icon from '$lib/assets/icon-pste.webp';
 
-    let { 
+	let {
 		userData,
 		ref = $bindable(null),
 		collapsible = 'icon',
 		...restProps
-	}: { 
+	}: {
 		userData: {
 			nim: string | undefined | null;
 			email: string | undefined | null;
 			role: string | null;
-		}
+		};
 	} & ComponentProps<typeof Sidebar.Root> = $props();
 
 	// Get filtered navigation based on user role
@@ -76,7 +87,7 @@
 			</div>
 			<div class="grid flex-1 text-left text-sm leading-tight">
 				<span class="truncate font-medium"> Lab. PSTE Untirta </span>
-				<span class="truncate text-xs">Ganjil 2025/2026</span>
+				<span class="truncate text-xs">Genap 2026/2027</span>
 			</div>
 		</Sidebar.MenuButton>
 	</Sidebar.Header>

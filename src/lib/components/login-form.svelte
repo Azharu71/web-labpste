@@ -1,11 +1,12 @@
 <script lang="ts">
-	import logo from '$lib/assets/logo-pste.png';
+	import logo from '$lib/assets/logo-pste.webp';
 	import type { HTMLAttributes } from 'svelte/elements';
 	import { Label } from '$lib/components/ui/label';
 	import { Input } from '$lib/components/ui/input';
 	import { Button } from '$lib/components/ui/button';
 	import { cn, type WithElementRef } from '$lib/utils';
 
+	let showPassword = $state(false);
 	let {
 		ref = $bindable(null),
 		class: className,
@@ -19,7 +20,7 @@
 	<form method="POST">
 		<div class="flex flex-col gap-6">
 			<div class="flex flex-col items-center gap-2">
-				<a href="##" class="flex flex-col items-center gap-2 font-medium">
+				<a href="/" class="flex flex-col items-center gap-2 font-medium">
 					<div class="flex items-center justify-center rounded-md">
 						<img src={logo} alt="Laboratorium PSTE" class="w-32" />
 					</div>
@@ -36,14 +37,33 @@
 					<Input name="email" id="email-{id}" type="email" placeholder="m@example.com" required />
 				</div>
 				<div class="grid gap-3">
-					<Label for="password-{id}">Password</Label>
+					<!-- <div class="flex items-center justify-between">
+						<Label for="password-{id}">Password</Label>
+						<a
+							href="/auth/password_update"
+							class="text-sm text-muted-foreground underline-offset-4 hover:underline"
+						>
+							Forgot your password?
+						</a>
+					</div> -->
 					<Input
 						name="password"
 						id="password-{id}"
-						type="password"
+						type={showPassword ? 'text' : 'password'}
 						placeholder="Enter your password"
 						required
 					/>
+					<div class="flex items-center gap-2">
+						<input
+							type="checkbox"
+							id="show-password-{id}"
+							bind:checked={showPassword}
+							class="h-4 w-6"
+						/>
+						<Label for="show-password-{id}" class="text-sm font-normal text-muted-foreground"
+							>Show password</Label
+						>
+					</div>
 				</div>
 				<Button type="submit" class="w-full">Login</Button>
 			</div>
@@ -55,6 +75,6 @@
 	<div
 		class="text-muted-foreground *:[a]:hover:text-primary *:[a]:underline *:[a]:underline-offset-4 text-balance text-center text-xs"
 	>
-		Copyright &copy; 2025 Lab. PSTE Untirta
+		Copyright &copy; 2026 Lab. PSTE Untirta
 	</div>
 </div>

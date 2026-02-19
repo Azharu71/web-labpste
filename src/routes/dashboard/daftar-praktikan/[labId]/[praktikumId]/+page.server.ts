@@ -1,0 +1,57 @@
+import { error } from '@sveltejs/kit';
+import type { PageServerLoad } from './$types';
+
+const labNameMap: Record<string, string> = {
+	lab_dasel: 'Laboratorium Dasar Elektro',
+	lab_tenaga: 'Laboratorium Tenaga',
+	lab_kendali: 'Laboratorium Kendali',
+	lab_telkom: 'Laboratorium Telekomunikasi',
+	lab_kom: 'Laboratorium Komputer'
+};
+
+export const load: PageServerLoad = async ({ params, url, locals: { supabase } }) => {
+	const { labId, praktikumId } = params;
+    const labName = labNameMap[labId];
+    if (!labName) {
+		throw error(404, 'Laboratorium tidak ditemukan');
+	}
+
+	try {
+        // Fetch practicum details
+        const { data: praktikumData, error: praktikumError } = await supabase
+            .from('list_praktikum')
+            .select('nama_praktikum')
+            .eq('id', praktikumId)
+            .single();
+
+        if (praktikumError) {
+             console.error('Error fetching praktikum details:', praktikumError);
+             throw error(404, 'Praktikum tidak ditemukan');
+        }
+
+		// Fetch interns
+		let query = supabase
+			.from('daftar_praktikan')
+			.select('*, jadwal_kosong(*)') // join with jadwal_kosong
+			.eq('praktikum_id', praktikumId)
+            .order('created_at', { ascending: false }); // Default server sort, client handles interaction
+
+		const { data: interns, error: dbError } = await query;
+
+		if (dbError) {
+			console.error('Error fetching interns:', dbError);
+			return { labId, labName, praktikumId, praktikumName: praktikumData?.nama_praktikum, interns: [] };
+		}
+
+		return {
+			labId,
+            labName,
+			praktikumId,
+            praktikumName: praktikumData?.nama_praktikum,
+			interns: interns || []
+		};
+	} catch (err) {
+		console.error('Unexpected error:', err);
+		return { labId, labName, praktikumId, praktikumName: '', interns: [] };
+	}
+};

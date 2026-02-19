@@ -8,7 +8,7 @@
 	import * as Card from '$lib/components/ui/card';
 	import * as Avatar from '$lib/components/ui/avatar';
 	import { Badge } from '$lib/components/ui/badge';
-	
+
 	import TrophyIcon from '@lucide/svelte/icons/trophy';
 	import MedalIcon from '@lucide/svelte/icons/medal';
 	import UsersIcon from '@lucide/svelte/icons/users';
@@ -19,7 +19,6 @@
 
 	const userData = data.userData;
 	const stats = data.stats;
-	const bestPraktikan = data.bestPraktikan;
 </script>
 
 <Sidebar.Provider>
@@ -37,9 +36,6 @@
 							<Breadcrumb.Link href="/dashboard">Dashboard</Breadcrumb.Link>
 						</Breadcrumb.Item>
 						<Breadcrumb.Separator class="hidden md:block" />
-						<Breadcrumb.Item>
-							<Breadcrumb.Page>Home</Breadcrumb.Page>
-						</Breadcrumb.Item>
 					</Breadcrumb.List>
 				</Breadcrumb.Root>
 			</div>
@@ -51,7 +47,7 @@
 					Selamat Datang, {userData.role === 'Asisten' ? 'Asisten' : 'Praktikan'}!
 				</h1>
 				<p class="text-muted-foreground">
-					Dashboard Laboratorium Program Studi Teknik Elektro - Semester Ganjil 2025/2026
+					Dashboard Laboratorium Program Studi Teknik Elektro - Semester Genap 2026/2027
 				</p>
 			</div>
 
@@ -81,7 +77,7 @@
 
 				<Card.Root>
 					<Card.Header class="flex flex-row items-center justify-between space-y-0 pb-2">
-						<Card.Title class="text-sm font-medium">Total Praktikum</Card.Title>
+						<Card.Title class="text-sm font-medium">Total Praktikum Semester Genap</Card.Title>
 						<BookOpenIcon class="h-4 w-4 text-muted-foreground" />
 					</Card.Header>
 					<Card.Content>
@@ -92,88 +88,9 @@
 			</div>
 
 			<!-- Top Students Section -->
-			<Card.Root>
-				<Card.Header>
-					<div class="flex items-center gap-2">
-						<TrophyIcon class="h-6 w-6 text-yellow-500" />
-						<div>
-							<Card.Title class="text-xl">Praktikan Terbaik</Card.Title>
-							<Card.Description>
-								Praktikan dengan performa terbaik dari masing-masing praktikum semester Ganjil 2025/2026
-							</Card.Description>
-						</div>
-					</div>
-				</Card.Header>
-				<Card.Content>
-					<div class="grid gap-4 md:grid-cols-3">
-					{#each bestPraktikan as praktikan, index}
-						<div class="relative">
-							<!-- Badge -->
-							<div class="absolute -top-2 -right-2 z-10">
-								<Badge class={`text-white ${
-									index === 0 ? 'bg-yellow-500 hover:bg-yellow-600' :
-									index === 1 ? 'bg-blue-500 hover:bg-blue-600' :
-									index === 2 ? 'bg-green-500 hover:bg-green-600' :
-									index === 3 ? 'bg-purple-500 hover:bg-purple-600' :
-									index === 4 ? 'bg-pink-500 hover:bg-pink-600' :
-									'bg-orange-500 hover:bg-orange-600'
-								}`}>
-									<MedalIcon class="h-5 w-5" />
-								</Badge>
-							</div>
-
-							<!-- praktikan Card -->
-							<Card.Root class={`transition-all hover:shadow-lg ${
-								index === 0 ? 'ring-2 ring-yellow-500/30 bg-gradient-to-br from-yellow-50 to-white' :
-								index === 1 ? 'ring-2 ring-blue-500/30 bg-gradient-to-br from-blue-50 to-white' :
-								index === 2 ? 'ring-2 ring-green-500/30 bg-gradient-to-br from-green-50 to-white' :
-								index === 3 ? 'ring-2 ring-purple-500/30 bg-gradient-to-br from-purple-50 to-white' :
-								index === 4 ? 'ring-2 ring-pink-500/30 bg-gradient-to-br from-pink-50 to-white' :
-								'ring-2 ring-orange-500/30 bg-gradient-to-br from-orange-50 to-white'
-							}`}>
-								<Card.Content class="pt-6">
-									<div class="flex flex-col items-center text-center space-y-4">
-										<!-- Avatar -->
-										<Avatar.Root class="h-16 w-16">
-											<Avatar.Fallback class={`text-lg font-bold text-white ${
-												index === 0 ? 'bg-yellow-500' :
-												index === 1 ? 'bg-blue-500' :
-												index === 2 ? 'bg-green-500' :
-												index === 3 ? 'bg-purple-500' :
-												index === 4 ? 'bg-pink-500' :
-												'bg-orange-500'
-											}`}>
-												{praktikan.name.split(' ').map(n => n[0]).join('').substring(0, 2)}
-											</Avatar.Fallback>
-										</Avatar.Root>
-
-										<!-- praktikan Info -->
-											<div class="space-y-2">
-												<h3 class="font-semibold text-sm leading-tight">
-													{praktikan.name}
-												</h3>
-												<p class="text-xs text-muted-foreground">
-													{praktikan.nim}
-												</p>
-											</div>
-
-										<!-- Subject -->
-										<div class="text-center">
-											<p class="text-xs text-muted-foreground">
-												{praktikan.praktikum}
-											</p>
-										</div>
-									</div>
-								</Card.Content>
-							</Card.Root>
-						</div>
-					{/each}
-					</div>
-				</Card.Content>
-			</Card.Root>
 
 			<!-- Quick Actions or Additional Info (Role-based) -->
-			{#if userData.role === 'Asisten'}
+			<!-- {#if userData.role === 'Asisten'}
 				<Card.Root>
 					<Card.Header>
 						<Card.Title>Aksi Cepat</Card.Title>
@@ -245,6 +162,7 @@
 					</Card.Content>
 				</Card.Root>
 			{/if}
+		</div> -->
 		</div>
 	</Sidebar.Inset>
 </Sidebar.Provider>
