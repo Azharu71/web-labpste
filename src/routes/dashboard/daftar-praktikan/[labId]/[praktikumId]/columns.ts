@@ -18,6 +18,7 @@ export type Intern = {
 		kamis: string | null;
 		jumat: string | null;
 		sabtu: string | null;
+		minggu: string | null;
 	} | null;
 	created_at: string;
 };
@@ -105,6 +106,11 @@ export const columns: ColumnDef<Intern>[] = [
                 header: 'Sabtu',
                 accessorFn: (row) => formatShifts(row.jadwal_kosong?.sabtu ?? null)
             },
+            {
+                id: 'minggu',
+                header: 'Minggu',
+                accessorFn: (row) => formatShifts(row.jadwal_kosong?.minggu ?? null)
+            }
         ]
     },
 	{

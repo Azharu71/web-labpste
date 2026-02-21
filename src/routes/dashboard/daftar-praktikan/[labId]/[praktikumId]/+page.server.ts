@@ -32,7 +32,7 @@ export const load: PageServerLoad = async ({ params, url, locals: { supabase } }
 		// Fetch interns
 		let query = supabase
 			.from('daftar_praktikan')
-			.select('*, jadwal_kosong(*)') // join with jadwal_kosong
+			.select('id, full_name, nim, ipk, krs_type, krs_url, created_at, jadwal_kosong(senin,selasa,rabu,kamis,jumat,sabtu,minggu)') // join with jadwal_kosong and explicit columns
 			.eq('praktikum_id', praktikumId)
             .order('created_at', { ascending: false }); // Default server sort, client handles interaction
 

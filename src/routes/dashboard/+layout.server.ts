@@ -3,14 +3,16 @@ import type { LayoutServerLoad } from './$types';
 import { getCachedProfile, setCachedProfile, cleanupExpiredCache } from '$lib/profile-cache';
 
 export const load: LayoutServerLoad = async ({
-	locals: { supabase, safeGetSession },
-	setHeaders
+	locals: { supabase },
+	setHeaders,
+	parent
 }) => {
-	// Get user session
-	const { session, user } = await safeGetSession();
+	// Get user session from parent (root layout)
+	const parentData = await parent();
+	const user = await parentData.user;
 
 	// Redirect if no session
-	if (!session || !user) {
+	if (!user) {
 		throw redirect(303, '/auth/login');
 	}
 

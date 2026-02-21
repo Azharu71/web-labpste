@@ -15,16 +15,16 @@ export const load: PageServerLoad = async ({ locals: { supabase }, parent }) => 
 			{ count: asistenCount, error: asistenError }
 		] = await Promise.all([
 			// Count Praktikan (role_id = 2)
-			supabase.from('profiles').select('*', { count: 'exact', head: true }).eq('role_id', '2'),
+			supabase.from('profiles').select('count', { count: 'exact', head: true }).eq('role_id', '2'),
 
 			// Count Praktikum (semester = Genap)
 			supabase
 				.from('list_praktikum')
-				.select('*', { count: 'exact', head: true })
+				.select('count', { count: 'exact', head: true })
 				.eq('semester', 'Genap'),
 
 			// Count Asisten (role_id = 1)
-			supabase.from('profiles').select('*', { count: 'exact', head: true }).eq('role_id', '1')
+			supabase.from('profiles').select('count', { count: 'exact', head: true }).eq('role_id', '1')
 		]);
 
 		if (!praktikanError && praktikanCount !== null) totalPraktikan = praktikanCount;

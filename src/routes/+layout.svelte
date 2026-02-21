@@ -7,7 +7,7 @@
 </script>
 
 <svelte:head>
-	<title>Lab. PSTE</title>
+	<title>Laboratorium PSTE</title>
 	<link rel="icon" href={icon} />
 </svelte:head>
 

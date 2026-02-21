@@ -1,5 +1,4 @@
 <script lang="ts">
-	import AppSidebar from '$lib/components/sidebar/app-sidebar.svelte';
 	import * as Breadcrumb from '$lib/components/ui/breadcrumb';
 	import { Separator } from '$lib/components/ui/separator';
 	import * as Sidebar from '$lib/components/ui/sidebar';
@@ -14,6 +13,7 @@
 	import labkom from '$lib/assets/labkom.webp';
 	import labdasel from '$lib/assets/labdasel.webp';
 	import labkendali from '$lib/assets/labkendali.webp';
+	import labtelkom from '$lib/assets/labtelkom.webp';
 
 	let { data }: { data: PageData } = $props();
 	const userData = data.userData;
@@ -43,7 +43,7 @@
 			name: 'Lab. Telekomunikasi',
 			desc: 'Dasar Telekomunikasi, Antena dan Propagasi.',
 			href: '/dashboard/pendaftaran-praktikum/lab_telkom',
-			icon: RadioIcon
+			icon: labtelkom
 		},
 		{
 			name: 'Lab. Komputer',
@@ -54,53 +54,48 @@
 	];
 </script>
 
-<Sidebar.Provider>
-	<AppSidebar {userData} />
-	<Sidebar.Inset>
-		<header class="flex h-16 shrink-0 items-center gap-2 px-4">
-			<Sidebar.Trigger class="-ml-1" />
-			<Separator orientation="vertical" class="mr-2 data-[orientation=vertical]:h-4" />
-			<Breadcrumb.Root class="hidden md:block">
-				<Breadcrumb.List>
-					<Breadcrumb.Item>
-						<Breadcrumb.Link href="/dashboard">Dashboard</Breadcrumb.Link>
-					</Breadcrumb.Item>
-					<Breadcrumb.Separator />
-					<Breadcrumb.Item>
-						<Breadcrumb.Page>Pendaftaran Praktikum</Breadcrumb.Page>
-					</Breadcrumb.Item>
-				</Breadcrumb.List>
-			</Breadcrumb.Root>
-		</header>
+<header class="flex h-16 shrink-0 items-center gap-2 px-4">
+	<Sidebar.Trigger class="-ml-1" />
+	<Separator orientation="vertical" class="mr-2 data-[orientation=vertical]:h-4" />
+	<Breadcrumb.Root class="hidden md:block">
+		<Breadcrumb.List>
+			<Breadcrumb.Item>
+				<Breadcrumb.Link href="/dashboard">Dashboard</Breadcrumb.Link>
+			</Breadcrumb.Item>
+			<Breadcrumb.Separator />
+			<Breadcrumb.Item>
+				<Breadcrumb.Page>Pendaftaran Praktikum</Breadcrumb.Page>
+			</Breadcrumb.Item>
+		</Breadcrumb.List>
+	</Breadcrumb.Root>
+</header>
 
-		<div class="flex flex-1 flex-col gap-6 p-6 pt-0">
-			<div class="flex flex-col gap-1">
-				<h2 class="text-3xl font-bold tracking-tight">Pendaftaran Praktikum</h2>
-				<p class="text-muted-foreground">
-					Pilih laboratorium untuk melakukan pendaftaran ulang praktikum.
-				</p>
-			</div>
+<div class="flex flex-1 flex-col gap-6 p-6 pt-0">
+	<div class="flex flex-col gap-1">
+		<h2 class="text-3xl font-bold tracking-tight">Pendaftaran Praktikum</h2>
+		<p class="text-muted-foreground">
+			Pilih laboratorium untuk melakukan pendaftaran ulang praktikum.
+		</p>
+	</div>
 
-			<div class="grid gap-4 md:grid-cols-2 lg:grid-cols-3">
-				{#each labs as lab}
-					<Card.Root class="flex flex-col justify-around transition-all hover:shadow-md">
-						<Card.Header>
-							<div class="mb-4 flex w-full items-center justify-center">
-								{#if typeof lab.icon === 'string'}
-									<img src={lab.icon} alt={lab.name} class="h-16 w-16 md:h-20 md:w-20" />
-								{:else}
-									<lab.icon class="h-18 w-18" />
-								{/if}
-							</div>
-							<Card.Title>{lab.name}</Card.Title>
-							<Card.Description>{lab.desc}</Card.Description>
-						</Card.Header>
-						<Card.Footer>
-							<Button class="w-full" href={lab.href}>Daftar Sekarang</Button>
-						</Card.Footer>
-					</Card.Root>
-				{/each}
-			</div>
-		</div>
-	</Sidebar.Inset>
-</Sidebar.Provider>
+	<div class="grid gap-4 md:grid-cols-2 lg:grid-cols-3">
+		{#each labs as lab}
+			<Card.Root class="flex flex-col justify-around transition-all hover:shadow-md">
+				<Card.Header>
+					<div class="mb-4 flex w-full items-center justify-center">
+						{#if typeof lab.icon === 'string'}
+							<img src={lab.icon} alt={lab.name} class="h-16 w-16 md:h-20 md:w-20" />
+						{:else}
+							<lab.icon class="h-18 w-18" />
+						{/if}
+					</div>
+					<Card.Title>{lab.name}</Card.Title>
+					<Card.Description>{lab.desc}</Card.Description>
+				</Card.Header>
+				<Card.Footer>
+					<Button class="w-full" href={lab.href}>Daftar Sekarang</Button>
+				</Card.Footer>
+			</Card.Root>
+		{/each}
+	</div>
+</div>

@@ -20,6 +20,21 @@ export const actions: Actions = {
 			return fail(400, { ...returnData, error: validationError.details[0].message });
 		}
 
+
+		// 0. Cek apakan NIM sudah terdaftar
+		const { data: existingUser } = await supabase
+			.from('profiles')
+			.select('nim')
+			.eq('nim', nim)
+			.maybeSingle();
+
+		if (existingUser) {
+			return fail(400, {
+				...returnData,
+				error: 'NIM anda sudah terdaftar!'
+			});
+		}
+
 		// 1. Register ke Supabase Auth (auth.users)
 		const { data: authData, error: authError } = await supabase.auth.signUp({
 			email: email!,
@@ -33,9 +48,9 @@ export const actions: Actions = {
 		// 2. Insert ke tabel profiles (public.profiles)
 		if (authData.user) {
 			const { error: profileError } = await supabase.from('profiles').insert({
-				id: authData.user.id, // Relasi ke auth.users
+				id: authData.user.id,
 				nim: nim!,
-				role_id: 1 // Default role: Praktikan (sesuai konteks dashboard)
+				role_id: 1
 			});
 			if (profileError) {
 				return fail(400, {

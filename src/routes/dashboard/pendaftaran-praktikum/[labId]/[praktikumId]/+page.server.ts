@@ -128,7 +128,8 @@ export const actions: Actions = {
 			rabu: [],
 			kamis: [],
 			jumat: [],
-			sabtu: []
+			sabtu: [],
+			minggu: []
 		};
 
 		availableSchedule.forEach((item) => {
@@ -148,7 +149,8 @@ export const actions: Actions = {
 			rabu: scheduleMap.rabu.length ? JSON.stringify(scheduleMap.rabu) : null,
 			kamis: scheduleMap.kamis.length ? JSON.stringify(scheduleMap.kamis) : null,
 			jumat: scheduleMap.jumat.length ? JSON.stringify(scheduleMap.jumat) : null,
-			sabtu: scheduleMap.sabtu.length ? JSON.stringify(scheduleMap.sabtu) : null
+			sabtu: scheduleMap.sabtu.length ? JSON.stringify(scheduleMap.sabtu) : null,
+			minggu: scheduleMap.minggu.length ? JSON.stringify(scheduleMap.minggu) : null
 		};
 
 		const { error: jadwalError } = await locals.supabase

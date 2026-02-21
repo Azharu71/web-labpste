@@ -1,15 +1,12 @@
 <script lang="ts">
 	import { Button } from '$lib/components/ui/button';
 	import * as Card from '$lib/components/ui/card';
-	import { Badge } from '$lib/components/ui/badge';
-
 	import ZapIcon from '@lucide/svelte/icons/zap';
 	import FlaskConicalIcon from '@lucide/svelte/icons/flask-conical';
 	import GraduationCapIcon from '@lucide/svelte/icons/graduation-cap';
 	import UsersIcon from '@lucide/svelte/icons/users';
 	import BookOpenIcon from '@lucide/svelte/icons/book-open';
 	import AwardIcon from '@lucide/svelte/icons/award';
-
 	import IconWhite from '$lib/assets/icon-pste-white.webp';
 </script>
 

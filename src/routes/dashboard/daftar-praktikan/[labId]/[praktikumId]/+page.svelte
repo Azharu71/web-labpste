@@ -1,6 +1,6 @@
 <script lang="ts">
 	import { page } from '$app/stores';
-	import AppSidebar from '$lib/components/sidebar/app-sidebar.svelte';
+
 	import * as Breadcrumb from '$lib/components/ui/breadcrumb';
 	import { Separator } from '$lib/components/ui/separator';
 	import * as Sidebar from '$lib/components/ui/sidebar';
@@ -70,6 +70,7 @@
 				{ key: 'kamis', width: 15 },
 				{ key: 'jumat', width: 15 },
 				{ key: 'sabtu', width: 15 },
+				{ key: 'minggu', width: 15 },
 				{ key: 'created_at', width: 20 }
 			];
 
@@ -88,7 +89,8 @@
 				'',
 				'',
 				'',
-				'', // Jadwal Kosong takes G1..L1
+				'',
+				'', // Jadwal Kosong takes G1..M1
 				'Tanggal Daftar'
 			];
 
@@ -100,6 +102,7 @@
 			row2.getCell('J').value = 'Kamis';
 			row2.getCell('K').value = 'Jumat';
 			row2.getCell('L').value = 'Sabtu';
+			row2.getCell('M').value = 'Minggu';
 
 			// Merges
 			worksheet.mergeCells('A1:A2'); // Praktikum
@@ -108,8 +111,8 @@
 			worksheet.mergeCells('D1:D2'); // IPK
 			worksheet.mergeCells('E1:E2'); // Tipe KRS
 			worksheet.mergeCells('F1:F2'); // URL KRS
-			worksheet.mergeCells('G1:L1'); // Jadwal Kosong (Main Header)
-			worksheet.mergeCells('M1:M2'); // Tanggal Daftar
+			worksheet.mergeCells('G1:M1'); // Jadwal Kosong (Main Header)
+			worksheet.mergeCells('N1:N2'); // Tanggal Daftar
 
 			// Style headers (Center alignment, Bold, Borders)
 			[1, 2].forEach((r) => {
@@ -141,12 +144,13 @@
 					kamis: getDaySchedule(intern.jadwal_kosong, 'kamis'),
 					jumat: getDaySchedule(intern.jadwal_kosong, 'jumat'),
 					sabtu: getDaySchedule(intern.jadwal_kosong, 'sabtu'),
+					minggu: getDaySchedule(intern.jadwal_kosong, 'minggu'),
 					created_at: new Date(intern.created_at).toLocaleString('id-ID')
 				});
 			});
 
 			// Enable wrap text for schedule columns
-			['senin', 'selasa', 'rabu', 'kamis', 'jumat', 'sabtu'].forEach((key) => {
+			['senin', 'selasa', 'rabu', 'kamis', 'jumat', 'sabtu', 'minggu'].forEach((key) => {
 				worksheet.getColumn(key).alignment = {
 					wrapText: true,
 					vertical: 'middle',
@@ -168,51 +172,43 @@
 	}
 </script>
 
-<Sidebar.Provider>
-	<AppSidebar userData={data.userData} />
-	<Sidebar.Inset>
-		<header class="flex h-16 shrink-0 items-center gap-2 px-4">
-			<Sidebar.Trigger class="-ml-1" />
-			<Separator
-				orientation="vertical"
-				class="mr-2 hidden md:block data-[orientation=vertical]:h-4"
-			/>
-			<Breadcrumb.Root class="hidden md:block">
-				<Breadcrumb.List>
-					<Breadcrumb.Item>
-						<Breadcrumb.Link href="/dashboard">Dashboard</Breadcrumb.Link>
-					</Breadcrumb.Item>
-					<Breadcrumb.Separator />
-					<Breadcrumb.Item>
-						<Breadcrumb.Link href="/dashboard/daftar-praktikan">Daftar Praktikan</Breadcrumb.Link>
-					</Breadcrumb.Item>
-					<Breadcrumb.Separator />
-					<Breadcrumb.Item>
-						<Breadcrumb.Link href="/dashboard/daftar-praktikan/{data.labId}">
-							{data.labName}
-						</Breadcrumb.Link>
-					</Breadcrumb.Item>
-					<Breadcrumb.Separator />
-					<Breadcrumb.Item>
-						<Breadcrumb.Page>{data.praktikumName}</Breadcrumb.Page>
-					</Breadcrumb.Item>
-				</Breadcrumb.List>
-			</Breadcrumb.Root>
-		</header>
+<header class="flex h-16 shrink-0 items-center gap-2 px-4">
+	<Sidebar.Trigger class="-ml-1" />
+	<Separator orientation="vertical" class="mr-2 hidden md:block data-[orientation=vertical]:h-4" />
+	<Breadcrumb.Root class="hidden md:block">
+		<Breadcrumb.List>
+			<Breadcrumb.Item>
+				<Breadcrumb.Link href="/dashboard">Dashboard</Breadcrumb.Link>
+			</Breadcrumb.Item>
+			<Breadcrumb.Separator />
+			<Breadcrumb.Item>
+				<Breadcrumb.Link href="/dashboard/daftar-praktikan">Daftar Praktikan</Breadcrumb.Link>
+			</Breadcrumb.Item>
+			<Breadcrumb.Separator />
+			<Breadcrumb.Item>
+				<Breadcrumb.Link href="/dashboard/daftar-praktikan/{data.labId}">
+					{data.labName}
+				</Breadcrumb.Link>
+			</Breadcrumb.Item>
+			<Breadcrumb.Separator />
+			<Breadcrumb.Item>
+				<Breadcrumb.Page>{data.praktikumName}</Breadcrumb.Page>
+			</Breadcrumb.Item>
+		</Breadcrumb.List>
+	</Breadcrumb.Root>
+</header>
 
-		<div class="flex flex-1 flex-col gap-6 p-6 pt-0">
-			<div class="flex items-center justify-between">
-				<div class="flex flex-col gap-1">
-					<h2 class="text-3xl font-bold tracking-tight">{data.praktikumName}</h2>
-					<p class="text-muted-foreground">Daftar praktikan yang terdaftar.</p>
-				</div>
-				<Button onclick={handleExport}>
-					<FileSpreadsheet class="mr-2 h-4 w-4" />
-					Export Excel
-				</Button>
-			</div>
-
-			<DataTable data={interns} {columns} />
+<div class="flex flex-1 flex-col gap-6 p-6 pt-0">
+	<div class="flex items-center justify-between">
+		<div class="flex flex-col gap-1">
+			<h2 class="text-3xl font-bold tracking-tight">{data.praktikumName}</h2>
+			<p class="text-muted-foreground">Daftar praktikan yang terdaftar.</p>
 		</div>
-	</Sidebar.Inset>
-</Sidebar.Provider>
+		<Button onclick={handleExport}>
+			<FileSpreadsheet class="mr-2 h-4 w-4" />
+			Export Excel
+		</Button>
+	</div>
+
+	<DataTable data={interns} {columns} />
+</div>
