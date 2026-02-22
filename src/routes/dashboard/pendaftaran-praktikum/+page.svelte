@@ -4,16 +4,12 @@
 	import * as Sidebar from '$lib/components/ui/sidebar';
 	import * as Card from '$lib/components/ui/card';
 	import { Button } from '$lib/components/ui/button';
-	import CpuIcon from '@lucide/svelte/icons/cpu';
-	import Omega from '@lucide/svelte/icons/omega';
-	import ZapIcon from '@lucide/svelte/icons/zap';
-	import RadioIcon from '@lucide/svelte/icons/radio';
-	import ActivityIcon from '@lucide/svelte/icons/activity';
 	import type { PageData } from './$types';
 	import labkom from '$lib/assets/labkom.webp';
 	import labdasel from '$lib/assets/labdasel.webp';
 	import labkendali from '$lib/assets/labkendali.webp';
 	import labtelkom from '$lib/assets/labtelkom.webp';
+	import labtenaga from '$lib/assets/labtenaga.webp';
 
 	let { data }: { data: PageData } = $props();
 	const userData = data.userData;
@@ -31,7 +27,7 @@
 			name: 'Lab. Tenaga',
 			desc: 'Rangkaian Listrik, Elektronika Daya, Mesin Listrik',
 			href: '/dashboard/pendaftaran-praktikum/lab_tenaga',
-			icon: ZapIcon
+			icon: labtenaga
 		},
 		{
 			name: 'Lab. Kendali',
@@ -83,11 +79,7 @@
 			<Card.Root class="flex flex-col justify-around transition-all hover:shadow-md">
 				<Card.Header>
 					<div class="mb-4 flex w-full items-center justify-center">
-						{#if typeof lab.icon === 'string'}
-							<img src={lab.icon} alt={lab.name} class="h-16 w-16 md:h-20 md:w-20" />
-						{:else}
-							<lab.icon class="h-18 w-18" />
-						{/if}
+						<img src={lab.icon} alt={lab.name} class="h-16 w-16 md:h-20 md:w-20" />
 					</div>
 					<Card.Title>{lab.name}</Card.Title>
 					<Card.Description>{lab.desc}</Card.Description>
