@@ -60,8 +60,6 @@ export const actions: Actions = {
 			}
 		}
 
-		// Logout user agar session dibersihkan dan tidak di-redirect otomatis ke dashboard oleh layout
-		await supabase.auth.signOut();
 
 		throw redirect(303, '/auth/login?registered=true');
 	}
