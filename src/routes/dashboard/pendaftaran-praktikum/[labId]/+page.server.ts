@@ -9,6 +9,8 @@ const labNameMap: Record<string, string> = {
 	lab_kom: 'Laboratorium Komputer'
 };
 
+// @ts-expect-error - SvelteKit's PageServerLoad type inference breaks (expects session, user) 
+// because the parent layout's unconditional redirect evaluates to 'never', corrupting the type union.
 export const load: PageServerLoad = async ({ params, locals: { supabase } }) => {
 	const { labId } = params;
 	const labName = labNameMap[labId];
@@ -28,7 +30,7 @@ export const load: PageServerLoad = async ({ params, locals: { supabase } }) => 
 
 		if (dbError) {
 			console.error('Error fetching praktikum:', dbError);
-			return { labName, praktikum: [] };
+			return { labId, labName, praktikum: [] };
 		}
 
 		return {
@@ -38,6 +40,6 @@ export const load: PageServerLoad = async ({ params, locals: { supabase } }) => 
 		};
 	} catch (err) {
 		console.error('Unexpected error:', err);
-		return { labName, praktikum: [] };
+		return { labId, labName, praktikum: [] };
 	}
 };

@@ -9,49 +9,46 @@ const labNameMap: Record<string, string> = {
 	lab_kom: 'Laboratorium Komputer'
 };
 
-export const load: PageServerLoad = async ({ params, url, locals: { supabase } }) => {
+export const load: PageServerLoad = async ({ params, locals: { supabase } }) => {
 	const { labId, praktikumId } = params;
-    const labName = labNameMap[labId];
-    if (!labName) {
+	const labName = labNameMap[labId];
+
+	if (!labName) {
 		throw error(404, 'Laboratorium tidak ditemukan');
 	}
 
-	try {
-        // Fetch practicum details
-        const { data: praktikumData, error: praktikumError } = await supabase
-            .from('list_praktikum')
-            .select('nama_praktikum')
-            .eq('id', praktikumId)
-            .single();
+	// Jalankan kedua query secara paralel — tidak ada dependensi satu sama lain
+	const [{ data: praktikumData, error: praktikumError }, { data: interns, error: dbError }] =
+		await Promise.all([
+			supabase
+				.from('list_praktikum')
+				.select('nama_praktikum')
+				.eq('id', praktikumId)
+				.single(),
+			supabase
+				.from('daftar_praktikan')
+				.select(
+					'id, full_name, nim, ipk, krs_type, krs_url, created_at, jadwal_kosong(senin,selasa,rabu,kamis,jumat,sabtu,minggu)'
+				)
+				.eq('praktikum_id', praktikumId)
+				.order('created_at', { ascending: false })
+		]);
 
-        if (praktikumError) {
-             console.error('Error fetching praktikum details:', praktikumError);
-             throw error(404, 'Praktikum tidak ditemukan');
-        }
-
-		// Fetch interns
-		let query = supabase
-			.from('daftar_praktikan')
-			.select('*, jadwal_kosong(*)') // join with jadwal_kosong
-			.eq('praktikum_id', praktikumId)
-            .order('created_at', { ascending: false }); // Default server sort, client handles interaction
-
-		const { data: interns, error: dbError } = await query;
-
-		if (dbError) {
-			console.error('Error fetching interns:', dbError);
-			return { labId, labName, praktikumId, praktikumName: praktikumData?.nama_praktikum, interns: [] };
-		}
-
-		return {
-			labId,
-            labName,
-			praktikumId,
-            praktikumName: praktikumData?.nama_praktikum,
-			interns: interns || []
-		};
-	} catch (err) {
-		console.error('Unexpected error:', err);
-		return { labId, labName, praktikumId, praktikumName: '', interns: [] };
+	if (praktikumError) {
+		console.error('Error fetching praktikum details:', praktikumError);
+		throw error(404, 'Praktikum tidak ditemukan');
 	}
+
+	if (dbError) {
+		console.error('Error fetching interns:', dbError);
+		return { labId, labName, praktikumId, praktikumName: praktikumData?.nama_praktikum, interns: [] };
+	}
+
+	return {
+		labId,
+		labName,
+		praktikumId,
+		praktikumName: praktikumData?.nama_praktikum,
+		interns: interns || []
+	};
 };

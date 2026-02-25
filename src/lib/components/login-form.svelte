@@ -5,8 +5,12 @@
 	import { Input } from '$lib/components/ui/input';
 	import { Button } from '$lib/components/ui/button';
 	import { cn, type WithElementRef } from '$lib/utils';
+	import { enhance } from '$app/forms';
+	import Loading from '$lib/components/loading.svelte';
 
 	let showPassword = $state(false);
+	let isLoading = $state(false);
+
 	let {
 		ref = $bindable(null),
 		class: className,
@@ -17,7 +21,16 @@
 </script>
 
 <div class={cn('flex flex-col gap-6', className)} bind:this={ref} {...restProps}>
-	<form method="POST">
+	<form
+		method="POST"
+		use:enhance={() => {
+			isLoading = true;
+			return async ({ update }) => {
+				await update();
+				isLoading = false;
+			};
+		}}
+	>
 		<div class="flex flex-col gap-6">
 			<div class="flex flex-col items-center gap-2">
 				<a href="/" class="flex flex-col items-center gap-2 font-medium">
@@ -37,15 +50,15 @@
 					<Input name="email" id="email-{id}" type="email" placeholder="m@example.com" required />
 				</div>
 				<div class="grid gap-3">
-					<!-- <div class="flex items-center justify-between">
+					<div class="flex items-center justify-between">
 						<Label for="password-{id}">Password</Label>
 						<a
-							href="/auth/password_update"
-							class="text-sm text-muted-foreground underline-offset-4 hover:underline"
+							href="/auth/resetpassword"
+							class="text-sm text-blue-500 underline-offset-4 hover:underline"
 						>
 							Forgot your password?
 						</a>
-					</div> -->
+					</div>
 					<Input
 						name="password"
 						id="password-{id}"
@@ -65,7 +78,13 @@
 						>
 					</div>
 				</div>
-				<Button type="submit" class="w-full">Login</Button>
+				<Button type="submit" class="w-full" disabled={isLoading}>
+					{#if isLoading}
+						<Loading variant="inline" message="Sedang memproses..." />
+					{:else}
+						Login
+					{/if}
+				</Button>
 			</div>
 			<div
 				class="after:border-border relative text-center text-sm after:absolute after:inset-0 after:top-1/2 after:z-0 after:flex after:items-center after:border-t"

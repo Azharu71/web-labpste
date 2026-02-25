@@ -4,6 +4,7 @@
 	import TablePropertiesIcon from '@lucide/svelte/icons/table-properties';
 	import NotebookPenIcon from '@lucide/svelte/icons/notebook-pen';
 	import UsersRoundIcon from '@lucide/svelte/icons/users-round';
+	import BookText from '@lucide/svelte/icons/book-text';
 
 	const allNavItems = [
 		{
@@ -35,13 +36,19 @@
 			url: '/dashboard/kelompok-praktikum',
 			icon: UsersRoundIcon,
 			roles: ['Asisten', 'Praktikan']
+		},
+		{
+			name: 'Modul Praktikum',
+			url: '/dashboard/modul-praktikum',
+			icon: BookText,
+			roles: ['Asisten', 'Praktikan']
+		},
+		{
+			name: 'Transparansi Nilai',
+			url: '/dashboard/transparansi-nilai',
+			icon: NotebookPenIcon,
+			roles: ['Asisten', 'Praktikan']
 		}
-		// {
-		// 	name: 'Transparansi Nilai',
-		// 	url: '/dashboard/transparansi-nilai',
-		// 	icon: NotebookPenIcon,
-		// 	roles: ['Asisten', 'Praktikan']
-		// }
 	];
 
 	function getFilteredNav(userRole: string | null) {

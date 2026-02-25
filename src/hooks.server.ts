@@ -8,6 +8,19 @@ import type { Session, User } from '@supabase/supabase-js';
 // Key: Access Token, Value: { user: User, expires: number }
 const userCache = new Map<string, { user: User; expires: number }>();
 const CACHE_TTL = 60 * 1000; // 60 detik
+const USER_CACHE_MAX_SIZE = 500; // Batas maksimal entri cache
+
+// Evict entri expired; jika masih penuh, hapus entri terlama
+function evictCache() {
+	const now = Date.now();
+	for (const [key, val] of userCache) {
+		if (val.expires <= now) userCache.delete(key);
+	}
+	if (userCache.size >= USER_CACHE_MAX_SIZE) {
+		// Hapus entri pertama (FIFO — Map mempertahankan insertion order)
+		userCache.delete(userCache.keys().next().value!);
+	}
+}
 
 export const handle: Handle = async ({ event, resolve }) => {
 	event.locals.supabase = createServerClient(PUBLIC_SUPABASE_URL, PUBLIC_SUPABASE_PUBLISHABLE_KEY, {
@@ -15,9 +28,11 @@ export const handle: Handle = async ({ event, resolve }) => {
 			getAll: () => event.cookies.getAll(),
 			setAll: (cookiesToSet) => {
 				cookiesToSet.forEach(({ name, value, options }) => {
-					// Enforce 1 hour expiration (3600 seconds)
+					// Strip both `expires` and `maxAge` dari Supabase agar tidak ada
+					// nilai pendek (misal code verifier PKCE) yang lolos dan menyebabkan
+					// link reset password expire terlalu cepat.
 					// eslint-disable-next-line @typescript-eslint/no-unused-vars
-					const { expires, ...restOptions } = options;
+					const { expires, maxAge, ...restOptions } = options;
 					event.cookies.set(name, value, { ...restOptions, maxAge: 3600, path: '/' });
 				});
 			}
@@ -64,7 +79,8 @@ export const handle: Handle = async ({ event, resolve }) => {
 					return { session: null, user: null };
 				}
 
-				// 4. Simpan ke Cache
+				// 4. Simpan ke Cache (evict jika perlu sebelum insert)
+				if (!userCache.has(token)) evictCache();
 				userCache.set(token, { user, expires: Date.now() + CACHE_TTL });
 
 				return { session, user };

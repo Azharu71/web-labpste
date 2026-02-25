@@ -54,11 +54,11 @@ export const columns: ColumnDef<Praktikum>[] = [
 		accessorKey: 'tahun',
 		header: 'Tahun'
 	},
-	{
-		id: 'actions',
-		cell: ({ row }) => {
-			// You can pass whatever you need from `row.original` to the component
-			return renderComponent(DataTableActions, { id: row.original.id });
-		}
-	}
+	// {
+	// 	id: 'actions',
+	// 	cell: ({ row }) => {
+	// 		// You can pass whatever you need from `row.original` to the component
+	// 		return renderComponent(DataTableActions, { id: row.original.id });
+	// 	}
+	// }
 ];

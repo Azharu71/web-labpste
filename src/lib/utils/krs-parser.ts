@@ -28,7 +28,7 @@ const SHIFTS = [
 	{ id: 'S5', name: 'SHIFT 5', start: '17:00', end: '19:00' }
 ];
 
-const DAYS = ['Senin', 'Selasa', 'Rabu', 'Kamis', 'Jumat', 'Sabtu'];
+const DAYS = ['Senin', 'Selasa', 'Rabu', 'Kamis', 'Jumat', 'Sabtu', 'Minggu'];
 
 interface ClassSchedule {
 	day: string;
@@ -70,7 +70,7 @@ export async function parseKrs(file: File): Promise<AvailableSession[]> {
         // - Handles spaces in time (08 : 00)
         // - Handles different dash types (- – —)
         const dayPattern =
-            /(Senin|Selasa|Rabu|Kamis|Jumat|Sabtu)\s+[^\d]*?(\d{1,2}\s*[:.]\s*\d{2})\s*[-–—]\s*(\d{1,2}\s*[:.]\s*\d{2})/gi;
+            /(Senin|Selasa|Rabu|Kamis|Jumat|Sabtu|Minggu)\s+[^\d]*?(\d{1,2}\s*[:.]\s*\d{2})\s*[-–—]\s*(\d{1,2}\s*[:.]\s*\d{2})/gi;
         
         const classes: ClassSchedule[] = [];
         let match;
@@ -95,8 +95,8 @@ export async function parseKrs(file: File): Promise<AvailableSession[]> {
                 const shiftEnd = timeToMinutes(shift.end);
 
                 // Check Conflict
-                // Special Rule: Saturday (Sabtu) is always available (no regular classes)
-                const isConflict = dayName.toLowerCase() === 'sabtu' 
+                // Special Rule: Saturday (Sabtu) & Sunday (Minggu) are always available (no regular classes)
+                const isConflict = ['sabtu', 'minggu'].includes(dayName.toLowerCase())
                     ? false 
                     : todaysClasses.some((cls) => {
                         // Logic: Class overlaps with Shift

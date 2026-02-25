@@ -27,7 +27,7 @@ export const actions: Actions = {
 		if (error) {
 			return fail(400, {
 				email,
-				error: error.message
+				error: 'Username or password is incorrect'
 			});
 		}
 

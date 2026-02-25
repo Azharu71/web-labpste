@@ -20,6 +20,21 @@ export const actions: Actions = {
 			return fail(400, { ...returnData, error: validationError.details[0].message });
 		}
 
+
+		// 0. Cek apakan NIM sudah terdaftar
+		const { data: existingUser } = await supabase
+			.from('profiles')
+			.select('nim')
+			.eq('nim', nim)
+			.maybeSingle();
+
+		if (existingUser) {
+			return fail(400, {
+				...returnData,
+				error: 'Failed to register: NIM already exists!'
+			});
+		}
+
 		// 1. Register ke Supabase Auth (auth.users)
 		const { data: authData, error: authError } = await supabase.auth.signUp({
 			email: email!,
@@ -27,27 +42,24 @@ export const actions: Actions = {
 		});
 
 		if (authError) {
-			return fail(400, { ...returnData, error: authError.message });
+			return fail(400, { ...returnData, error: 'Failed to register: ' + authError.message });
 		}
 
 		// 2. Insert ke tabel profiles (public.profiles)
 		if (authData.user) {
 			const { error: profileError } = await supabase.from('profiles').insert({
-				id: authData.user.id, // Relasi ke auth.users
+				id: authData.user.id,
 				nim: nim!,
-				role_id: 1 // Default role: Praktikan (sesuai konteks dashboard)
+				role_id: 2
 			});
 			if (profileError) {
 				return fail(400, {
 					...returnData,
-					error: 'Gagal menyimpan data profil: ' + profileError.message
+					error: 'Failed to save profile data: ' + profileError.message
 				});
 			}
 		}
 
-		// Logout user agar session dibersihkan dan tidak di-redirect otomatis ke dashboard oleh layout
-		await supabase.auth.signOut();
 
-		throw redirect(303, '/auth/login?registered=true');
 	}
 };

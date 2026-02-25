@@ -143,7 +143,7 @@
 					</Table.Row>
 				{:else}
 					<Table.Row>
-						<Table.Cell colspan={columns.length} class="h-24 text-center"
+						<Table.Cell colspan={columns.length + 6} class="h-24 text-center"
 							>Belum ada data praktikan</Table.Cell
 						>
 					</Table.Row>

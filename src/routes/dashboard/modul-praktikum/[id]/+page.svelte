@@ -1,15 +1,16 @@
 <script lang="ts">
-	import DataTable from './data-table.svelte';
-	import { columns } from './columns';
 	import * as Breadcrumb from '$lib/components/ui/breadcrumb';
 	import { Separator } from '$lib/components/ui/separator';
 	import * as Sidebar from '$lib/components/ui/sidebar';
 	import type { PageData } from './$types';
 
 	let { data }: { data: PageData } = $props();
-
-	const userData = data.userData;
+	const { praktikum } = data;
 </script>
+
+<svelte:head>
+	<title>{praktikum.nama_praktikum} - Modul | Dashboard</title>
+</svelte:head>
 
 <header
 	class="group-has-data-[collapsible=icon]/sidebar-wrapper:h-12 flex h-16 shrink-0 items-center gap-2 transition-[width,height] ease-linear"
@@ -24,20 +25,25 @@
 				</Breadcrumb.Item>
 				<Breadcrumb.Separator />
 				<Breadcrumb.Item>
-					<Breadcrumb.Page>Praktikum</Breadcrumb.Page>
+					<Breadcrumb.Link href="/dashboard/modul-praktikum">Modul Praktikum</Breadcrumb.Link>
+				</Breadcrumb.Item>
+				<Breadcrumb.Separator />
+				<Breadcrumb.Item>
+					<Breadcrumb.Page>{praktikum.nama_praktikum}</Breadcrumb.Page>
 				</Breadcrumb.Item>
 			</Breadcrumb.List>
 		</Breadcrumb.Root>
 	</div>
 </header>
+
 <div class="flex flex-1 flex-col gap-4 p-4 pt-0">
-	<div class="flex flex-col gap-1">
-		<h2 class="text-3xl font-bold tracking-tight">Daftar Praktikum</h2>
-		<p class="text-muted-foreground">
-			Daftar Keseluruhan Praktikum Laboratorium Program Studi Teknik Elektro
-		</p>
-	</div>
-	<div class="min-h-[100vh] flex-1 rounded-xl md:min-h-min">
-		<DataTable data={data.praktikum} {columns} />
+	<div class="flex-1 rounded-lg border bg-background overflow-hidden" style="min-height: 80vh;">
+		<iframe
+			src={praktikum.signedUrl}
+			width="100%"
+			height="100%"
+			style="min-height: 80vh;"
+			title="Modul {praktikum.nama_praktikum}"
+		></iframe>
 	</div>
 </div>

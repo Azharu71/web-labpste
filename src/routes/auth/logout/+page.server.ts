@@ -20,9 +20,9 @@ export const actions: Actions = {
 		const supabase = locals.supabase;
 
 		try {
-			// Get current session to clear cache
-			const { session } = await locals.safeGetSession();
-			const userId = session?.user?.id;
+			// Gunakan getUser() langsung — aman dan tidak menghasilkan warning Supabase
+			const { data: { user } } = await supabase.auth.getUser();
+			const userId = user?.id;
 
 			// Clear profile cache for this user
 			if (userId) {
