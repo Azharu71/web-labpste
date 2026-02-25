@@ -7,8 +7,8 @@ export const load: LayoutServerLoad = async ({ locals: { safeGetSession }, url }
 
     // Define routes that should be accessible even when authenticated
     const allowedAuthenticatedRoutes = [
-        '/auth/logout'
-        // Add other routes like '/auth/error', '/auth/confirm' when they exist
+        '/auth/logout',
+        '/auth/resetpassword'
     ];
 
     // If user is authenticated and trying to access restricted auth pages

@@ -7,7 +7,7 @@
 	import { Label } from '$lib/components/ui/label';
 	import * as Card from '$lib/components/ui/card';
 	import { Separator } from '$lib/components/ui/separator';
-	import { parseKrs, type AvailableSession } from '$lib/utils/krs-parser';
+	import { parseKrs } from '$lib/utils/krs-parser';
 	import { toast } from 'svelte-sonner';
 
 	let { data, form } = $props();
@@ -36,6 +36,8 @@
 	let isLoading = $state(false);
 	let isScanning = $state(false);
 	let checkedSchedules = $state(new Set<string>());
+	let selectedCount = $derived(checkedSchedules.size);
+	let confirmed = $state(false);
 
 	async function handleFileChange(event: Event) {
 		const target = event.target as HTMLInputElement;
@@ -53,16 +55,8 @@
 		try {
 			const availableSessions = await parseKrs(file);
 
-			// Reset current checks
-			checkedSchedules.clear();
-
-			// Auto check available sessions
-			availableSessions.forEach((session) => {
-				checkedSchedules.add(`${session.day}_${session.sessionId}`);
-			});
-
-			// Trigger reactivity
-			checkedSchedules = new Set(checkedSchedules);
+			// Set langsung dari hasil scan — lebih efisien dan trigger reaktif sekali
+			checkedSchedules = new Set(availableSessions.map((s) => `${s.day}_${s.sessionId}`));
 
 			toast.success(`Berhasil memindai! Ditemukan ${availableSessions.length} jadwal kosong.`, {
 				id: toastId
@@ -150,10 +144,17 @@
 					}}
 					class="space-y-6"
 				>
+					<!-- Pass realPraktikumId agar server tidak perlu query ulang ke list_praktikum -->
+					<input type="hidden" name="realPraktikumId" value={data.realPraktikumId} />
 					<div class="grid md:grid-cols-2 gap-4">
 						<div class="space-y-2">
 							<Label>Nama Lengkap</Label>
-							<Input name="fullName" required />
+							<Input
+								name="fullName"
+								required
+								style="text-transform: uppercase"
+								placeholder="Nama Lengkap"
+							/>
 						</div>
 						<div class="space-y-2">
 							<Label>NIM</Label>
@@ -213,9 +214,20 @@
 								<span class="text-xs text-blue-600 animate-pulse">Sedang memindai...</span>
 							{/if}
 						</div>
-						<p class="text-xs text-muted-foreground">
-							*Silahkan periksa kembali jadwal kosong yang dipilih agar sesuai dengan KRS anda.
-						</p>
+						<Card.Root class="border-destructive/50 bg-destructive/10">
+							<Card.Header>
+								<Card.Description class="text-destructive/80">
+									<p>
+										Silahkan periksa kembali Jadwal kosong, Nama, NIM, IPK, dan File KRS yang anda
+										pilih!!
+									</p>
+									<br />
+									<p class="font-semibold">
+										Jumlah daftar kosong minimal yang di isi adalah 15 Shift
+									</p>
+								</Card.Description>
+							</Card.Header>
+						</Card.Root>
 						<div class="grid grid-cols-1 gap-4 md:grid-cols-2 lg:grid-cols-3">
 							{#each days as day}
 								<div class="rounded-lg border p-4 shadow-sm">
@@ -260,7 +272,23 @@
 						</div>
 					</div>
 
-					<Button type="submit" class="w-full" disabled={isLoading}>
+					<p class="text-sm text-muted-foreground text-right">
+						Shift dipilih: <span class="font-semibold text-foreground">{selectedCount}</span>
+					</p>
+
+					<label class="flex items-start gap-3 cursor-pointer">
+						<input
+							type="checkbox"
+							bind:checked={confirmed}
+							class="mt-0.5 h-4 w-4 shrink-0 accent-primary"
+						/>
+						<span class="text-sm leading-relaxed">
+							Dengan ini saya telah yakin bahwa data yang saya masukan benar-benar
+							<strong>valid dan akurat</strong>.
+						</span>
+					</label>
+
+					<Button type="submit" class="w-full" disabled={isLoading || !confirmed}>
 						{#if isLoading}
 							Memproses...
 						{:else}

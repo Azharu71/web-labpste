@@ -31,7 +31,7 @@ export const actions: Actions = {
 		if (existingUser) {
 			return fail(400, {
 				...returnData,
-				error: 'NIM anda sudah terdaftar!'
+				error: 'Failed to register: NIM already exists!'
 			});
 		}
 
@@ -42,7 +42,7 @@ export const actions: Actions = {
 		});
 
 		if (authError) {
-			return fail(400, { ...returnData, error: authError.message });
+			return fail(400, { ...returnData, error: 'Failed to register: ' + authError.message });
 		}
 
 		// 2. Insert ke tabel profiles (public.profiles)
@@ -50,17 +50,16 @@ export const actions: Actions = {
 			const { error: profileError } = await supabase.from('profiles').insert({
 				id: authData.user.id,
 				nim: nim!,
-				role_id: 1
+				role_id: 2
 			});
 			if (profileError) {
 				return fail(400, {
 					...returnData,
-					error: 'Gagal menyimpan data profil: ' + profileError.message
+					error: 'Failed to save profile data: ' + profileError.message
 				});
 			}
 		}
 
 
-		throw redirect(303, '/auth/login?registered=true');
 	}
 };

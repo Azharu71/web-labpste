@@ -1,6 +1,6 @@
 import { redirect } from '@sveltejs/kit';
 import type { LayoutServerLoad } from './$types';
-import { getCachedProfile, setCachedProfile, cleanupExpiredCache } from '$lib/profile-cache';
+import { getCachedProfile, setCachedProfile } from '$lib/profile-cache';
 
 export const load: LayoutServerLoad = async ({
 	locals: { supabase },
@@ -47,12 +47,6 @@ export const load: LayoutServerLoad = async ({
 
 	// Cache the result
 	setCachedProfile(userId, userData);
-
-	// Clean up expired cache entries periodically
-	if (Math.random() < 0.1) {
-		// 10% chance to cleanup
-		cleanupExpiredCache();
-	}
 
 	return { userData };
 };

@@ -3,10 +3,18 @@
 	import * as DropdownMenu from '$lib/components/ui/dropdown-menu';
 	import * as Sidebar from '$lib/components/ui/sidebar';
 	import { useSidebar } from '$lib/components/ui/sidebar';
+	import { enhance } from '$app/forms';
 	import ChevronsUpDownIcon from '@lucide/svelte/icons/chevrons-up-down';
 	import LogOutIcon from '@lucide/svelte/icons/log-out';
-	let { user }: { user: { nim: string | undefined | null; email: string | undefined | null; role: any } } = $props();
+	import Loading from '$lib/components/loading.svelte';
+
+	let {
+		user
+	}: { user: { nim: string | undefined | null; email: string | undefined | null; role: any } } =
+		$props();
+
 	const sidebar = useSidebar();
+	let isLoggingOut = $state(false);
 </script>
 
 <Sidebar.Menu>
@@ -24,7 +32,8 @@
 						</Avatar.Root>
 						<div class="grid flex-1 text-left text-sm leading-tight">
 							<span class="truncate font-medium">{user.email || 'No Email'}</span>
-							<span class="truncate text-xs">{user.nim || 'No NIM'} • {user.role || 'No Role'}</span>
+							<span class="truncate text-xs">{user.nim || 'No NIM'} • {user.role || 'No Role'}</span
+							>
 						</div>
 						<ChevronsUpDownIcon class="ml-auto size-4" />
 					</Sidebar.MenuButton>
@@ -38,21 +47,38 @@
 			>
 				<DropdownMenu.Label class="p-0 font-normal">
 					<div class="flex items-center gap-2 px-1 py-1.5 text-left text-sm">
-						<Avatar.Root class="size-8 rounded-lg">
-							<Avatar.Fallback class="rounded-lg">LP</Avatar.Fallback>
-						</Avatar.Root>
 						<div class="grid flex-1 text-left text-sm leading-tight">
-							<span class="truncate font-medium">{user.email || 'No Email'}</span>
-							<span class="truncate text-xs">{user.nim || 'No NIM'} • {user.role || 'No Role'}</span>
+							<span class="truncate font-medium">{user.nim || 'No NIM'}</span>
+							<span class="truncate text-xs">{user.role || 'No Role'}</span>
 						</div>
 					</div>
 				</DropdownMenu.Label>
 				<DropdownMenu.Separator />
-				<DropdownMenu.Item>
-					<form action="/auth/logout" method="POST">
-						<button type="submit" class="flex items-center gap-2"
-							><LogOutIcon /><span>Log out</span></button
+				<DropdownMenu.Item class="p-0">
+					<form
+						action="/auth/logout"
+						method="POST"
+						class="w-full"
+						use:enhance={() => {
+							isLoggingOut = true;
+							return async ({ update }) => {
+								await update();
+								isLoggingOut = false;
+							};
+						}}
+					>
+						<button
+							type="submit"
+							disabled={isLoggingOut}
+							class="flex w-full items-center gap-2 px-2 py-1.5 text-sm disabled:opacity-60"
 						>
+							{#if isLoggingOut}
+								<Loading variant="inline" message="Keluar..." />
+							{:else}
+								<LogOutIcon class="size-4" />
+								<span>Log out</span>
+							{/if}
+						</button>
 					</form>
 				</DropdownMenu.Item>
 			</DropdownMenu.Content>

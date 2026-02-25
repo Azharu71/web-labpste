@@ -153,46 +153,48 @@
 			Lihat detail nilai dan progress praktikum Anda secara transparan
 		</p>
 	</div>
-
-	<!-- Student Profile Card -->
-	<div
-		class="bg-gradient-to-r from-primary/10 via-primary/5 to-background p-6 rounded-lg shadow-sm hover:shadow-md transition-shadow"
-	>
-		<div class="flex flex-col sm:flex-row sm:items-center gap-6">
-			<!-- Avatar and Basic Info -->
-			<div class="flex items-center gap-4">
-				<Avatar.Root class="h-20 w-20 border-4 border-background shadow-lg">
-					<Avatar.Fallback class="text-xl font-bold bg-primary text-primary-foreground">
-						{praktikumScores[0]?.nama
-							? praktikumScores[0]?.nama.substring(0, 2).toUpperCase()
-							: 'UN'}
-					</Avatar.Fallback>
-				</Avatar.Root>
-				<div class="space-y-2">
-					<h2 class="text-2xl font-bold">
-						{praktikumScores[0]?.nama?.toUpperCase() || 'NAMA TIDAK TERSEDIA'}
-					</h2>
-					<div class="flex items-center gap-2">
-						<Badge variant="secondary" class="bg-blue-500 text-white">
-							{userData.nim || 'NIM tidak tersedia'}
-						</Badge>
-					</div>
-				</div>
-			</div>
-
-			<!-- Quick Stats -->
-			{#if praktikumScores.length > 0}
-				<div class="flex-1 flex justify-center sm:justify-end sm:ml-auto">
-					<div class="text-center">
-						<div class="text-2xl font-bold text-primary">
-							{praktikumScores.length}
+	{#if false}
+		<!-- Student Profile Card -->
+		<div
+			class="bg-gradient-to-r from-primary/10 via-primary/5 to-background p-6 rounded-lg shadow-sm hover:shadow-md transition-shadow"
+		>
+			<div class="flex flex-col sm:flex-row sm:items-center gap-6">
+				<!-- Avatar and Basic Info -->
+				<div class="flex items-center gap-4">
+					<Avatar.Root class="h-20 w-20 border-4 border-background shadow-lg">
+						<Avatar.Fallback class="text-xl font-bold bg-primary text-primary-foreground">
+							{praktikumScores[0]?.nama
+								? praktikumScores[0]?.nama.substring(0, 2).toUpperCase()
+								: 'UN'}
+						</Avatar.Fallback>
+					</Avatar.Root>
+					<div class="space-y-2">
+						<h2 class="text-2xl font-bold">
+							{praktikumScores[0]?.nama?.toUpperCase() || 'NAMA TIDAK TERSEDIA'}
+						</h2>
+						<div class="flex items-center gap-2">
+							<Badge variant="secondary" class="bg-blue-500 text-white">
+								{userData.nim || 'NIM tidak tersedia'}
+							</Badge>
 						</div>
-						<p class="text-xs text-muted-foreground">Praktikum Diambil</p>
 					</div>
 				</div>
-			{/if}
+
+				<!-- Quick Stats -->
+				{#if praktikumScores.length > 0}
+					<div class="flex-1 flex justify-center sm:justify-end sm:ml-auto">
+						<div class="text-center">
+							<div class="text-2xl font-bold text-primary">
+								{praktikumScores.length}
+							</div>
+							<p class="text-xs text-muted-foreground">Praktikum Diambil</p>
+						</div>
+					</div>
+				{/if}
+			</div>
 		</div>
-	</div>
+	{/if}
+
 	<!-- Praktikum Scores Section -->
 	<div class="space-y-4">
 		{#if praktikumScores.length > 0}
@@ -428,7 +430,10 @@
 			</Accordion.Root>
 		{:else}
 			<div class="text-center py-8">
-				<p class="text-muted-foreground">Tidak ada data nilai praktikum yang tersedia.</p>
+				<p class="text-muted-foreground">
+					Transparansi nilai akan dibagikan pada saat semua unit praktikum telah selesai
+					dilaksanakan
+				</p>
 			</div>
 		{/if}
 	</div>
