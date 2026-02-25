@@ -9,7 +9,8 @@ const spreadsheetMap: Record<string, string> = {
 	'prak-ik-2627': 'https://docs.google.com/spreadsheets/d/e/2PACX-1vSuyRobtm5Ie_t6V0PlyHWXraSLr9-TGv66oDckCLxW_mhP2no7IIB7fHrhOThWd9M7MVKUmJKCh0KV/pubhtml?gid=0&single=true',
 	'prak-dasel-2627':'https://docs.google.com/spreadsheets/d/e/2PACX-1vR2b8D2oXvoGjTNHAUjNsupHz7WlHr32B0UXfXMLU18l6tcrBoxRoN_z2DWSqFg6LO_ON4XYE9amKWx/pubhtml?gid=1398249081&single=true',
 	'prak-skd-2627':'https://docs.google.com/spreadsheets/d/e/2PACX-1vSB5u3sgVkSl05FXW-DPan1EGoNEWakxVCkckDF1iDtc4fvLIr3SQSvgUvqSSyUzX7TMVBxc7YvGeoo/pubhtml?gid=0&single=true',
-	'prak-meli-2627':'https://docs.google.com/spreadsheets/d/e/2PACX-1vSnBCrCihORcXk_tx32JoVnnz3BfbV5kud-SzxF-riGETLX6Umg12_pKRNAEqDC4n-8jy52hJr4hJ8d/pubhtml'
+	'prak-meli-2627':'https://docs.google.com/spreadsheets/d/e/2PACX-1vSnBCrCihORcXk_tx32JoVnnz3BfbV5kud-SzxF-riGETLX6Umg12_pKRNAEqDC4n-8jy52hJr4hJ8d/pubhtml',
+	'prak-penglis-2627': 'https://docs.google.com/spreadsheets/d/e/2PACX-1vQFlfQH0N4SnAfTZZnbCgtw8UXni-8iNY3gdQu-RgexqM3jHFEnsgPZgh9NSMMiiyd8741V7upGvmGs/pubhtml?gid=2108544642&single=true'
 
 };
 

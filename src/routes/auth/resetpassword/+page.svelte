@@ -36,7 +36,7 @@
 							</div>
 						</a>
 						<h2 class="text-xl font-bold">
-							{data.mode === 'request' ? 'Lupa Password' : 'Buat Password Baru'}
+							{data.mode === 'request' ? 'Forget Password' : 'Create new password'}
 						</h2>
 						<p class="text-center text-sm text-muted-foreground">
 							{data.mode === 'request'

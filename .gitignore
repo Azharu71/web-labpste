@@ -24,6 +24,6 @@ vite.config.ts.timestamp-*
 
 # Folder
 /static
-Gemini.md
+GEMINI.md
 /logs
 

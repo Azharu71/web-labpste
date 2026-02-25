@@ -431,8 +431,7 @@
 		{:else}
 			<div class="text-center py-8">
 				<p class="text-muted-foreground">
-					Transparansi nilai akan dibagikan pada saat semua unit praktikum telah selesai
-					dilaksanakan
+					Transparansi nilai akan dibagikan pada saat semua unit praktikum telah diselesaikan
 				</p>
 			</div>
 		{/if}
