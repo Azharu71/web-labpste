@@ -3,6 +3,7 @@
 	import { Separator } from '$lib/components/ui/separator';
 	import * as Sidebar from '$lib/components/ui/sidebar';
 	import type { PageData } from './$types';
+	import ScanEye from '@lucide/svelte/icons/scan-eye';
 
 	let { data }: { data: PageData } = $props();
 	const { praktikum } = data;
@@ -37,6 +38,19 @@
 </header>
 
 <div class="flex flex-1 flex-col gap-4 p-4 pt-0">
+	<!-- Toolbar Khusus Mobile / Fallback Render PDF -->
+	<div class="flex items-center justify-between rounded-lg border bg-muted/50 p-3">
+		<a
+			href={praktikum.signedUrl}
+			target="_blank"
+			rel="noopener noreferrer"
+			class="inline-flex h-9 items-center justify-center rounded-md border border-input bg-background px-3 text-sm font-medium shadow-sm transition-colors hover:bg-accent hover:text-accent-foreground focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring disabled:pointer-events-none disabled:opacity-50 shrink-0 gap-2"
+		>
+			<ScanEye class="h-4 w-4" />
+			Buka Dokumen
+		</a>
+	</div>
+
 	<div class="flex-1 rounded-lg border bg-background overflow-hidden" style="min-height: 80vh;">
 		<iframe
 			src={praktikum.signedUrl}

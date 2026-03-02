@@ -6,13 +6,14 @@
 
 <div class="w-full overflow-hidden rounded-lg border">
 	{#if data.spreadsheetUrl}
-		<iframe
-			src={data.spreadsheetUrl}
-			class="w-full"
-			style="height: 70vh; min-height: 400px;"
-			frameborder="0"
-			title="Jadwal Kelompok {data.praktikum.nama_praktikum}"
-		></iframe>
+		<div class="w-full overflow-x-auto" style="-webkit-overflow-scrolling: touch;">
+			<iframe
+				src={data.spreadsheetUrl}
+				class="block h-[70vh] min-h-[400px] w-full border-none"
+				frameborder="0"
+				title="Jadwal Kelompok {data.praktikum.nama_praktikum}"
+			></iframe>
+		</div>
 	{:else}
 		<div
 			class="flex flex-col items-center justify-center py-16 text-center text-muted-foreground gap-3"

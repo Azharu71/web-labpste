@@ -32,7 +32,7 @@
 			roles: ['Asisten']
 		},
 		{
-			name: 'Kelompok praktikum',
+			name: 'Kelompok & Jadwal',
 			url: '/dashboard/kelompok-praktikum',
 			icon: UsersRoundIcon,
 			roles: ['Asisten', 'Praktikan']
