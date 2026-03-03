@@ -39,6 +39,13 @@
 					</div>
 				</a>
 				<h2 class="text-xl font-bold">Laboratorium PSTE Untirta</h2>
+				<div class="rounded-md border border-red-200 bg-red-50 p-4 text-sm text-red-600">
+					Bagi yang sebelumnya mendaftar menggunakan akun @student<span class="font-bold">
+						s
+					</span>.untirta.ac.id , silahkan gunakan email dengan format
+					<span class="font-bold"> @student.untirta.ac.id </span>
+					untuk melakukan login/reset password
+				</div>
 				<div class="text-center text-sm">
 					Don&apos;t have an account?
 					<a href="/auth/register" class="underline underline-offset-4"> Sign up </a>
