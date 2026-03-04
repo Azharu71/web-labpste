@@ -78,7 +78,7 @@
 							type="checkbox"
 							id="show-password-{id}"
 							bind:checked={showPassword}
-							class="h-4 w-6"
+							class="h-4 w-4"
 						/>
 						<Label for="show-password-{id}" class="text-sm font-normal text-muted-foreground"
 							>Show password</Label

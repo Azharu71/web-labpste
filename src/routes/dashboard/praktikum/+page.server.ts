@@ -23,8 +23,8 @@ export const load: PageServerLoad = async ({ locals: { supabase }, parent }) => 
 		return {
 			praktikum: praktikum || []
 		};
-	} catch (error) {
-		console.error('Unexpected error fetching praktikum data:', error);
+	} catch (err) {
+		console.error('Unexpected error fetching praktikum data:', err);
 		return {
 			praktikum: []
 		};

@@ -117,6 +117,8 @@ export const actions: Actions = {
 
 		if (dbError) {
 			console.error('[pendaftaran] DB error:', dbError);
+			// Hapus file KRS yang sudah di-upload agar tidak jadi orphan di storage
+			await locals.supabase.storage.from('krs-uploads').remove([fileName]);
 			return fail(500, { message: 'Database error: ' + dbError.message });
 		}
 

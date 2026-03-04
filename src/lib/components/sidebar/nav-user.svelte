@@ -55,29 +55,10 @@
 				</DropdownMenu.Label>
 				<DropdownMenu.Separator />
 				<DropdownMenu.Item class="p-0">
-					<form
-						action="/auth/logout"
-						method="POST"
-						class="w-full"
-						use:enhance={() => {
-							isLoggingOut = true;
-							return async ({ update }) => {
-								await update();
-								isLoggingOut = false;
-							};
-						}}
-					>
-						<button
-							type="submit"
-							disabled={isLoggingOut}
-							class="flex w-full items-center gap-2 px-2 py-1.5 text-sm disabled:opacity-60"
-						>
-							{#if isLoggingOut}
-								<Loading variant="inline" message="Keluar..." />
-							{:else}
-								<LogOutIcon class="size-4" />
-								<span>Log out</span>
-							{/if}
+					<form action="/auth/logout" method="POST" class="w-full">
+						<button type="submit" class="flex w-full items-center gap-2 px-2 py-1.5 text-sm">
+							<LogOutIcon class="size-4" />
+							<span>Log out</span>
 						</button>
 					</form>
 				</DropdownMenu.Item>

@@ -37,6 +37,15 @@
 
 	// Praktikum tanpa modul (dropdown upload)
 	const praktikumTanpaModul = $derived(data.praktikumList.filter((p) => !p.url_modul));
+
+	// List tersortir: yang sudah ada modul tampil duluan
+	const sortedPraktikumList = $derived(
+		[...data.praktikumList].sort((a, b) => {
+			if (a.url_modul && !b.url_modul) return -1;
+			if (!a.url_modul && b.url_modul) return 1;
+			return 0;
+		})
+	);
 </script>
 
 <svelte:head>
@@ -66,7 +75,7 @@
 <div class="flex flex-1 flex-col gap-4 p-4 pt-0">
 	<div class="flex flex-col gap-1">
 		<h2 class="text-3xl font-bold tracking-tight">Modul Praktikum</h2>
-		<p class="text-muted-foreground">Unduh atau kelola modul praktikum yang akan dilaksanakan.</p>
+		<p class="text-muted-foreground">Unduh modul praktikum yang akan dilaksanakan.</p>
 	</div>
 
 	<!-- Success banner -->
@@ -150,7 +159,7 @@
 
 	<!-- Card Grid -->
 	<div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
-		{#each data.praktikumList as praktikum (praktikum.id)}
+		{#each sortedPraktikumList as praktikum (praktikum.id)}
 			<Card.Root class="flex flex-col">
 				<Card.Header class="pb-3">
 					<Card.Title class="text-base leading-snug">{praktikum.nama_praktikum}</Card.Title>
@@ -164,14 +173,9 @@
 							<FileText class="h-7 w-7 text-primary shrink-0" />
 							<div class="flex-1 overflow-hidden">
 								<p class="text-xs font-medium">Modul tersedia</p>
-								<a
-									href="/dashboard/modul-praktikum/{praktikum.id}"
-									class="text-xs text-primary hover:underline block truncate"
-								>
-									Lihat / Unduh Dokumen
-								</a>
 							</div>
 						</div>
+						<Button href="/dashboard/modul-praktikum/{praktikum.id}">Buka/Unduh Dokumen</Button>
 
 						{#if isAsisten}
 							<form
@@ -204,7 +208,7 @@
 						{/if}
 					{:else}
 						<div
-							class="bg-muted/50 rounded-md border border-dashed p-3 flex items-center justify-center text-muted-foreground text-xs"
+							class="bg-muted/50 rounded-md border border-dashed p-3 flex items-center justify-center h-full text-muted-foreground text-xs"
 						>
 							Belum ada modul diunggah
 						</div>

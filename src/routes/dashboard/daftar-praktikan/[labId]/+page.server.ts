@@ -10,34 +10,27 @@ const labNameMap: Record<string, string> = {
 };
 
 export const load: PageServerLoad = async ({ params, locals: { supabase } }) => {
-	const { labId } = params;
-	const labName = labNameMap[labId];
+	const labName = labNameMap[params.labId];
 
 	if (!labName) {
 		throw error(404, 'Laboratorium tidak ditemukan');
 	}
 
-	try {
-		// Mengambil daftar praktikum berdasarkan nama lab
-		const { data: praktikum, error: dbError } = await supabase
-			.from('list_praktikum')
-			.select('id, nama_praktikum, semester, tahun')
-			.eq('nama_lab', labName)
-			.eq('semester', 'Genap')
-			.order('nama_praktikum', { ascending: true });
+	const { data: praktikum, error: dbError } = await supabase
+		.from('list_praktikum')
+		.select('id, nama_praktikum, semester, tahun')
+		.eq('nama_lab', labName)
+		.eq('semester', 'Genap')
+		.order('nama_praktikum', { ascending: true });
 
-		if (dbError) {
-			console.error('Error fetching praktikum:', dbError);
-			return { labName, praktikum: [] };
-		}
-
-		return {
-			labId,
-			labName,
-			praktikum: praktikum || []
-		};
-	} catch (err) {
-		console.error('Unexpected error:', err);
-		return { labName, praktikum: [] };
+	if (dbError) {
+		console.error('Error fetching praktikum:', dbError);
+		return { labId: params.labId, labName, praktikum: [] };
 	}
+
+	return {
+		labId: params.labId,
+		labName,
+		praktikum: praktikum ?? []
+	};
 };

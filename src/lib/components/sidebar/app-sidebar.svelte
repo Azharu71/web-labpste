@@ -5,6 +5,7 @@
 	import NotebookPenIcon from '@lucide/svelte/icons/notebook-pen';
 	import UsersRoundIcon from '@lucide/svelte/icons/users-round';
 	import BookText from '@lucide/svelte/icons/book-text';
+	import ClipboardList from '@lucide/svelte/icons/clipboard-list';
 
 	const allNavItems = [
 		{
@@ -18,12 +19,6 @@
 			url: '/dashboard/praktikum',
 			icon: BriefcaseBusinessIcon,
 			roles: ['Asisten']
-		},
-		{
-			name: 'Daftar ulang ',
-			url: '/dashboard/pendaftaran-praktikum',
-			icon: NotebookPenIcon,
-			roles: ['Asisten', 'Praktikan']
 		},
 		{
 			name: 'Daftar praktikan',
@@ -44,8 +39,20 @@
 			roles: ['Asisten', 'Praktikan']
 		},
 		{
+			name: 'Administrasi',
+			url: '/dashboard/administrasi',
+			icon: ClipboardList,
+			roles: ['Asisten', 'Praktikan']
+		},
+		{
 			name: 'Transparansi Nilai',
 			url: '/dashboard/transparansi-nilai',
+			icon: NotebookPenIcon,
+			roles: ['Asisten', 'Praktikan']
+		},
+		{
+			name: 'Daftar ulang ',
+			url: '/dashboard/pendaftaran-praktikum',
 			icon: NotebookPenIcon,
 			roles: ['Asisten', 'Praktikan']
 		}
