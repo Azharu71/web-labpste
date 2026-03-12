@@ -1,6 +1,4 @@
 <script lang="ts">
-	import DataTable from './data-table.svelte';
-	import { columns } from './columns';
 	import * as Breadcrumb from '$lib/components/ui/breadcrumb';
 	import { Separator } from '$lib/components/ui/separator';
 	import * as Sidebar from '$lib/components/ui/sidebar';
@@ -33,15 +31,13 @@
 </header>
 <div class="flex flex-1 flex-col gap-4 p-4 pt-0">
 	<div class="flex flex-col gap-1">
-		<h2 class="text-3xl font-bold tracking-tight">Daftar Nilai Praktikum</h2>
+		<h1 class="text-3xl font-bold tracking-tight">Daftar Nilai Praktikum</h1>
 		<p class="text-muted-foreground">
 			Daftar Keseluruhan Nilai Praktikum Laboratorium Program Studi Teknik Elektro
 		</p>
 	</div>
-	<div class="text-center py-8">
-		<p class="text-muted-foreground">Coming soon...</p>
+	<div class="text-center py-12">
+		<p class="text-sm font-medium text-foreground mb-1">Fitur dalam pengembangan</p>
+		<p class="text-xs text-muted-foreground">Halaman ini belum tersedia. Silakan kembali lagi nanti.</p>
 	</div>
-	<!-- <div class="min-h-[100vh] flex-1 rounded-xl md:min-h-min">
-				<DataTable data={data.nilaiPraktikum} {columns} />
-			</div> -->
 </div>

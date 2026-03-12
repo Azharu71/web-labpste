@@ -7,6 +7,11 @@
 	import UsersIcon from '@lucide/svelte/icons/users';
 	import BookOpenIcon from '@lucide/svelte/icons/book-open';
 	import GraduationCapIcon from '@lucide/svelte/icons/graduation-cap';
+	import NotebookPenIcon from '@lucide/svelte/icons/notebook-pen';
+	import BriefcaseIcon from '@lucide/svelte/icons/briefcase-business';
+	import UsersRoundIcon from '@lucide/svelte/icons/users-round';
+	import BookTextIcon from '@lucide/svelte/icons/book-text';
+	import ChevronRightIcon from '@lucide/svelte/icons/chevron-right';
 
 	let { data }: { data: PageData } = $props();
 
@@ -42,11 +47,13 @@
 	</div>
 
 	<!-- Stats Cards -->
-	<div class="grid gap-4 md:grid-cols-1 lg:grid-cols-3">
+	<div class="grid gap-4 lg:grid-cols-3">
 		<Card.Root>
 			<Card.Header class="flex flex-row items-center justify-between space-y-0 pb-2">
 				<Card.Title class="text-sm font-medium">Total Asisten</Card.Title>
-				<GraduationCapIcon class="h-4 w-4 text-muted-foreground" />
+				<div class="rounded-md bg-primary/10 p-1.5">
+					<GraduationCapIcon class="h-4 w-4 text-primary" />
+				</div>
 			</Card.Header>
 			<Card.Content>
 				<div class="text-2xl font-bold">{stats.totalAsisten}</div>
@@ -57,7 +64,9 @@
 		<Card.Root>
 			<Card.Header class="flex flex-row items-center justify-between space-y-0 pb-2">
 				<Card.Title class="text-sm font-medium">Total Praktikan</Card.Title>
-				<UsersIcon class="h-4 w-4 text-muted-foreground" />
+				<div class="rounded-md bg-chart-3/15 p-1.5">
+					<UsersIcon class="h-4 w-4 text-chart-3" />
+				</div>
 			</Card.Header>
 			<Card.Content>
 				<div class="text-2xl font-bold">{stats.totalPraktikan}</div>
@@ -67,90 +76,105 @@
 
 		<Card.Root>
 			<Card.Header class="flex flex-row items-center justify-between space-y-0 pb-2">
-				<Card.Title class="text-sm font-medium">Total Praktikum Semester Genap</Card.Title>
-				<BookOpenIcon class="h-4 w-4 text-muted-foreground" />
+				<Card.Title class="text-sm font-medium">Total Praktikum</Card.Title>
+				<div class="rounded-md bg-chart-4/15 p-1.5">
+					<BookOpenIcon class="h-4 w-4 text-chart-4" />
+				</div>
 			</Card.Header>
 			<Card.Content>
 				<div class="text-2xl font-bold">{stats.totalPraktikum}</div>
-				<p class="text-xs text-muted-foreground">Mata kuliah praktikum</p>
+				<p class="text-xs text-muted-foreground">Mata kuliah semester ini</p>
 			</Card.Content>
 		</Card.Root>
 	</div>
 
-	<!-- Top Students Section -->
-
-	<!-- Quick Actions or Additional Info (Role-based) -->
-	<!-- {#if userData.role === 'Asisten'}
-				<Card.Root>
-					<Card.Header>
-						<Card.Title>Aksi Cepat</Card.Title>
-						<Card.Description>Kelola data praktikum dan nilai dengan mudah</Card.Description>
-					</Card.Header>
-					<Card.Content>
-						<div class="grid gap-4 md:grid-cols-2">
-							<a href="/dashboard/praktikum" class="block">
-								<Card.Root class="transition-all hover:shadow-md hover:scale-105 cursor-pointer">
-									<Card.Content class="flex items-center space-x-4">
-										<BookOpenIcon class="h-8 w-8 text-primary" />
-										<div>
-											<p class="font-medium">Kelola Praktikum</p>
-											<p class="text-sm text-muted-foreground">Tambah, edit, dan kelola mata kuliah praktikum</p>
-										</div>
-									</Card.Content>
-								</Card.Root>
-							</a>
-							<a href="/dashboard/nilai-praktikum" class="block">
-								<Card.Root class="transition-all hover:shadow-md hover:scale-105 cursor-pointer">
-									<Card.Content class="flex items-center space-x-4">
-										<GraduationCapIcon class="h-8 w-8 text-primary" />
-										<div>
-											<p class="font-medium">Kelola Nilai</p>
-											<p class="text-sm text-muted-foreground">Input dan kelola nilai praktikan</p>
-										</div>
-									</Card.Content>
-								</Card.Root>
-							</a>
+	<!-- Quick Links (role-based) -->
+	{#if userData.role === 'Asisten'}
+		<Card.Root>
+			<Card.Header class="pb-3">
+				<Card.Title class="text-sm">Aksi Cepat</Card.Title>
+				<Card.Description class="text-xs">Kelola data praktikum dan nilai</Card.Description>
+			</Card.Header>
+			<Card.Content class="p-0">
+				<div class="divide-y divide-border">
+					<a
+						href="/dashboard/praktikum"
+						class="flex items-center gap-3 px-6 py-3 hover:bg-accent transition-colors group"
+					>
+						<div class="rounded-md bg-primary/10 p-1.5 shrink-0">
+							<BriefcaseIcon class="h-4 w-4 text-primary" />
 						</div>
-					</Card.Content>
-				</Card.Root>
-			{:else}
-				<Card.Root>
-					<Card.Header>
-						<Card.Title>Informasi Praktikan</Card.Title>
-						<Card.Description>Informasi penting untuk praktikan</Card.Description>
-					</Card.Header>
-					<Card.Content>
-						<div class="space-y-4">
-							<div class="flex items-start space-x-3">
-								<div class="w-2 h-2 bg-primary rounded-full mt-2 flex-shrink-0"></div>
-								<div>
-									<p class="font-medium">Cek Nilai Praktikum</p>
-									<p class="text-sm text-muted-foreground">
-										Lihat nilai dan transparansi praktikum Anda di menu Transparansi Nilai
-									</p>
-								</div>
-							</div>
-							<div class="flex items-start space-x-3">
-								<div class="w-2 h-2 bg-primary rounded-full mt-2 flex-shrink-0"></div>
-								<div>
-									<p class="font-medium">Jadwal Praktikum</p>
-									<p class="text-sm text-muted-foreground">
-										Pastikan hadir tepat waktu sesuai jadwal yang telah ditentukan
-									</p>
-								</div>
-							</div>
-							<div class="flex items-start space-x-3">
-								<div class="w-2 h-2 bg-primary rounded-full mt-2 flex-shrink-0"></div>
-								<div>
-									<p class="font-medium">Kontak Asisten</p>
-									<p class="text-sm text-muted-foreground">
-										Hubungi asisten jika ada pertanyaan terkait praktikum
-									</p>
-								</div>
-							</div>
+						<div class="flex-1 min-w-0">
+							<p class="text-sm font-medium">Kelola Praktikum</p>
+							<p class="text-xs text-muted-foreground">Tambah, edit, dan kelola mata kuliah praktikum</p>
 						</div>
-					</Card.Content>
-				</Card.Root>
-			{/if}
-		</div> -->
+						<ChevronRightIcon class="h-4 w-4 text-muted-foreground group-hover:text-foreground transition-colors shrink-0" />
+					</a>
+					<a
+						href="/dashboard/nilai-praktikum"
+						class="flex items-center gap-3 px-6 py-3 hover:bg-accent transition-colors group"
+					>
+						<div class="rounded-md bg-chart-3/15 p-1.5 shrink-0">
+							<NotebookPenIcon class="h-4 w-4 text-chart-3" />
+						</div>
+						<div class="flex-1 min-w-0">
+							<p class="text-sm font-medium">Kelola Nilai</p>
+							<p class="text-xs text-muted-foreground">Input dan kelola nilai praktikan</p>
+						</div>
+						<ChevronRightIcon class="h-4 w-4 text-muted-foreground group-hover:text-foreground transition-colors shrink-0" />
+					</a>
+				</div>
+			</Card.Content>
+		</Card.Root>
+	{:else}
+		<Card.Root>
+			<Card.Header class="pb-3">
+				<Card.Title class="text-sm">Akses Cepat</Card.Title>
+				<Card.Description class="text-xs">Halaman yang sering digunakan</Card.Description>
+			</Card.Header>
+			<Card.Content class="p-0">
+				<div class="divide-y divide-border">
+					<a
+						href="/dashboard/transparansi-nilai"
+						class="flex items-center gap-3 px-6 py-3 hover:bg-accent transition-colors group"
+					>
+						<div class="rounded-md bg-primary/10 p-1.5 shrink-0">
+							<NotebookPenIcon class="h-4 w-4 text-primary" />
+						</div>
+						<div class="flex-1 min-w-0">
+							<p class="text-sm font-medium">Cek Nilai Praktikum</p>
+							<p class="text-xs text-muted-foreground">Lihat nilai dan transparansi hasil praktikum Anda</p>
+						</div>
+						<ChevronRightIcon class="h-4 w-4 text-muted-foreground group-hover:text-foreground transition-colors shrink-0" />
+					</a>
+					<a
+						href="/dashboard/kelompok-praktikum"
+						class="flex items-center gap-3 px-6 py-3 hover:bg-accent transition-colors group"
+					>
+						<div class="rounded-md bg-chart-4/15 p-1.5 shrink-0">
+							<UsersRoundIcon class="h-4 w-4 text-chart-4" />
+						</div>
+						<div class="flex-1 min-w-0">
+							<p class="text-sm font-medium">Kelompok & Jadwal</p>
+							<p class="text-xs text-muted-foreground">Lihat kelompok dan jadwal praktikum Anda</p>
+						</div>
+						<ChevronRightIcon class="h-4 w-4 text-muted-foreground group-hover:text-foreground transition-colors shrink-0" />
+					</a>
+					<a
+						href="/dashboard/modul-praktikum"
+						class="flex items-center gap-3 px-6 py-3 hover:bg-accent transition-colors group"
+					>
+						<div class="rounded-md bg-chart-3/15 p-1.5 shrink-0">
+							<BookTextIcon class="h-4 w-4 text-chart-3" />
+						</div>
+						<div class="flex-1 min-w-0">
+							<p class="text-sm font-medium">Modul Praktikum</p>
+							<p class="text-xs text-muted-foreground">Akses materi dan modul praktikum digital</p>
+						</div>
+						<ChevronRightIcon class="h-4 w-4 text-muted-foreground group-hover:text-foreground transition-colors shrink-0" />
+					</a>
+				</div>
+			</Card.Content>
+		</Card.Root>
+	{/if}
 </div>

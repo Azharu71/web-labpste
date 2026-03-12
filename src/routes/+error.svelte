@@ -17,17 +17,17 @@
 			<Card.Title class="text-2xl">{$page.status}</Card.Title>
 			<Card.Description>
 				{#if $page.status === 403}
-					You don't have permission to access this page. Please contact Asisten if you believe this
-					is an error.
+					Kamu tidak punya akses ke halaman ini. Hubungi asisten jika kamu merasa ini adalah
+					kesalahan.
 				{:else if $page.status === 404}
-					The page you're looking for doesn't exist.
+					Halaman yang kamu cari tidak ditemukan.
 				{:else}
-					An error occurred: {$page.error?.message || 'Unknown error'}
+					Terjadi kesalahan: {$page.error?.message || 'Error tidak diketahui'}
 				{/if}
 			</Card.Description>
 		</Card.Header>
 		<Card.Content class="text-center">
-			<Button href="/dashboard" class="w-full mt-4">Back</Button>
+			<Button href="/dashboard" class="w-full mt-4">Kembali ke Dashboard</Button>
 		</Card.Content>
 	</Card.Root>
 </div>

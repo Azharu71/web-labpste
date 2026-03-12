@@ -47,8 +47,8 @@
 					untuk melakukan login/reset password
 				</div>
 				<div class="text-center text-sm">
-					Don&apos;t have an account?
-					<a href="/auth/register" class="underline underline-offset-4"> Sign up </a>
+					Belum punya akun?
+					<a href="/auth/register" class="underline underline-offset-4"> Daftar </a>
 				</div>
 			</div>
 			<div class="flex flex-col gap-6">
@@ -61,16 +61,16 @@
 						<Label for="password-{id}">Password</Label>
 						<a
 							href="/auth/resetpassword"
-							class="text-sm text-blue-500 underline-offset-4 hover:underline"
+							class="text-sm text-primary underline-offset-4 hover:underline"
 						>
-							Forgot your password?
+							Lupa password?
 						</a>
 					</div>
 					<Input
 						name="password"
 						id="password-{id}"
 						type={showPassword ? 'text' : 'password'}
-						placeholder="Enter your password"
+						placeholder="Masukkan password"
 						required
 					/>
 					<div class="flex items-center gap-2">
@@ -81,7 +81,7 @@
 							class="h-4 w-4"
 						/>
 						<Label for="show-password-{id}" class="text-sm font-normal text-muted-foreground"
-							>Show password</Label
+							>Tampilkan password</Label
 						>
 					</div>
 				</div>
@@ -89,7 +89,7 @@
 					{#if isLoading}
 						<Loading variant="inline" message="Sedang memproses..." />
 					{:else}
-						Login
+						Masuk
 					{/if}
 				</Button>
 			</div>

@@ -41,8 +41,8 @@
 				</a>
 				<h2 class="text-xl font-bold">Laboratorium PSTE Untirta</h2>
 				<div class="text-center text-sm">
-					Already have an account?
-					<a href="/auth/login" class="underline underline-offset-4"> Login </a>
+					Sudah punya akun?
+					<a href="/auth/login" class="underline underline-offset-4"> Masuk </a>
 				</div>
 			</div>
 			<div class="flex flex-col gap-6">
@@ -75,29 +75,29 @@
 						id="password-{id}"
 						name="password"
 						type={showPassword ? 'text' : 'password'}
-						placeholder="Enter your password"
+						placeholder="Masukkan password"
 						required
 					/>
 				</div>
 				<div class="grid gap-3">
-					<Label for="confirmPassword-{id}">Confirmation Password</Label>
+					<Label for="confirmPassword-{id}">Konfirmasi Password</Label>
 					<Input
 						id="confirmPassword-{id}"
 						name="confirmPassword"
 						type={showPassword ? 'text' : 'password'}
-						placeholder="Confirmation password"
+						placeholder="Masukkan ulang password"
 						required
 					/>
 				</div>
 				<div class="flex items-center gap-2">
 					<input
 						type="checkbox"
-						id="show-confirm-password"
+						id="show-password-{id}"
 						bind:checked={showPassword}
 						class="h-4 w-4"
 					/>
-					<Label for="show-confirm-password" class="text-sm font-normal text-muted-foreground">
-						Show password
+					<Label for="show-password-{id}" class="text-sm font-normal text-muted-foreground">
+						Tampilkan password
 					</Label>
 				</div>
 
@@ -105,7 +105,7 @@
 					{#if isLoading}
 						<Loading variant="inline" message="Sedang memproses..." />
 					{:else}
-						Sign Up
+						Daftar
 					{/if}
 				</Button>
 			</div>

@@ -74,7 +74,7 @@
 
 <div class="flex flex-1 flex-col gap-4 p-4 pt-0">
 	<div class="flex flex-col gap-1">
-		<h2 class="text-3xl font-bold tracking-tight">Modul Praktikum</h2>
+		<h1 class="text-3xl font-bold tracking-tight">Modul Praktikum</h1>
 		<p class="text-muted-foreground">Unduh modul praktikum yang akan dilaksanakan.</p>
 	</div>
 
@@ -142,7 +142,7 @@
 					<Button
 						type="submit"
 						size="sm"
-						class="gap-2 sm:shrink-0"
+						class="gap-2 w-full sm:w-auto sm:shrink-0"
 						disabled={isUploading || !selectedPraktikumId}
 					>
 						{#if isUploading}

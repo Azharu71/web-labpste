@@ -68,7 +68,7 @@
 
 <div class="flex flex-1 flex-col gap-6 p-6 pt-0">
 	<div class="flex flex-col gap-1">
-		<h2 class="text-3xl font-bold tracking-tight">Pendaftaran Praktikum</h2>
+		<h1 class="text-3xl font-bold tracking-tight">Pendaftaran Praktikum</h1>
 		<p class="text-muted-foreground">
 			Pilih laboratorium untuk melakukan pendaftaran ulang praktikum.
 		</p>

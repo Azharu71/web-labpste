@@ -2,27 +2,17 @@
 	import * as Sidebar from '$lib/components/ui/sidebar';
 	import * as Breadcrumb from '$lib/components/ui/breadcrumb';
 	import { Separator } from '$lib/components/ui/separator';
-	import { goto } from '$app/navigation';
 	import { page } from '$app/stores';
 	import type { LayoutData } from './$types';
 
 	let { data, children }: { data: LayoutData; children: import('svelte').Snippet } = $props();
 
-	// Ambil praktikumId aktif dari URL
+	// Active praktikumId from URL
 	let selectedId = $derived($page.params.praktikumId ?? '');
-
-	function handleChange(e: Event) {
-		const id = (e.target as HTMLSelectElement).value;
-		if (id) {
-			goto(`/dashboard/kelompok-praktikum/${id}`);
-		} else {
-			goto('/dashboard/kelompok-praktikum');
-		}
-	}
 </script>
 
 <header
-	class="group-has-data-[collapsible=icon]/sidebar-wrapper:h-12 flex h-16 shrink-0 items-center gap-2 transition-[width,height] ease-linear"
+	class="flex h-16 shrink-0 items-center gap-2 transition-[width,height] ease-linear"
 >
 	<div class="flex items-center gap-2 px-4">
 		<Sidebar.Trigger class="-ml-1" />
@@ -41,25 +31,25 @@
 	</div>
 </header>
 
-<div class="flex flex-1 flex-col gap-4 p-4 pt-0">
+<div class="flex flex-1 flex-col gap-5 p-4 pt-0">
 	<div class="flex flex-col gap-1">
-		<h2 class="text-3xl font-bold tracking-tight">Daftar Kelompok dan Jadwal</h2>
+		<h1 class="text-3xl font-bold tracking-tight">Jadwal &amp; Kelompok Praktikum</h1>
+		<p class="text-muted-foreground">Pilih laboratorium untuk melihat pembagian jadwal asisten dan kelompok.</p>
 	</div>
 
-	<!-- Dropdown Pilih Praktikum -->
-	<div class="flex flex-wrap items-center gap-2">
-		<label for="praktikum-select" class="text-sm font-medium shrink-0">Pilih Praktikum:</label>
-		<select
-			id="praktikum-select"
-			value={selectedId}
-			onchange={handleChange}
-			class="flex h-9 w-full max-w-sm rounded-md border border-input bg-background px-3 py-1 text-sm shadow-sm transition-colors focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring min-w-0"
-		>
-			<option value="">Pilih Praktikum</option>
-			{#each data.praktikumList as item}
-				<option value={item.id}>{item.nama_praktikum}</option>
-			{/each}
-		</select>
+	<!-- Horizontal Pill Navigation -->
+	<div 
+		class="flex overflow-x-auto pb-2 pt-1 -mx-4 px-4 sm:mx-0 sm:px-1 scrollbar-none gap-2" 
+		style="-webkit-overflow-scrolling: touch; mask-image: linear-gradient(to right, black 90%, transparent 100%);"
+	>
+		{#each data.praktikumList as item}
+			<a
+				href="/dashboard/kelompok-praktikum/{item.id}"
+				class="inline-flex items-center justify-center whitespace-nowrap rounded-md px-4 py-2 text-sm font-medium transition-colors focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring shrink-0 {selectedId === item.id ? 'bg-primary text-primary-foreground shadow' : 'bg-muted/50 text-muted-foreground hover:bg-muted hover:text-foreground'}"
+			>
+				{item.nama_praktikum}
+			</a>
+		{/each}
 	</div>
 
 	<!-- Child route content -->

@@ -1,226 +1,194 @@
 <script lang="ts">
 	import { Button } from '$lib/components/ui/button';
-	import * as Card from '$lib/components/ui/card';
-	import ZapIcon from '@lucide/svelte/icons/zap';
-	import FlaskConicalIcon from '@lucide/svelte/icons/flask-conical';
-	import GraduationCapIcon from '@lucide/svelte/icons/graduation-cap';
-	import UsersIcon from '@lucide/svelte/icons/users';
-	import BookOpenIcon from '@lucide/svelte/icons/book-open';
-	import AwardIcon from '@lucide/svelte/icons/award';
 	import IconWhite from '$lib/assets/icon-pste-white.webp';
+	import IconColour from '$lib/assets/icon-pste.webp';
 </script>
 
-<div class="min-h-screen bg-gradient-to-br from-blue-50 via-white to-indigo-50">
-	<!-- Navigation Header -->
-	<nav class="bg-white/80 backdrop-blur-md border-b border-gray-200 sticky top-0 z-50">
-		<div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-			<div class="flex items-center justify-between h-16">
-				<a href="/" class="flex items-center space-x-3">
-					<div class="p-2 bg-blue-600 rounded-lg">
-						<img src={IconWhite} alt="Icon" class="w-6" />
+<div class="min-h-screen bg-background">
+	<!-- Navigation -->
+	<nav class="bg-sidebar border-b border-sidebar-border sticky top-0 z-50">
+		<div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
+			<div class="flex items-center justify-between h-14">
+				<a href="/" class="flex items-center gap-2.5 min-w-0">
+					<div class="flex items-center justify-center w-8 h-8 bg-primary rounded-md shrink-0">
+						<img src={IconWhite} alt="Lab PSTE" class="w-5 h-5 object-contain" />
 					</div>
-					<div>
-						<h1 class="text-xl font-bold text-gray-900">Lab. PSTE</h1>
-					</div>
+					<span class="text-sm font-semibold text-foreground tracking-tight truncate"
+						>Lab. PSTE</span
+					>
 				</a>
-				<div class="flex items-center space-x-3">
-					<Button variant="ghost" href="/auth/login">Masuk</Button>
-					<Button href="/auth/register">Daftar</Button>
+				<div class="flex items-center gap-1.5 shrink-0 ml-3">
+					<Button variant="ghost" size="sm" href="/auth/login" class="px-3">Masuk</Button>
+					<Button size="sm" href="/auth/register" class="px-3">Daftar</Button>
 				</div>
 			</div>
 		</div>
 	</nav>
 
-	<!-- Hero Section -->
-	<section class="relative overflow-hidden">
-		<div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-24">
-			<div class="text-center">
-				<!-- <Badge variant="secondary" class="mb-6">
-					<FlaskConicalIcon class="h-4 w-4 mr-2" />
-					Manajemen Praktikum
-				</Badge> -->
-				<h1 class="text-4xl md:text-6xl font-bold text-gray-900 mb-6">
-					Laboratorium<br />
-					<span
-						class="bg-gradient-to-r from-blue-600 to-indigo-600 bg-clip-text text-transparent text-5xl"
-					>
-						Program Studi Teknik Elektro
-					</span>
-				</h1>
-				<p class="text-xl text-gray-600 max-w-3xl mx-auto mb-8">
-					Platform digital untuk mengelola praktikum, nilai, dan laporan mahasiswa Program Studi
-					Teknik Elektro. Akses mudah, transparan, dan efisien untuk pembelajaran yang lebih baik.
+	<!-- Hero -->
+	<section class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-12 sm:py-16 lg:py-28">
+		<div class="grid lg:grid-cols-2 gap-10 lg:gap-12 items-center">
+			<!-- Left: Text -->
+			<div>
+				<!-- Mobile-only logo: appear above text on small screens -->
+				<div class="flex justify-center mb-8 lg:hidden">
+					<div class="relative">
+						<div class="absolute inset-0 rounded-full bg-primary/8 scale-125"></div>
+						<div class="flex items-center justify-center w-32 h-32 rounded-full bg-primary/10">
+							<img
+								src={IconColour}
+								alt="Laboratorium PSTE Untirta"
+								class="w-20 h-20 object-contain"
+							/>
+						</div>
+					</div>
+				</div>
+
+				<p
+					class="text-xs sm:text-sm font-semibold text-primary uppercase tracking-wide sm:tracking-widest mb-3 sm:mb-4"
+				>
+					Universitas Sultan Ageng Tirtayasa
 				</p>
-				<div class="flex flex-col sm:flex-row gap-4 justify-center">
-					<Button size="lg" href="/auth/login" class="text-lg px-8 py-3">
-						<UsersIcon class="h-5 w-5 mr-2" />
+				<h1
+					class="text-4xl sm:text-5xl lg:text-6xl font-bold text-foreground leading-tight mb-4 sm:mb-5"
+				>
+					Laboratorium<br />
+					<span class="text-primary">Teknik Elektro</span>
+				</h1>
+				<p class="text-muted-foreground leading-relaxed mb-7 sm:mb-8 max-w-md text-sm sm:text-base">
+					Platform digital untuk mengelola praktikum, nilai, dan laporan mahasiswa Program Studi
+					Teknik Elektro. Akses mudah, transparan, dan efisien.
+				</p>
+				<div class="flex flex-col sm:flex-row gap-3">
+					<Button size="lg" href="/auth/login" class="px-7 w-full sm:w-auto">
 						Masuk ke Sistem
 					</Button>
-					<Button size="lg" variant="outline" href="/auth/register" class="text-lg px-8 py-3">
-						<GraduationCapIcon class="h-5 w-5 mr-2" />
+					<Button size="lg" variant="outline" href="/auth/register" class="px-7 w-full sm:w-auto">
 						Daftar Akun Baru
 					</Button>
 				</div>
 			</div>
-		</div>
 
-		<!-- Background Decoration -->
-		<div class="absolute inset-0 -z-10 overflow-hidden">
-			<div
-				class="absolute top-20 left-10 w-72 h-72 bg-blue-200 rounded-full mix-blend-multiply filter blur-xl opacity-30 animate-pulse"
-			></div>
-			<div
-				class="absolute top-40 right-10 w-96 h-96 bg-indigo-200 rounded-full mix-blend-multiply filter blur-xl opacity-30 animate-pulse delay-1000"
-			></div>
-			<div
-				class="absolute bottom-20 left-1/2 transform -translate-x-1/2 w-80 h-80 bg-purple-200 rounded-full mix-blend-multiply filter blur-xl opacity-30 animate-pulse delay-2000"
-			></div>
-		</div>
-	</section>
-
-	<!-- Features Section -->
-	{#if false}
-		<section class="py-24 bg-white/50">
-			<div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-				<div class="text-center mb-16">
-					<h2 class="text-3xl md:text-4xl font-bold text-gray-900 mb-4">Fitur Unggulan</h2>
-					<p class="text-lg text-gray-600 max-w-2xl mx-auto">
-						Dirancang khusus untuk memudahkan pengelolaan praktikum dan meningkatkan pengalaman
-						belajar mahasiswa
-					</p>
-				</div>
-
-				<div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-					<!-- Feature 1 -->
-					<Card.Root class="transition-all hover:shadow-lg hover:-translate-y-1">
-						<Card.Header>
-							<div class="p-3 bg-blue-100 rounded-lg w-fit mb-4">
-								<BookOpenIcon class="h-6 w-6 text-blue-600" />
-							</div>
-							<Card.Title class="text-xl">Manajemen Nilai</Card.Title>
-							<Card.Description>
-								Kelola dan pantau nilai praktikum per unit dengan sistem yang transparan dan mudah
-								diakses
-							</Card.Description>
-						</Card.Header>
-					</Card.Root>
-
-					<!-- Feature 2 -->
-					<Card.Root class="transition-all hover:shadow-lg hover:-translate-y-1">
-						<Card.Header>
-							<div class="p-3 bg-green-100 rounded-lg w-fit mb-4">
-								<FlaskConicalIcon class="h-6 w-6 text-green-600" />
-							</div>
-							<Card.Title class="text-xl">Praktikum Digital</Card.Title>
-							<Card.Description>
-								Akses materi praktikum, submit laporan, dan ikuti jadwal praktikum dalam satu
-								platform
-							</Card.Description>
-						</Card.Header>
-					</Card.Root>
-
-					<!-- Feature 3 -->
-					<Card.Root class="transition-all hover:shadow-lg hover:-translate-y-1">
-						<Card.Header>
-							<div class="p-3 bg-purple-100 rounded-lg w-fit mb-4">
-								<AwardIcon class="h-6 w-6 text-purple-600" />
-							</div>
-							<Card.Title class="text-xl">Transparansi Nilai</Card.Title>
-							<Card.Description>
-								Lihat detail nilai per unit, grade akhir, dan progress pembelajaran secara real-time
-							</Card.Description>
-						</Card.Header>
-					</Card.Root>
-
-					<!-- Feature 4 -->
-					<Card.Root class="transition-all hover:shadow-lg hover:-translate-y-1">
-						<Card.Header>
-							<div class="p-3 bg-orange-100 rounded-lg w-fit mb-4">
-								<UsersIcon class="h-6 w-6 text-orange-600" />
-							</div>
-							<Card.Title class="text-xl">Role-Based Access</Card.Title>
-							<Card.Description>
-								Sistem akses yang disesuaikan untuk admin, dosen, dan mahasiswa dengan hak akses
-								yang tepat
-							</Card.Description>
-						</Card.Header>
-					</Card.Root>
-
-					<!-- Feature 5 -->
-					<Card.Root class="transition-all hover:shadow-lg hover:-translate-y-1">
-						<Card.Header>
-							<div class="p-3 bg-red-100 rounded-lg w-fit mb-4">
-								<GraduationCapIcon class="h-6 w-6 text-red-600" />
-							</div>
-							<Card.Title class="text-xl">Dashboard Mahasiswa</Card.Title>
-							<Card.Description>
-								Dashboard personal untuk melihat progress, ranking, dan statistik pembelajaran
-							</Card.Description>
-						</Card.Header>
-					</Card.Root>
-
-					<!-- Feature 6 -->
-					<Card.Root class="transition-all hover:shadow-lg hover:-translate-y-1">
-						<Card.Header>
-							<div class="p-3 bg-indigo-100 rounded-lg w-fit mb-4">
-								<ZapIcon class="h-6 w-6 text-indigo-600" />
-							</div>
-							<Card.Title class="text-xl">Responsif & Modern</Card.Title>
-							<Card.Description>
-								Interface modern yang responsive dan dapat diakses dari berbagai perangkat
-							</Card.Description>
-						</Card.Header>
-					</Card.Root>
+			<!-- Right: Visual identity — desktop only -->
+			<div class="hidden lg:flex items-center justify-center">
+				<div class="relative">
+					<div class="absolute inset-0 rounded-full bg-primary/8 scale-125"></div>
+					<div class="absolute inset-0 rounded-full bg-primary/5 scale-150"></div>
+					<div
+						class="relative flex items-center justify-center w-64 h-64 rounded-full bg-primary/10"
+					>
+						<img
+							src={IconColour}
+							alt="Laboratorium PSTE Untirta"
+							class="w-40 h-40 object-contain"
+						/>
+					</div>
 				</div>
 			</div>
-		</section>
-	{/if}
-
-	<!-- CTA Section -->
-	<section class="py-24 bg-gradient-to-r from-blue-600 to-indigo-600">
-		<div class="max-w-4xl mx-auto text-center px-4 sm:px-6 lg:px-8">
-			<h2 class="text-3xl md:text-4xl font-bold text-white mb-6">
-				Siap Memulai Praktikum Digital?
-			</h2>
-			<p class="text-xl text-blue-100 mb-8">
-				Bergabunglah dengan sistem manajemen praktikum modern untuk pengalaman belajar yang lebih
-				baik
-			</p>
-			{#if false}
-				<div class="flex flex-col sm:flex-row gap-4 justify-center">
-					<Button size="lg" variant="secondary" href="/auth/register" class="text-lg px-8 py-3">
-						<GraduationCapIcon class="h-5 w-5 mr-2" />
-						Daftar Sekarang
-					</Button>
-					<Button
-						size="lg"
-						variant="outline"
-						href="/auth/login"
-						class="text-lg px-8 py-3 bg-transparent border-white text-white hover:bg-white hover:text-blue-600"
-					>
-						<UsersIcon class="h-5 w-5 mr-2" />
-						Masuk ke Akun
-					</Button>
-				</div>
-			{/if}
 		</div>
 	</section>
 
-	<!-- Footer -->
-	<footer class="bg-gray-900 text-white py-12">
-		<div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-			<div class="text-center">
-				<div class="flex items-center justify-center">
-					<div>
-						<h3 class="text-xl font-bold">Laboratorium Program Studi Teknik Elektro</h3>
-					</div>
+	<!-- Divider -->
+	<div class="border-t border-border"></div>
+
+	<!-- Features strip -->
+	<section class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-12 sm:py-16">
+		<div class="grid sm:grid-cols-3 gap-8 sm:gap-10">
+			<div class="flex sm:block gap-4 sm:gap-0">
+				<div
+					class="w-10 h-10 rounded-lg bg-primary/10 flex items-center justify-center shrink-0 mb-0 sm:mb-4"
+				>
+					<svg
+						class="w-5 h-5 text-primary"
+						fill="none"
+						viewBox="0 0 24 24"
+						stroke="currentColor"
+						stroke-width="2"
+					>
+						<path
+							stroke-linecap="round"
+							stroke-linejoin="round"
+							d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"
+						/>
+					</svg>
 				</div>
-				<div class="flex flex-col justify-center text-gray-400">
-					<div class="flex flex-col justify-center text-gray-400 mb-3">
-						<span>Fakultas Teknik</span>
-						<span>Universitas Sultan Ageng Tirtayasa</span>
-					</div>
-					<span class="text-sm">Copyright &copy; 2026 Lab. PSTE Untirta</span>
+				<div>
+					<h3 class="font-semibold text-foreground mb-1 sm:mt-0">Manajemen Nilai</h3>
+					<p class="text-sm text-muted-foreground leading-relaxed">
+						Kelola dan pantau nilai praktikum setiap unit secara transparan dan terstruktur.
+					</p>
+				</div>
+			</div>
+			<div class="flex sm:block gap-4 sm:gap-0">
+				<div
+					class="w-10 h-10 rounded-lg bg-primary/10 flex items-center justify-center shrink-0 mb-0 sm:mb-4"
+				>
+					<svg
+						class="w-5 h-5 text-primary"
+						fill="none"
+						viewBox="0 0 24 24"
+						stroke="currentColor"
+						stroke-width="2"
+					>
+						<path
+							stroke-linecap="round"
+							stroke-linejoin="round"
+							d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253"
+						/>
+					</svg>
+				</div>
+				<div>
+					<h3 class="font-semibold text-foreground mb-1">Modul Praktikum</h3>
+					<p class="text-sm text-muted-foreground leading-relaxed">
+						Akses materi dan modul praktikum digital langsung dari platform dalam satu tempat.
+					</p>
+				</div>
+			</div>
+			<div class="flex sm:block gap-4 sm:gap-0">
+				<div
+					class="w-10 h-10 rounded-lg bg-primary/10 flex items-center justify-center shrink-0 mb-0 sm:mb-4"
+				>
+					<svg
+						class="w-5 h-5 text-primary"
+						fill="none"
+						viewBox="0 0 24 24"
+						stroke="currentColor"
+						stroke-width="2"
+					>
+						<path
+							stroke-linecap="round"
+							stroke-linejoin="round"
+							d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0z"
+						/>
+					</svg>
+				</div>
+				<div>
+					<h3 class="font-semibold text-foreground mb-1">Kelompok &amp; Jadwal</h3>
+					<p class="text-sm text-muted-foreground leading-relaxed">
+						Pantau pembagian kelompok dan jadwal praktikum yang telah ditentukan asisten.
+					</p>
+				</div>
+			</div>
+		</div>
+	</section>
+
+	<!-- Divider -->
+	<div class="border-t border-border"></div>
+
+	<!-- Footer -->
+	<footer class="bg-sidebar border-t border-sidebar-border py-10">
+		<div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
+			<div
+				class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-6 text-center sm:text-left"
+			>
+				<div>
+					<h3 class="font-semibold text-foreground text-sm mb-1">
+						Laboratorium Program Studi Teknik Elektro
+					</h3>
+					<p class="text-xs text-muted-foreground">
+						Fakultas Teknik — Universitas Sultan Ageng Tirtayasa
+					</p>
+					<p class="text-xs text-muted-foreground mt-3">Copyright &copy; 2026 Lab. PSTE Untirta</p>
 				</div>
 			</div>
 		</div>
