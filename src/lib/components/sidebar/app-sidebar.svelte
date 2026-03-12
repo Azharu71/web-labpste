@@ -6,6 +6,7 @@
 	import UsersRoundIcon from '@lucide/svelte/icons/users-round';
 	import BookText from '@lucide/svelte/icons/book-text';
 	import ClipboardList from '@lucide/svelte/icons/clipboard-list';
+	import RefreshCwIcon from '@lucide/svelte/icons/refresh-cw';
 
 	const allNavItems = [
 		{
@@ -53,7 +54,7 @@
 		{
 			name: 'Daftar ulang ',
 			url: '/dashboard/pendaftaran-praktikum',
-			icon: NotebookPenIcon,
+			icon: RefreshCwIcon,
 			roles: ['Asisten', 'Praktikan']
 		}
 	];
