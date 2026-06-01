@@ -12,7 +12,7 @@
 
 <div class="min-h-screen bg-gradient-to-br from-blue-50 via-white to-indigo-50">
 	<!-- Navigation Header -->
-	<nav class="bg-white/80 backdrop-blur-md border-b border-gray-200 sticky top-0 z-50">
+	<nav class="bg-white/80 backdrop-blur-md border-b-2 border-gray-200 sticky top-0 z-50">
 		<div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
 			<div class="flex items-center justify-between h-16">
 				<a href="/" class="flex items-center space-x-3">
@@ -41,9 +41,7 @@
 				</Badge> -->
 				<h1 class="text-4xl md:text-6xl font-bold text-gray-900 mb-6">
 					Laboratorium<br />
-					<span
-						class="bg-gradient-to-r from-blue-600 to-indigo-600 bg-clip-text text-transparent text-5xl"
-					>
+					<span class="bg-gradient-to-r bg-blue-600 bg-clip-text text-transparent text-5xl">
 						Program Studi Teknik Elektro
 					</span>
 				</h1>
@@ -51,16 +49,6 @@
 					Platform digital untuk mengelola praktikum, nilai, dan laporan mahasiswa Program Studi
 					Teknik Elektro. Akses mudah, transparan, dan efisien untuk pembelajaran yang lebih baik.
 				</p>
-				<div class="flex flex-col sm:flex-row gap-4 justify-center">
-					<Button size="lg" href="/auth/login" class="text-lg px-8 py-3">
-						<UsersIcon class="h-5 w-5 mr-2" />
-						Masuk ke Sistem
-					</Button>
-					<Button size="lg" variant="outline" href="/auth/register" class="text-lg px-8 py-3">
-						<GraduationCapIcon class="h-5 w-5 mr-2" />
-						Daftar Akun Baru
-					</Button>
-				</div>
 			</div>
 		</div>
 
@@ -186,23 +174,12 @@
 				Bergabunglah dengan sistem manajemen praktikum modern untuk pengalaman belajar yang lebih
 				baik
 			</p>
-			{#if false}
-				<div class="flex flex-col sm:flex-row gap-4 justify-center">
-					<Button size="lg" variant="secondary" href="/auth/register" class="text-lg px-8 py-3">
-						<GraduationCapIcon class="h-5 w-5 mr-2" />
-						Daftar Sekarang
-					</Button>
-					<Button
-						size="lg"
-						variant="outline"
-						href="/auth/login"
-						class="text-lg px-8 py-3 bg-transparent border-white text-white hover:bg-white hover:text-blue-600"
-					>
-						<UsersIcon class="h-5 w-5 mr-2" />
-						Masuk ke Akun
-					</Button>
-				</div>
-			{/if}
+			<div class="flex flex-col sm:flex-row gap-4 justify-center">
+				<Button size="lg" variant="secondary" href="/auth/register" class="text-lg px-8 py-3">
+					<GraduationCapIcon class="h-5 w-5 mr-2" />
+					Daftar Sekarang
+				</Button>
+			</div>
 		</div>
 	</section>
 

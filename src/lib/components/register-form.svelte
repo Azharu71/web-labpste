@@ -9,7 +9,6 @@
 	import Loading from '$lib/components/loading.svelte';
 
 	let isLoading = $state(false);
-	let showPassword = $state(false);
 
 	let {
 		ref = $bindable(null),
@@ -32,7 +31,7 @@
 			};
 		}}
 	>
-		<div class="flex flex-col gap-6">
+		<div class="flex flex-col gap-6 border-2 p-8 rounded-2xl">
 			<div class="flex flex-col items-center gap-2">
 				<a href="/" class="flex flex-col items-center gap-2 font-medium">
 					<div class="flex items-center justify-center rounded-md">
@@ -45,6 +44,11 @@
 					<a href="/auth/login" class="underline underline-offset-4"> Login </a>
 				</div>
 			</div>
+			{#if form?.error}
+				<div class="mb-4 rounded-md bg-red-50 p-4 text-sm text-red-600 border border-red-200">
+					{form.error}
+				</div>
+			{/if}
 			<div class="flex flex-col gap-6">
 				<div class="grid gap-3">
 					<Label for="nim-{id}">NIM</Label>
@@ -63,7 +67,7 @@
 						id="email-{id}"
 						name="email"
 						type="email"
-						placeholder="m@example.com"
+						placeholder="333xx@example.com"
 						value={form?.email || ''}
 						required
 					/>
@@ -74,9 +78,10 @@
 					<Input
 						id="password-{id}"
 						name="password"
-						type={showPassword ? 'text' : 'password'}
+						type="password"
 						placeholder="Enter your password"
 						required
+						min="8"
 					/>
 				</div>
 				<div class="grid gap-3">
@@ -84,21 +89,10 @@
 					<Input
 						id="confirmPassword-{id}"
 						name="confirmPassword"
-						type={showPassword ? 'text' : 'password'}
+						type="password"
 						placeholder="Confirmation password"
 						required
 					/>
-				</div>
-				<div class="flex items-center gap-2">
-					<input
-						type="checkbox"
-						id="show-confirm-password"
-						bind:checked={showPassword}
-						class="h-4 w-4"
-					/>
-					<Label for="show-confirm-password" class="text-sm font-normal text-muted-foreground">
-						Show password
-					</Label>
 				</div>
 
 				<Button type="submit" class="w-full" disabled={isLoading}>
@@ -112,11 +106,11 @@
 			<div
 				class="after:border-border relative text-center text-sm after:absolute after:inset-0 after:top-1/2 after:z-0 after:flex after:items-center after:border-t"
 			></div>
+			<div
+				class="text-muted-foreground *:[a]:hover:text-primary *:[a]:underline *:[a]:underline-offset-4 text-balance text-center text-xs"
+			>
+				Copyright &copy; 2026 Lab. PSTE Untirta
+			</div>
 		</div>
 	</form>
-	<div
-		class="text-muted-foreground *:[a]:hover:text-primary *:[a]:underline *:[a]:underline-offset-4 text-balance text-center text-xs"
-	>
-		Copyright &copy; 2026 Lab. PSTE Untirta
-	</div>
 </div>
