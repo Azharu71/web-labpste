@@ -3,9 +3,49 @@ import { fail } from '@sveltejs/kit';
 
 export const load: PageServerLoad = async ({ locals: { supabase }, parent }) => {
     const { userData } = await parent();
+    const isAsisten = userData.role === 'Asisten';
 
+    // Asisten: fetch semua nilai + daftar praktikum untuk filter
+    if (isAsisten) {
+        try {
+            const [scoresResult, praktikumResult] = await Promise.all([
+                supabase
+                    .from('nilai_praktikum')
+                    .select(`
+                        id, praktikum_id, nim, nama,
+                        praktikum_u1, laporan_u1, total_nilai_u1,
+                        praktikum_u2, laporan_u2, total_nilai_u2,
+                        praktikum_u3, laporan_u3, total_nilai_u3,
+                        praktikum_u4, laporan_u4, total_nilai_u4,
+                        praktikum_u5, laporan_u5, total_nilai_u5,
+                        praktikum_u6, laporan_u6, total_nilai_u6,
+                        praktikum_u7, laporan_u7, total_nilai_u7,
+                        praktikum_u8, laporan_u8, total_nilai_u8,
+                        sosialisasi, responsi, absolut, grade,
+                        list_praktikum:praktikum_id ( id, nama_praktikum, nama_lab, semester )
+                    `)
+                    .order('praktikum_id', { ascending: true })
+                    .order('nama', { ascending: true }),
+                supabase
+                    .from('list_praktikum')
+                    .select('id, nama_praktikum, nama_lab, semester')
+                    .order('nama_praktikum', { ascending: true })
+            ]);
+
+            return {
+                praktikumScores: [],
+                allScores: scoresResult.data || [],
+                listPraktikum: praktikumResult.data || []
+            };
+        } catch (error) {
+            console.error('Unexpected error (Asisten):', error);
+            return { praktikumScores: [], allScores: [], listPraktikum: [] };
+        }
+    }
+
+    // Praktikan: hanya fetch nilai sendiri berdasarkan NIM
     if (!userData.nim) {
-        return { praktikumScores: [] };
+        return { praktikumScores: [], allScores: [], listPraktikum: [] };
     }
 
     try {
@@ -27,10 +67,10 @@ export const load: PageServerLoad = async ({ locals: { supabase }, parent }) => 
             .eq('nim', userData.nim)
             .order('praktikum_id', { ascending: true });
 
-        return { praktikumScores: scores || [] };
+        return { praktikumScores: scores || [], allScores: [], listPraktikum: [] };
     } catch (error) {
         console.error('Unexpected error:', error);
-        return { praktikumScores: [] };
+        return { praktikumScores: [], allScores: [], listPraktikum: [] };
     }
 };
 
