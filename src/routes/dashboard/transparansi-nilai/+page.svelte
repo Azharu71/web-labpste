@@ -3,6 +3,7 @@
 	import * as Card from '$lib/components/ui/card';
 	import * as Avatar from '$lib/components/ui/avatar';
 	import { Badge } from '$lib/components/ui/badge';
+	import { Button } from '$lib/components/ui/button';
 
 	import AwardIcon from '@lucide/svelte/icons/award';
 	import MegaphoneIcon from '@lucide/svelte/icons/megaphone';
@@ -15,8 +16,9 @@
 	import * as Breadcrumb from '$lib/components/ui/breadcrumb';
 	import { Separator } from '$lib/components/ui/separator';
 	import * as Sidebar from '$lib/components/ui/sidebar';
-	import type { PageData } from './$types';
-
+	import type { PageData, ActionData } from './$types';
+	import Loading from '$lib/components/loading.svelte';
+	import { enhance } from '$app/forms';
 	// Create a type for the praktikum score data
 	interface PraktikumScore {
 		id: number;
@@ -67,11 +69,32 @@
 			| null;
 	}
 
-	let { data }: { data: PageData & { praktikumScores: PraktikumScore[] } } = $props();
+	let {
+		data,
+		form
+	}: {
+		data: PageData & { praktikumScores: PraktikumScore[] };
+		form: ActionData;
+	} = $props();
+
+	let isUploading = $state(false);
+	let selectedPraktikumId = $state('');
+
+	let showMessage = $state(false);
+	let messageTimeout: ReturnType<typeof setTimeout>;
+
+	$effect(() => {
+		if (form) {
+			showMessage = true;
+			clearTimeout(messageTimeout);
+			messageTimeout = setTimeout(() => (showMessage = false), 5000);
+		}
+	});
 
 	// Data is now coming from layout server load - cached and optimized
 	const userData = data.userData;
 	const praktikumScores = data.praktikumScores || [];
+	const isAsisten = data.userData.role === 'Asisten';
 
 	// Helper function to safely get praktikum info
 	function getPraktikumInfo(scoreData: PraktikumScore) {
@@ -153,47 +176,137 @@
 			Lihat detail nilai dan progress praktikum Anda secara transparan
 		</p>
 	</div>
-	{#if false}
-		<!-- Student Profile Card -->
-		<div
-			class="bg-gradient-to-r from-primary/10 via-primary/5 to-background p-6 rounded-lg shadow-sm hover:shadow-md transition-shadow"
-		>
-			<div class="flex flex-col sm:flex-row sm:items-center gap-6">
-				<!-- Avatar and Basic Info -->
-				<div class="flex items-center gap-4">
-					<Avatar.Root class="h-20 w-20 border-4 border-background shadow-lg">
-						<Avatar.Fallback class="text-xl font-bold bg-primary text-primary-foreground">
-							{praktikumScores[0]?.nama
-								? praktikumScores[0]?.nama.substring(0, 2).toUpperCase()
-								: 'UN'}
-						</Avatar.Fallback>
-					</Avatar.Root>
-					<div class="space-y-2">
-						<h2 class="text-2xl font-bold">
-							{praktikumScores[0]?.nama?.toUpperCase() || 'NAMA TIDAK TERSEDIA'}
-						</h2>
-						<div class="flex items-center gap-2">
-							<Badge variant="secondary" class="bg-blue-500 text-white">
-								{userData.nim || 'NIM tidak tersedia'}
-							</Badge>
+	{#if isAsisten}
+		<Card.Root class="p-6 border-dashed border-2">
+			<Card.Header>
+				<Card.Title class="text-xl font-bold"
+					>Menu Unggah Nilai Praktikum (Admin/Asisten)</Card.Title
+				>
+				<Card.Description>Unggah berkas Nilai dengan formatCSV</Card.Description>
+			</Card.Header>
+			<Card.Content>
+				{#if form && showMessage}
+					{#if form.success}
+						<div
+							class="mb-4 p-4 text-sm text-green-800 bg-green-100 rounded-lg border border-green-200 dark:bg-gray-800 dark:text-green-400"
+							role="alert"
+						>
+							<span class="font-medium">Berhasil!</span>
+							{form.message}
 						</div>
+					{:else if form.error}
+						<div
+							class="mb-4 p-4 text-sm text-red-800 bg-red-100 rounded-lg border border-red-200 dark:bg-gray-800 dark:text-red-400"
+							role="alert"
+						>
+							<span class="font-medium">Gagal!</span>
+							{form.error}
+						</div>
+					{/if}
+				{/if}
+				<form
+					method="POST"
+					action="?/uploadNilai"
+					enctype="multipart/form-data"
+					class="space-y-4"
+					use:enhance={() => {
+						isUploading = true;
+						return async ({ update }) => {
+							await update();
+							isUploading = false;
+							selectedPraktikumId = '';
+						};
+					}}
+				>
+					<div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+						<div class="flex flex-col gap-1">
+							<label for="praktikum_id" class="text-sm font-medium">Pilih Praktikum Target</label>
+							<select
+								id="praktikum_id"
+								name="praktikum_id"
+								required
+								bind:value={selectedPraktikumId}
+								disabled={isUploading}
+								class="flex h-10 w-full rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background file:border-0 file:bg-transparent file:text-sm file:font-medium placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50"
+							>
+								<option value="" disabled>Pilih Praktikum</option>
+								<option value="prak-dasel-2627">Praktikum Dasar Elektronika</option>
+								<option value="prak-skd-2627">Praktikum Sistem Kendali Digital</option>
+								<option value="prak-penglis-2627">Praktikum Pengukuran Listrik</option>
+								<option value="prak-meli-2627">Praktikum Medan Listrik</option>
+								<option value="prak-komnum-2627">Praktikum Komputasi Numerik</option>
+								<option value="prak-ik-2627">Praktikum Instrumentasi Kendali</option>
+								<option value="prak-dsk-2627">Praktikum Dasar Sistem Kendali</option>
+							</select>
+						</div>
+						<div class="flex flex-col gap-1">
+							<label for="file" class="text-sm font-medium">Pilih File CSV Template Nilai</label>
+							<input
+								type="file"
+								id="file"
+								name="file"
+								accept=".csv"
+								required
+								disabled={isUploading}
+								class="cursor-pointer file:mr-4 file:py-2 file:px-4 file:rounded-md file:border-0 file:text-sm file:font-semibold file:bg-primary file:text-primary-foreground hover:file:bg-primary/90 h-12"
+							/>
+						</div>
+					</div>
+					<Button
+						type="submit"
+						disabled={isUploading || !selectedPraktikumId}
+					>
+						{#if isUploading}
+							<Loading variant="inline" message="Mengunggah..." />
+						{:else}
+							Upload nilai
+						{/if}
+					</Button>
+				</form>
+			</Card.Content>
+		</Card.Root>
+	{/if}
+	<!-- {#if false} -->
+	<!-- Student Profile Card -->
+	<div
+		class="bg-gradient-to-r from-primary/10 via-primary/5 to-background p-6 rounded-lg shadow-sm hover:shadow-md transition-shadow"
+	>
+		<div class="flex flex-col sm:flex-row sm:items-center gap-6">
+			<!-- Avatar and Basic Info -->
+			<div class="flex items-center gap-4">
+				<Avatar.Root class="h-20 w-20 border-4 border-background shadow-lg">
+					<Avatar.Fallback class="text-xl font-bold bg-primary text-primary-foreground">
+						{praktikumScores[0]?.nama
+							? praktikumScores[0]?.nama.substring(0, 2).toUpperCase()
+							: 'UN'}
+					</Avatar.Fallback>
+				</Avatar.Root>
+				<div class="space-y-2">
+					<h2 class="text-2xl font-bold">
+						{praktikumScores[0]?.nama?.toUpperCase() || 'NAMA TIDAK TERSEDIA'}
+					</h2>
+					<div class="flex items-center gap-2">
+						<Badge variant="secondary" class="bg-blue-500 text-white">
+							{userData.nim || 'NIM tidak tersedia'}
+						</Badge>
 					</div>
 				</div>
-
-				<!-- Quick Stats -->
-				{#if praktikumScores.length > 0}
-					<div class="flex-1 flex justify-center sm:justify-end sm:ml-auto">
-						<div class="text-center">
-							<div class="text-2xl font-bold text-primary">
-								{praktikumScores.length}
-							</div>
-							<p class="text-xs text-muted-foreground">Praktikum Diambil</p>
-						</div>
-					</div>
-				{/if}
 			</div>
+
+			<!-- Quick Stats -->
+			{#if praktikumScores.length > 0}
+				<div class="flex-1 flex justify-center sm:justify-end sm:ml-auto">
+					<div class="text-center">
+						<div class="text-2xl font-bold text-primary">
+							{praktikumScores.length}
+						</div>
+						<p class="text-xs text-muted-foreground">Praktikum Diambil</p>
+					</div>
+				</div>
+			{/if}
 		</div>
-	{/if}
+	</div>
+	<!-- {/if} -->
 
 	<!-- Praktikum Scores Section -->
 	<div class="space-y-4">

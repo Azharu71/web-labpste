@@ -13,7 +13,7 @@
 <div class="min-h-screen bg-gradient-to-br from-blue-50 via-white to-indigo-50">
 	<!-- Navigation Header -->
 	<nav class="bg-white/80 backdrop-blur-md border-b-2 border-gray-200 sticky top-0 z-50">
-		<div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+		<div class="min-h-max max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
 			<div class="flex items-center justify-between h-16">
 				<a href="/" class="flex items-center space-x-3">
 					<div class="p-2 bg-blue-600 rounded-lg">
