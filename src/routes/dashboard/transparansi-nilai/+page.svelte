@@ -21,8 +21,9 @@
 	import { Separator } from '$lib/components/ui/separator';
 	import * as Sidebar from '$lib/components/ui/sidebar';
 	import type { PageData, ActionData } from './$types';
-	import Loading from '$lib/components/loading.svelte';
-	import { enhance } from '$app/forms';
+	// [DISABLED] Upload nilai feature disabled - no longer needed
+	// import Loading from '$lib/components/loading.svelte';
+	// import { enhance } from '$app/forms';
 	// Create a type for the praktikum score data
 	interface PraktikumScore {
 		id: number;
@@ -92,19 +93,20 @@
 		form: ActionData;
 	} = $props();
 
-	let isUploading = $state(false);
-	let selectedPraktikumId = $state('');
-
-	let showMessage = $state(false);
-	let messageTimeout: ReturnType<typeof setTimeout>;
-
-	$effect(() => {
-		if (form) {
-			showMessage = true;
-			clearTimeout(messageTimeout);
-			messageTimeout = setTimeout(() => (showMessage = false), 5000);
-		}
-	});
+	// [DISABLED] Upload nilai feature disabled - no longer needed
+	// let isUploading = $state(false);
+	// let selectedPraktikumId = $state('');
+	//
+	// let showMessage = $state(false);
+	// let messageTimeout: ReturnType<typeof setTimeout>;
+	//
+	// $effect(() => {
+	// 	if (form) {
+	// 		showMessage = true;
+	// 		clearTimeout(messageTimeout);
+	// 		messageTimeout = setTimeout(() => (showMessage = false), 5000);
+	// 	}
+	// });
 
 	// Data is now coming from layout server load - cached and optimized
 	const userData = data.userData;
@@ -129,9 +131,7 @@
 		if (searchQuery.trim()) {
 			const q = searchQuery.trim().toLowerCase();
 			result = result.filter(
-				(s) =>
-					s.nim?.toLowerCase().includes(q) ||
-					s.nama?.toLowerCase().includes(q)
+				(s) => s.nim?.toLowerCase().includes(q) || s.nama?.toLowerCase().includes(q)
 			);
 		}
 		return result;
@@ -221,6 +221,7 @@
 			Lihat detail nilai dan progress praktikum Anda secara transparan
 		</p>
 	</div>
+	<!-- [DISABLED] Upload nilai feature disabled - no longer needed
 	{#if isAsisten}
 		<Card.Root class="p-6 border-dashed border-2">
 			<Card.Header>
@@ -297,10 +298,7 @@
 							/>
 						</div>
 					</div>
-					<Button
-						type="submit"
-						disabled={isUploading || !selectedPraktikumId}
-					>
+					<Button type="submit" disabled={isUploading || !selectedPraktikumId}>
 						{#if isUploading}
 							<Loading variant="inline" message="Mengunggah..." />
 						{:else}
@@ -311,7 +309,9 @@
 			</Card.Content>
 		</Card.Root>
 	{/if}
+	-->
 
+	<!-- All praktikan results for asisten -->
 	{#if isAsisten && allScores.length > 0}
 		<!-- Asisten: Tabel Semua Nilai -->
 		<Card.Root class="p-6">
@@ -322,7 +322,8 @@
 					</div>
 					<div>
 						<Card.Title class="text-xl font-bold">Daftar Nilai Semua Praktikan</Card.Title>
-						<Card.Description>{allScores.length} data nilai dari seluruh praktikan</Card.Description>
+						<Card.Description>{allScores.length} data nilai dari seluruh praktikan</Card.Description
+						>
 					</div>
 				</div>
 			</Card.Header>
@@ -338,14 +339,16 @@
 						>
 							<option value="">Semua Praktikum</option>
 							{#each listPraktikum as prak}
-								<option value={prak.id}>{prak.nama_praktikum} — {prak.semester}</option>
+								<option value={prak.id}>{prak.nama_praktikum}</option>
 							{/each}
 						</select>
 					</div>
 					<div class="flex flex-col gap-1">
 						<label for="search-nilai" class="text-sm font-medium">Cari Praktikan</label>
 						<div class="relative">
-							<SearchIcon class="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
+							<SearchIcon
+								class="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground"
+							/>
 							<input
 								id="search-nilai"
 								type="text"
@@ -397,7 +400,9 @@
 										</td>
 										<td class="px-4 py-3 text-center">{scoreRow.sosialisasi?.toFixed(2) || '-'}</td>
 										<td class="px-4 py-3 text-center">{scoreRow.responsi?.toFixed(2) || '-'}</td>
-										<td class="px-4 py-3 text-center font-semibold">{scoreRow.absolut?.toFixed(2) || '-'}</td>
+										<td class="px-4 py-3 text-center font-semibold"
+											>{scoreRow.absolut?.toFixed(2) || '-'}</td
+										>
 										<td class="px-4 py-3 text-center">
 											{#if scoreRow.grade}
 												<Badge
@@ -459,293 +464,309 @@
 				{/if}
 			</Card.Content>
 		</Card.Root>
-	{/if}
-
-	{#if !isAsisten}
-	<!-- {#if false} -->
-	<!-- Student Profile Card -->
-	<div
-		class="bg-gradient-to-r from-primary/10 via-primary/5 to-background p-6 rounded-lg shadow-sm hover:shadow-md transition-shadow"
-	>
-		<div class="flex flex-col sm:flex-row sm:items-center gap-6">
-			<!-- Avatar and Basic Info -->
-			<div class="flex items-center gap-4">
-				<Avatar.Root class="h-20 w-20 border-4 border-background shadow-lg">
-					<Avatar.Fallback class="text-xl font-bold bg-primary text-primary-foreground">
-						{praktikumScores[0]?.nama
-							? praktikumScores[0]?.nama.substring(0, 2).toUpperCase()
-							: 'UN'}
-					</Avatar.Fallback>
-				</Avatar.Root>
-				<div class="space-y-2">
-					<h2 class="text-2xl font-bold">
-						{praktikumScores[0]?.nama?.toUpperCase() || 'NAMA TIDAK TERSEDIA'}
-					</h2>
-					<div class="flex items-center gap-2">
-						<Badge variant="secondary" class="bg-blue-500 text-white">
-							{userData.nim || 'NIM tidak tersedia'}
-						</Badge>
-					</div>
-				</div>
-			</div>
-
-			<!-- Quick Stats -->
-			{#if praktikumScores.length > 0}
-				<div class="flex-1 flex justify-center sm:justify-end sm:ml-auto">
-					<div class="text-center">
-						<div class="text-2xl font-bold text-primary">
-							{praktikumScores.length}
-						</div>
-						<p class="text-xs text-muted-foreground">Praktikum Diambil</p>
-					</div>
-				</div>
-			{/if}
+	{:else}
+		<div class="text-center py-8">
+			<p class="text-muted-foreground">Belum ada data nilai praktikum</p>
 		</div>
-	</div>
+	{/if}
+	{#if !isAsisten}
+		<!-- {#if false} -->
+		<!-- Student Profile Card -->
+		<div
+			class="bg-gradient-to-r from-primary/10 via-primary/5 to-background p-6 rounded-lg shadow-sm hover:shadow-md transition-shadow"
+		>
+			<div class="flex flex-col sm:flex-row sm:items-center gap-6">
+				<!-- Avatar and Basic Info -->
+				<div class="flex items-center gap-4">
+					<Avatar.Root class="h-20 w-20 border-4 border-background shadow-lg">
+						<Avatar.Fallback class="text-xl font-bold bg-primary text-primary-foreground">
+							{praktikumScores[0]?.nama
+								? praktikumScores[0]?.nama.substring(0, 2).toUpperCase()
+								: 'UN'}
+						</Avatar.Fallback>
+					</Avatar.Root>
+					<div class="space-y-2">
+						<h2 class="text-2xl font-bold">
+							{praktikumScores[0]?.nama?.toUpperCase() || 'NAMA TIDAK TERSEDIA'}
+						</h2>
+						<div class="flex items-center gap-2">
+							<Badge variant="secondary" class="bg-blue-500 text-white">
+								{userData.nim || 'NIM tidak tersedia'}
+							</Badge>
+						</div>
+					</div>
+				</div>
+
+				<!-- Quick Stats -->
+				{#if praktikumScores.length > 0}
+					<div class="flex-1 flex justify-center sm:justify-end sm:ml-auto">
+						<div class="text-center">
+							<div class="text-2xl font-bold text-primary">
+								{praktikumScores.length}
+							</div>
+							<p class="text-xs text-muted-foreground">Praktikum Diambil</p>
+						</div>
+					</div>
+				{/if}
+			</div>
+		</div>
 	{/if}
 	<!-- {/if} -->
 
 	{#if !isAsisten}
-	<!-- Praktikum Scores Section -->
-	<div class="space-y-4">
-		{#if praktikumScores.length > 0}
-			<div class="flex items-center gap-2 mb-6">
-				<BookOpenIcon class="h-6 w-6 text-primary" />
-				<h2 class="text-xl font-semibold">Detail Nilai Praktikum</h2>
-				<Badge variant="secondary" class="ml-auto">
-					{praktikumScores.length} Praktikum
-				</Badge>
-			</div>
+		<!-- Praktikum Scores Section -->
+		<div class="space-y-4">
+			{#if praktikumScores.length > 0}
+				<div class="flex items-center gap-2 mb-6">
+					<BookOpenIcon class="h-6 w-6 text-primary" />
+					<h2 class="text-xl font-semibold">Detail Nilai Praktikum</h2>
+					<Badge variant="secondary" class="ml-auto">
+						{praktikumScores.length} Praktikum
+					</Badge>
+				</div>
 
-			<Accordion.Root type="single" class="space-y-4">
-				{#each praktikumScores as scoreData, index}
-					{@const gradeStyle = getGradeStyle(scoreData.grade)}
+				<Accordion.Root type="single" class="space-y-4">
+					{#each praktikumScores as scoreData, index}
+						{@const gradeStyle = getGradeStyle(scoreData.grade)}
 
-					<Card.Root class="overflow-hidden transition-all hover:shadow-md">
-						<Accordion.Item value="item-{index + 1}" class="border-none">
-							<Accordion.Trigger class="hover:no-underline px-6 py-4 hover:bg-muted/50">
-								<div class="flex items-center justify-between w-full">
-									<div class="flex items-center gap-4">
-										<div class="p-2 rounded-lg bg-primary/10">
-											<BookOpenIcon class="h-5 w-5 text-primary" />
+						<Card.Root class="overflow-hidden transition-all hover:shadow-md">
+							<Accordion.Item value="item-{index + 1}" class="border-none">
+								<Accordion.Trigger class="hover:no-underline px-6 py-4 hover:bg-muted/50">
+									<div class="flex items-center justify-between w-full">
+										<div class="flex items-center gap-4">
+											<div class="p-2 rounded-lg bg-primary/10">
+												<BookOpenIcon class="h-5 w-5 text-primary" />
+											</div>
+											<div class="text-left">
+												<h3 class="font-semibold text-base">
+													{getPraktikumInfo(scoreData)?.nama_praktikum ||
+														`Praktikum ${scoreData.praktikum_id}`}
+												</h3>
+												<p class="text-sm text-muted-foreground">
+													{getPraktikumInfo(scoreData)?.nama_lab || 'Lab'} • {getPraktikumInfo(
+														scoreData
+													)?.semester || 'Semester'}
+												</p>
+											</div>
 										</div>
-										<div class="text-left">
-											<h3 class="font-semibold text-base">
-												{getPraktikumInfo(scoreData)?.nama_praktikum ||
-													`Praktikum ${scoreData.praktikum_id}`}
-											</h3>
-											<p class="text-sm text-muted-foreground">
-												{getPraktikumInfo(scoreData)?.nama_lab || 'Lab'} • {getPraktikumInfo(
-													scoreData
-												)?.semester || 'Semester'}
-											</p>
-										</div>
-									</div>
-									<div class="flex items-center gap-3">
-										{#if scoreData.grade}
-											<Badge
-												class={gradeStyle.bgColor + ' ' + gradeStyle.color}
-												variant={gradeStyle.variant}
-											>
-												Grade {scoreData.grade}
-											</Badge>
-										{/if}
-										{#if scoreData.absolut}
-											<div class="text-right">
-												<div class="text-lg font-bold text-primary">
-													{scoreData.absolut?.toFixed(2) || '-'}
-												</div>
-												<div class="text-xs text-muted-foreground">Absolut</div>
-											</div>
-										{/if}
-									</div>
-								</div>
-							</Accordion.Trigger>
-							<Accordion.Content class="px-6 pb-6">
-								<!-- Overall Scores -->
-								<div class="grid gap-4 md:grid-cols-2 lg:grid-cols-4 mb-6">
-									<Card.Root class="transition-all hover:shadow-sm">
-										<Card.Header class="flex flex-row items-center justify-between space-y-0 pb-2">
-											<Card.Title class="text-sm font-medium">Sosialisasi</Card.Title>
-											<MegaphoneIcon class="h-4 w-4 text-muted-foreground" />
-										</Card.Header>
-										<Card.Content>
-											<div class="text-2xl font-bold text-primary">
-												{scoreData.sosialisasi?.toFixed(2) || '-'}
-											</div>
-										</Card.Content>
-									</Card.Root>
-
-									<Card.Root class="transition-all hover:shadow-sm">
-										<Card.Header class="flex flex-row items-center justify-between space-y-0 pb-2">
-											<Card.Title class="text-sm font-medium">Responsi</Card.Title>
-											<CheckCircleIcon class="h-4 w-4 text-muted-foreground" />
-										</Card.Header>
-										<Card.Content>
-											<div class="text-2xl font-bold text-primary">
-												{scoreData.responsi?.toFixed(2) || '-'}
-											</div>
-										</Card.Content>
-									</Card.Root>
-
-									<Card.Root class="transition-all hover:shadow-sm">
-										<Card.Header class="flex flex-row items-center justify-between space-y-0 pb-2">
-											<Card.Title class="text-sm font-medium">Absolut</Card.Title>
-											<UserCheckIcon class="h-4 w-4 text-muted-foreground" />
-										</Card.Header>
-										<Card.Content>
-											<div class="text-2xl font-bold text-primary">
-												{scoreData.absolut?.toFixed(2) || '-'}
-											</div>
-										</Card.Content>
-									</Card.Root>
-
-									<Card.Root class="transition-all hover:shadow-sm">
-										<Card.Header class="flex flex-row items-center justify-between space-y-0 pb-2">
-											<Card.Title class="text-sm font-medium">Grade Akhir</Card.Title>
-											<AwardIcon class="h-4 w-4 text-muted-foreground" />
-										</Card.Header>
-										<Card.Content>
+										<div class="flex items-center gap-3">
 											{#if scoreData.grade}
 												<Badge
-													class={gradeStyle.bgColor + ' ' + gradeStyle.color + ' text-xl px-3 py-2'}
+													class={gradeStyle.bgColor + ' ' + gradeStyle.color}
 													variant={gradeStyle.variant}
 												>
-													{scoreData.grade}
+													Grade {scoreData.grade}
 												</Badge>
-											{:else}
-												<div class="text-2xl font-bold text-muted-foreground">-</div>
 											{/if}
-										</Card.Content>
-									</Card.Root>
-								</div>
+											{#if scoreData.absolut}
+												<div class="text-right">
+													<div class="text-lg font-bold text-primary">
+														{scoreData.absolut?.toFixed(2) || '-'}
+													</div>
+													<div class="text-xs text-muted-foreground">Absolut</div>
+												</div>
+											{/if}
+										</div>
+									</div>
+								</Accordion.Trigger>
+								<Accordion.Content class="px-6 pb-6">
+									<!-- Overall Scores -->
+									<div class="grid gap-4 md:grid-cols-2 lg:grid-cols-4 mb-6">
+										<Card.Root class="transition-all hover:shadow-sm">
+											<Card.Header
+												class="flex flex-row items-center justify-between space-y-0 pb-2"
+											>
+												<Card.Title class="text-sm font-medium">Sosialisasi</Card.Title>
+												<MegaphoneIcon class="h-4 w-4 text-muted-foreground" />
+											</Card.Header>
+											<Card.Content>
+												<div class="text-2xl font-bold text-primary">
+													{scoreData.sosialisasi?.toFixed(2) || '-'}
+												</div>
+											</Card.Content>
+										</Card.Root>
 
-								<Separator class="my-6" />
+										<Card.Root class="transition-all hover:shadow-sm">
+											<Card.Header
+												class="flex flex-row items-center justify-between space-y-0 pb-2"
+											>
+												<Card.Title class="text-sm font-medium">Responsi</Card.Title>
+												<CheckCircleIcon class="h-4 w-4 text-muted-foreground" />
+											</Card.Header>
+											<Card.Content>
+												<div class="text-2xl font-bold text-primary">
+													{scoreData.responsi?.toFixed(2) || '-'}
+												</div>
+											</Card.Content>
+										</Card.Root>
 
-								<!-- Unit Details -->
-								<div>
-									<div class="flex items-center gap-2 mb-4">
-										<BookOpenIcon class="h-5 w-5 text-primary" />
-										<h3 class="text-lg font-semibold">Detail Nilai Per Unit</h3>
+										<Card.Root class="transition-all hover:shadow-sm">
+											<Card.Header
+												class="flex flex-row items-center justify-between space-y-0 pb-2"
+											>
+												<Card.Title class="text-sm font-medium">Absolut</Card.Title>
+												<UserCheckIcon class="h-4 w-4 text-muted-foreground" />
+											</Card.Header>
+											<Card.Content>
+												<div class="text-2xl font-bold text-primary">
+													{scoreData.absolut?.toFixed(2) || '-'}
+												</div>
+											</Card.Content>
+										</Card.Root>
+
+										<Card.Root class="transition-all hover:shadow-sm">
+											<Card.Header
+												class="flex flex-row items-center justify-between space-y-0 pb-2"
+											>
+												<Card.Title class="text-sm font-medium">Grade Akhir</Card.Title>
+												<AwardIcon class="h-4 w-4 text-muted-foreground" />
+											</Card.Header>
+											<Card.Content>
+												{#if scoreData.grade}
+													<Badge
+														class={gradeStyle.bgColor +
+															' ' +
+															gradeStyle.color +
+															' text-xl px-3 py-2'}
+														variant={gradeStyle.variant}
+													>
+														{scoreData.grade}
+													</Badge>
+												{:else}
+													<div class="text-2xl font-bold text-muted-foreground">-</div>
+												{/if}
+											</Card.Content>
+										</Card.Root>
 									</div>
 
-									<div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
-										{#each Array(8) as _, unitIndex}
-											{@const unitNumber = unitIndex + 1}
-											{@const unitScores = getUnitScores(scoreData, unitNumber)}
-											{#if unitScores.praktikum !== '-' || unitScores.laporan !== '-' || unitScores.total !== '-'}
-												<Card.Root class="transition-all hover:shadow-sm">
-													<Card.Header class="pb-3">
-														<div class="flex items-center justify-between">
-															<div class="flex items-center gap-2">
-																<div class="p-1.5 rounded bg-primary/10">
-																	<BookOpenIcon class="h-4 w-4 text-primary" />
+									<Separator class="my-6" />
+
+									<!-- Unit Details -->
+									<div>
+										<div class="flex items-center gap-2 mb-4">
+											<BookOpenIcon class="h-5 w-5 text-primary" />
+											<h3 class="text-lg font-semibold">Detail Nilai Per Unit</h3>
+										</div>
+
+										<div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
+											{#each Array(8) as _, unitIndex}
+												{@const unitNumber = unitIndex + 1}
+												{@const unitScores = getUnitScores(scoreData, unitNumber)}
+												{#if unitScores.praktikum !== '-' || unitScores.laporan !== '-' || unitScores.total !== '-'}
+													<Card.Root class="transition-all hover:shadow-sm">
+														<Card.Header class="pb-3">
+															<div class="flex items-center justify-between">
+																<div class="flex items-center gap-2">
+																	<div class="p-1.5 rounded bg-primary/10">
+																		<BookOpenIcon class="h-4 w-4 text-primary" />
+																	</div>
+																	<Card.Title class="text-base">Unit {unitNumber}</Card.Title>
 																</div>
-																<Card.Title class="text-base">Unit {unitNumber}</Card.Title>
+																{#if unitScores.total !== '-'}
+																	<Badge
+																		class={getGradeStyle(unitScores.total).bgColor +
+																			' ' +
+																			getGradeStyle(unitScores.total).color}
+																		variant={getGradeStyle(unitScores.total).variant}
+																	>
+																		{unitScores.total}
+																	</Badge>
+																{:else}
+																	<Badge variant="outline" class="text-muted-foreground"
+																		>Belum</Badge
+																	>
+																{/if}
 															</div>
-															{#if unitScores.total !== '-'}
-																<Badge
-																	class={getGradeStyle(unitScores.total).bgColor +
-																		' ' +
-																		getGradeStyle(unitScores.total).color}
-																	variant={getGradeStyle(unitScores.total).variant}
-																>
-																	{unitScores.total}
-																</Badge>
-															{:else}
-																<Badge variant="outline" class="text-muted-foreground">Belum</Badge>
-															{/if}
-														</div>
-													</Card.Header>
-													<Card.Content class="space-y-3">
-														<div class="flex justify-between items-center">
-															<span class="text-sm font-medium flex items-center gap-1">
-																<CalendarIcon class="h-3 w-3" />
-																Praktikum
-															</span>
-															{#if unitScores.praktikum !== '-'}
-																<Badge
-																	class={getGradeStyle(unitScores.praktikum).bgColor +
-																		' ' +
-																		getGradeStyle(unitScores.praktikum).color}
-																	variant={getGradeStyle(unitScores.praktikum).variant}
-																>
-																	{unitScores.praktikum}
-																</Badge>
-															{:else}
-																<span class="text-sm text-muted-foreground">-</span>
-															{/if}
-														</div>
-														<div class="flex justify-between items-center">
-															<span class="text-sm font-medium flex items-center gap-1">
-																<FileTextIcon class="h-3 w-3" />
-																Laporan
-															</span>
-															{#if unitScores.laporan !== '-'}
-																<Badge
-																	class={getGradeStyle(unitScores.laporan).bgColor +
-																		' ' +
-																		getGradeStyle(unitScores.laporan).color}
-																	variant={getGradeStyle(unitScores.laporan).variant}
-																>
-																	{unitScores.laporan}
-																</Badge>
-															{:else}
-																<span class="text-sm text-muted-foreground">-</span>
-															{/if}
-														</div>
-													</Card.Content>
-												</Card.Root>
-											{:else}
-												<Card.Root class="opacity-50">
-													<Card.Header class="pb-3">
-														<div class="flex items-center justify-between">
-															<div class="flex items-center gap-2">
-																<div class="p-1.5 rounded bg-muted">
-																	<BookOpenIcon class="h-4 w-4 text-muted-foreground" />
+														</Card.Header>
+														<Card.Content class="space-y-3">
+															<div class="flex justify-between items-center">
+																<span class="text-sm font-medium flex items-center gap-1">
+																	<CalendarIcon class="h-3 w-3" />
+																	Praktikum
+																</span>
+																{#if unitScores.praktikum !== '-'}
+																	<Badge
+																		class={getGradeStyle(unitScores.praktikum).bgColor +
+																			' ' +
+																			getGradeStyle(unitScores.praktikum).color}
+																		variant={getGradeStyle(unitScores.praktikum).variant}
+																	>
+																		{unitScores.praktikum}
+																	</Badge>
+																{:else}
+																	<span class="text-sm text-muted-foreground">-</span>
+																{/if}
+															</div>
+															<div class="flex justify-between items-center">
+																<span class="text-sm font-medium flex items-center gap-1">
+																	<FileTextIcon class="h-3 w-3" />
+																	Laporan
+																</span>
+																{#if unitScores.laporan !== '-'}
+																	<Badge
+																		class={getGradeStyle(unitScores.laporan).bgColor +
+																			' ' +
+																			getGradeStyle(unitScores.laporan).color}
+																		variant={getGradeStyle(unitScores.laporan).variant}
+																	>
+																		{unitScores.laporan}
+																	</Badge>
+																{:else}
+																	<span class="text-sm text-muted-foreground">-</span>
+																{/if}
+															</div>
+														</Card.Content>
+													</Card.Root>
+												{:else}
+													<Card.Root class="opacity-50">
+														<Card.Header class="pb-3">
+															<div class="flex items-center justify-between">
+																<div class="flex items-center gap-2">
+																	<div class="p-1.5 rounded bg-muted">
+																		<BookOpenIcon class="h-4 w-4 text-muted-foreground" />
+																	</div>
+																	<Card.Title class="text-base text-muted-foreground"
+																		>Unit {unitNumber}</Card.Title
+																	>
 																</div>
-																<Card.Title class="text-base text-muted-foreground"
-																	>Unit {unitNumber}</Card.Title
-																>
+																<Badge variant="outline" class="text-muted-foreground">
+																	Belum Ada
+																</Badge>
 															</div>
-															<Badge variant="outline" class="text-muted-foreground">
-																Belum Ada
-															</Badge>
-														</div>
-													</Card.Header>
-													<Card.Content class="space-y-3">
-														<div class="flex justify-between items-center">
-															<span class="text-sm text-muted-foreground flex items-center gap-1">
-																<CalendarIcon class="h-3 w-3" />
-																Praktikum
-															</span>
-															<span class="text-sm text-muted-foreground">-</span>
-														</div>
-														<div class="flex justify-between items-center">
-															<span class="text-sm text-muted-foreground flex items-center gap-1">
-																<FileTextIcon class="h-3 w-3" />
-																Laporan
-															</span>
-															<span class="text-sm text-muted-foreground">-</span>
-														</div>
-													</Card.Content>
-												</Card.Root>
-											{/if}
-										{/each}
+														</Card.Header>
+														<Card.Content class="space-y-3">
+															<div class="flex justify-between items-center">
+																<span class="text-sm text-muted-foreground flex items-center gap-1">
+																	<CalendarIcon class="h-3 w-3" />
+																	Praktikum
+																</span>
+																<span class="text-sm text-muted-foreground">-</span>
+															</div>
+															<div class="flex justify-between items-center">
+																<span class="text-sm text-muted-foreground flex items-center gap-1">
+																	<FileTextIcon class="h-3 w-3" />
+																	Laporan
+																</span>
+																<span class="text-sm text-muted-foreground">-</span>
+															</div>
+														</Card.Content>
+													</Card.Root>
+												{/if}
+											{/each}
+										</div>
 									</div>
-								</div>
-							</Accordion.Content>
-						</Accordion.Item>
-					</Card.Root>
-				{/each}
-			</Accordion.Root>
-		{:else}
-			<div class="text-center py-8">
-				<p class="text-muted-foreground">
-					Transparansi nilai akan dibagikan pada saat semua unit praktikum telah diselesaikan
-				</p>
-			</div>
-		{/if}
-	</div>
+								</Accordion.Content>
+							</Accordion.Item>
+						</Card.Root>
+					{/each}
+				</Accordion.Root>
+			{:else}
+				<div class="text-center py-8">
+					<p class="text-muted-foreground">
+						Transparansi nilai akan dibagikan pada saat semua unit praktikum telah diselesaikan
+					</p>
+				</div>
+			{/if}
+		</div>
 	{/if}
 </div>
