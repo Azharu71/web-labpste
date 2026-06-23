@@ -27,4 +27,4 @@ vite.config.ts.timestamp-*
 .md
 /logs
 /.gemini
-
+/old

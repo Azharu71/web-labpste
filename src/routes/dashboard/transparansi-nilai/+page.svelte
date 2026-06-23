@@ -169,27 +169,43 @@
 	function getGradeStyle(grade: string | null) {
 		switch (grade) {
 			case 'A':
-				return { color: 'text-green-600', bgColor: 'bg-green-100', variant: 'default' as const };
+				return {
+					color: 'text-emerald-700',
+					bgColor: 'bg-emerald-200',
+					variant: 'default' as const
+				};
 			case 'A-':
-				return { color: 'text-green-400', bgColor: 'bg-green-100', variant: 'default' as const };
+				return { color: 'text-teal-700', bgColor: 'bg-teal-200', variant: 'default' as const };
 			case 'B+':
-				return { color: 'text-blue-600', bgColor: 'bg-blue-100', variant: 'secondary' as const };
+				return { color: 'text-sky-700', bgColor: 'bg-sky-200', variant: 'secondary' as const };
 			case 'B':
-				return { color: 'text-blue-400', bgColor: 'bg-blue-100', variant: 'secondary' as const };
+				return {
+					color: 'text-indigo-700',
+					bgColor: 'bg-indigo-200',
+					variant: 'secondary' as const
+				};
 			case 'B-':
-				return { color: 'text-blue-200', bgColor: 'bg-blue-100', variant: 'secondary' as const };
+				return {
+					color: 'text-violet-700',
+					bgColor: 'bg-violet-200',
+					variant: 'secondary' as const
+				};
+			case 'C+':
+				return { color: 'text-yellow-700', bgColor: 'bg-yellow-200', variant: 'outline' as const };
 			case 'C':
-				return { color: 'text-yellow-600', bgColor: 'bg-yellow-100', variant: 'outline' as const };
+				return { color: 'text-amber-700', bgColor: 'bg-amber-200', variant: 'outline' as const };
+			case 'C-':
+				return { color: 'text-orange-700', bgColor: 'bg-orange-200', variant: 'outline' as const };
 			case 'D':
 				return {
-					color: 'text-orange-600',
-					bgColor: 'bg-orange-100',
+					color: 'text-orange-800',
+					bgColor: 'bg-orange-300',
 					variant: 'destructive' as const
 				};
 			case 'E':
-				return { color: 'text-red-600', bgColor: 'bg-red-100', variant: 'destructive' as const };
+				return { color: 'text-rose-700', bgColor: 'bg-rose-200', variant: 'destructive' as const };
 			default:
-				return { color: 'text-gray-600', bgColor: 'bg-gray-100', variant: 'secondary' as const };
+				return { color: 'text-gray-600', bgColor: 'bg-gray-200', variant: 'secondary' as const };
 		}
 	}
 </script>
@@ -427,7 +443,7 @@
 									{#if expandedRow === scoreRow.id}
 										<tr>
 											<td colspan="9" class="px-4 py-4 bg-muted/20">
-												<div class="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-8 gap-3">
+												<div class="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-8 gap-2">
 													{#each Array(8) as _, unitIdx}
 														{@const un = unitIdx + 1}
 														{@const us = getUnitScores(scoreRow, un)}
