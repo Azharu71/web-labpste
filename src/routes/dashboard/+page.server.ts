@@ -41,14 +41,27 @@ export const load: PageServerLoad = async ({ locals: { supabase }, parent }) => 
 			totalPraktikan,
 			totalPraktikum
 		},
-		// [DISABLED] Best Praktikan feature disabled - no longer needed
-		bestPraktikan: []
-		/*
+
 		bestPraktikan: [
 			{
-				nim: '3332240083',
-				name: 'Nabila Nurhaliza',
+				nim: '3332250005',
+				name: 'Shaeful Anam',
 				praktikum: 'Dasar Elektronika'
+			},
+			{
+				nim: '3332240022',
+				name: 'M. Riadhusholihin',
+				praktikum: 'Pengukuran Listrik'
+			},
+			{
+				nim: '3332240110',
+				name: 'Dewi Uma Angelina',
+				praktikum: 'Dasar Sistem Kendali'
+			},
+			{
+				nim: '3332230066',
+				name: 'Muhammad Rivaldy Pratama',
+				praktikum: 'Instrumentasi Kendali'
 			},
 			{
 				nim: '3332230050',
@@ -56,31 +69,16 @@ export const load: PageServerLoad = async ({ locals: { supabase }, parent }) => 
 				praktikum: 'Sistem Kendali Digital'
 			},
 			{
-				nim: '3332240069',
-				name: 'Selvy Irawan',
-				praktikum: 'Pengukuran Listrik'
+				nim: '3332230025',
+				name: 'Valentino Pahotan Simamora',
+				praktikum: 'Mesin Listrik'
 			},
 			{
-				nim: '3332230063',
-				name: 'Bella Azhar Kautsar',
-				praktikum: 'Medan Listrik'
-			},
-			{
-				nim: '3332230107',
-				name: 'Muhammad Fathurrizki',
+				nim: '3332250188',
+				name: 'Maheswari Anindya Lituhayu Tuswandi',
 				praktikum: 'Komputasi Numerik'
-			},
-			{
-				nim: '3332250014',
-				name: 'Moch Saiful Abdul Latif',
-				praktikum: 'Instrumentasi Kendali'
-			},
-			{
-				nim: '3332240001',
-				name: 'Ahmad Rizki Pratama',
-				praktikum: 'Dasar Sistem Kendali'
 			}
 		]
-		*/
+
 	};
 };

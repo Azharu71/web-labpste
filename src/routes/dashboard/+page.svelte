@@ -91,7 +91,7 @@
 		</Card.Root>
 	</div>
 
-	<!-- [DISABLED] Top Students Section - no longer needed
+	[DISABLED] Top Students Section - no longer needed
 	<Card.Root>
 		<Card.Header>
 			<div class="flex items-center gap-2">
@@ -130,80 +130,4 @@
 			</div>
 		</Card.Content>
 	</Card.Root>
-	-->
-
-	<!-- Quick Actions or Additional Info (Role-based) -->
-	<!-- {#if userData.role === 'Asisten'}
-				<Card.Root>
-					<Card.Header>
-						<Card.Title>Aksi Cepat</Card.Title>
-						<Card.Description>Kelola data praktikum dan nilai dengan mudah</Card.Description>
-					</Card.Header>
-					<Card.Content>
-						<div class="grid gap-4 md:grid-cols-2">
-							<a href="/dashboard/praktikum" class="block">
-								<Card.Root class="transition-all hover:shadow-md hover:scale-105 cursor-pointer">
-									<Card.Content class="flex items-center space-x-4">
-										<BookOpenIcon class="h-8 w-8 text-primary" />
-										<div>
-											<p class="font-medium">Kelola Praktikum</p>
-											<p class="text-sm text-muted-foreground">Tambah, edit, dan kelola mata kuliah praktikum</p>
-										</div>
-									</Card.Content>
-								</Card.Root>
-							</a>
-							<a href="/dashboard/nilai-praktikum" class="block">
-								<Card.Root class="transition-all hover:shadow-md hover:scale-105 cursor-pointer">
-									<Card.Content class="flex items-center space-x-4">
-										<GraduationCapIcon class="h-8 w-8 text-primary" />
-										<div>
-											<p class="font-medium">Kelola Nilai</p>
-											<p class="text-sm text-muted-foreground">Input dan kelola nilai praktikan</p>
-										</div>
-									</Card.Content>
-								</Card.Root>
-							</a>
-						</div>
-					</Card.Content>
-				</Card.Root>
-			{:else}
-				<Card.Root>
-					<Card.Header>
-						<Card.Title>Informasi Praktikan</Card.Title>
-						<Card.Description>Informasi penting untuk praktikan</Card.Description>
-					</Card.Header>
-					<Card.Content>
-						<div class="space-y-4">
-							<div class="flex items-start space-x-3">
-								<div class="w-2 h-2 bg-primary rounded-full mt-2 flex-shrink-0"></div>
-								<div>
-									<p class="font-medium">Cek Nilai Praktikum</p>
-									<p class="text-sm text-muted-foreground">
-										Lihat nilai dan transparansi praktikum Anda di menu Transparansi Nilai
-									</p>
-								</div>
-							</div>
-							<div class="flex items-start space-x-3">
-								<div class="w-2 h-2 bg-primary rounded-full mt-2 flex-shrink-0"></div>
-								<div>
-									<p class="font-medium">Jadwal Praktikum</p>
-									<p class="text-sm text-muted-foreground">
-										Pastikan hadir tepat waktu sesuai jadwal yang telah ditentukan
-									</p>
-								</div>
-							</div>
-							<div class="flex items-start space-x-3">
-								<div class="w-2 h-2 bg-primary rounded-full mt-2 flex-shrink-0"></div>
-								<div>
-									<p class="font-medium">Kontak Asisten</p>
-									<p class="text-sm text-muted-foreground">
-										Hubungi asisten jika ada pertanyaan terkait praktikum
-									</p>
-								</div>
-							</div>
-						</div>
-					</Card.Content>
-				</Card.Root>
-			{/if}
-		</div> -->
 </div>
