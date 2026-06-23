@@ -9,7 +9,13 @@ const labNameMap: Record<string, string> = {
 	lab_kom: 'Laboratorium Komputer'
 };
 
-export const load: PageServerLoad = async ({ params, locals: { supabase } }) => {
+export const load: PageServerLoad = async ({ params, locals: { supabase }, parent }) => {
+	const { userData } = await parent();
+
+	if (userData.role !== 'Asisten' && userData.role !== 'SU') {
+		throw error(403, 'Forbidden. Access restricted to Assistants.');
+	}
+
 	const labName = labNameMap[params.labId];
 
 	if (!labName) {
