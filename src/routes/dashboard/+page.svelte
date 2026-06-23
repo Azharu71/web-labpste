@@ -91,7 +91,6 @@
 		</Card.Root>
 	</div>
 
-	[DISABLED] Top Students Section - no longer needed
 	<Card.Root>
 		<Card.Header>
 			<div class="flex items-center gap-2">
