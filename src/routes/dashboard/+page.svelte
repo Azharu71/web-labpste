@@ -91,7 +91,7 @@
 		</Card.Root>
 	</div>
 
-	<!-- Top Students Section -->
+	<!-- [DISABLED] Top Students Section - no longer needed
 	<Card.Root>
 		<Card.Header>
 			<div class="flex items-center gap-2">
@@ -130,6 +130,7 @@
 			</div>
 		</Card.Content>
 	</Card.Root>
+	-->
 
 	<!-- Quick Actions or Additional Info (Role-based) -->
 	<!-- {#if userData.role === 'Asisten'}

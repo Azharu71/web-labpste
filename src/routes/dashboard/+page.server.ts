@@ -41,6 +41,9 @@ export const load: PageServerLoad = async ({ locals: { supabase }, parent }) => 
 			totalPraktikan,
 			totalPraktikum
 		},
+		// [DISABLED] Best Praktikan feature disabled - no longer needed
+		bestPraktikan: []
+		/*
 		bestPraktikan: [
 			{
 				nim: '3332240083',
@@ -78,5 +81,6 @@ export const load: PageServerLoad = async ({ locals: { supabase }, parent }) => 
 				praktikum: 'Dasar Sistem Kendali'
 			}
 		]
+		*/
 	};
 };
