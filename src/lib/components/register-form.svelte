@@ -9,6 +9,7 @@
 	import Loading from '$lib/components/loading.svelte';
 
 	let isLoading = $state(false);
+	let showPassword = $state(false);
 
 	let {
 		ref = $bindable(null),

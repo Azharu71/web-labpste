@@ -3,7 +3,6 @@
 	import * as Card from '$lib/components/ui/card';
 	import { Badge } from '$lib/components/ui/badge';
 	import { Separator } from '$lib/components/ui/separator';
-	import { Button } from '$lib/components/ui/button';
 
 	import AwardIcon from '@lucide/svelte/icons/award';
 	import MegaphoneIcon from '@lucide/svelte/icons/megaphone';
@@ -17,7 +16,7 @@
 
 	import * as Breadcrumb from '$lib/components/ui/breadcrumb';
 	import * as Sidebar from '$lib/components/ui/sidebar';
-	import type { PageData, ActionData } from './$types';
+	import type { PageData } from './$types';
 	interface PraktikumScore {
 		id: number;
 		praktikum_id: string;
@@ -75,15 +74,13 @@
 	}
 
 	let {
-		data,
-		form
+		data
 	}: {
 		data: PageData & {
 			praktikumScores: PraktikumScore[];
 			allScores: PraktikumScore[];
 			listPraktikum: ListPraktikum[];
 		};
-		form: ActionData;
 	} = $props();
 
 	// [DISABLED] Upload nilai feature disabled - no longer needed
@@ -101,8 +98,8 @@
 	// 	}
 	// });
 
-	const userData = data.userData;
 	const praktikumScores = data.praktikumScores || [];
+	const units = [1, 2, 3, 4, 5, 6, 7, 8];
 	const isAsisten = data.userData.role === 'Asisten';
 
 	// Asisten: semua data nilai + list praktikum
@@ -245,7 +242,7 @@
 								class="flex h-10 w-full rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2"
 							>
 								<option value="">Semua Praktikum</option>
-								{#each listPraktikum as prak}
+								{#each listPraktikum as prak (prak.id)}
 									<option value={prak.id}>{prak.nama_praktikum}</option>
 								{/each}
 							</select>
@@ -292,7 +289,7 @@
 									</tr>
 								</thead>
 								<tbody>
-									{#each filteredScores as scoreRow, idx}
+									{#each filteredScores as scoreRow, idx (scoreRow.id)}
 										{@const rowGradeStyle = getGradeStyle(scoreRow.grade)}
 										{@const prakInfo = getPraktikumInfo(scoreRow)}
 										<tr
@@ -335,11 +332,10 @@
 											<tr>
 												<td colspan="9" class="px-4 py-4 bg-muted/20">
 													<div class="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-8 gap-2">
-														{#each Array(8) as _, unitIdx}
-															{@const un = unitIdx + 1}
-															{@const us = getUnitScores(scoreRow, un)}
+														{#each units as unitNumber (unitNumber)}
+															{@const us = getUnitScores(scoreRow, unitNumber)}
 															<div class="rounded-lg border bg-background p-3 space-y-1">
-																<div class="text-xs font-semibold text-primary">Unit {un}</div>
+																<div class="text-xs font-semibold text-primary">Unit {unitNumber}</div>
 																<div class="flex justify-between text-xs">
 																	<span class="text-muted-foreground">Praktikum</span>
 																	<span class="font-medium">{us.praktikum}</span>
@@ -387,7 +383,7 @@
 				</div>
 
 				<Accordion.Root type="single" class="space-y-3">
-					{#each praktikumScores as scoreData, index}
+					{#each praktikumScores as scoreData, index (scoreData.id)}
 						{@const gradeStyle = getGradeStyle(scoreData.grade)}
 
 						<Card.Root class="overflow-hidden transition-shadow hover:shadow-md">
@@ -478,8 +474,7 @@
 										Detail Per Unit
 									</p>
 									<div class="border border-border rounded-lg overflow-hidden">
-										{#each Array(8) as _, unitIndex}
-											{@const unitNumber = unitIndex + 1}
+										{#each units as unitNumber (unitNumber)}
 											{@const unitScores = getUnitScores(scoreData, unitNumber)}
 											{#if unitScores.hasData}
 												<div
