@@ -2,6 +2,9 @@
 	import { Button } from '$lib/components/ui/button';
 	import IconWhite from '$lib/assets/icon-pste-white.webp';
 	import IconColour from '$lib/assets/icon-pste.webp';
+	import { toggleMode, mode } from 'mode-watcher';
+	import SunIcon from '@lucide/svelte/icons/sun';
+	import MoonIcon from '@lucide/svelte/icons/moon';
 </script>
 
 <div class="min-h-screen bg-background">
@@ -18,6 +21,13 @@
 					>
 				</a>
 				<div class="flex items-center gap-1.5 shrink-0 ml-3">
+					<Button variant="ghost" size="icon" onclick={toggleMode} class="h-9 w-9" aria-label="Toggle tema">
+						{#if mode.current === 'dark'}
+							<SunIcon class="h-[1.2rem] w-[1.2rem]" />
+						{:else}
+							<MoonIcon class="h-[1.2rem] w-[1.2rem]" />
+						{/if}
+					</Button>
 					<Button variant="ghost" size="sm" href="/auth/login" class="px-3">Masuk</Button>
 					<Button size="sm" href="/auth/register" class="px-3">Daftar</Button>
 				</div>
