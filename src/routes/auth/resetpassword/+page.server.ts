@@ -18,16 +18,15 @@ function getRemainingCooldown(email: string): number {
 }
 // ─────────────────────────────────────────────────────────────────────────────
 
-export const load: PageServerLoad = async ({ url, locals: { supabase } }) => {
+export const load: PageServerLoad = async ({ url }) => {
+	// Memeriksa jenis token yang diberikan (PKCE atau Implicit OTP)
 	const code = url.searchParams.get('code');
+	const token_hash = url.searchParams.get('token_hash');
 
 	if (code) {
-		// Exchange PKCE code dengan session
-		const { error } = await supabase.auth.exchangeCodeForSession(code);
-		if (error) {
-			return { mode: 'request' as const, exchangeError: error.message };
-		}
-		return { mode: 'update' as const };
+		return { mode: 'update' as const, code, tokenType: 'pkce' };
+	} else if (token_hash) {
+		return { mode: 'update' as const, code: token_hash, tokenType: 'otp' };
 	}
 
 	return { mode: 'request' as const };
@@ -75,10 +74,12 @@ export const actions: Actions = {
 	},
 
 	// Tahap 2: Update password baru
-	updatePassword: async ({ request, locals: { supabase } }) => {
+	updatePassword: async ({ request, locals: { supabase, safeGetSession } }) => {
 		const formData = await request.formData();
 		const newPassword = formData.get('newPassword')?.toString();
 		const confirmPassword = formData.get('confirmPassword')?.toString();
+		const code = formData.get('code')?.toString();
+		const tokenType = formData.get('tokenType')?.toString();
 
 		// Validasi input
 		const { error: validationError } = resetPasswordUpdateSchema.validate({
@@ -89,7 +90,41 @@ export const actions: Actions = {
 			return fail(400, { error: validationError.details[0].message });
 		}
 
-		// Update password di Supabase
+		let verifyFailed = false;
+		let verifyErrorMessage = '';
+
+		// Jika ada token dari URL, coba verifikasi
+		// (Akan berhasil pada percobaan pertama, dan akan gagal pada percobaan kedua karena token sudah hangus)
+		if (code && tokenType) {
+			if (tokenType === 'pkce') {
+				const { error } = await supabase.auth.exchangeCodeForSession(code);
+				if (error) {
+					verifyFailed = true;
+					verifyErrorMessage = error.message.includes('code verifier')
+						? 'Please open the reset link in the SAME browser/device where you requested it.'
+						: error.message;
+				}
+			} else {
+				const { error } = await supabase.auth.verifyOtp({ token_hash: code, type: 'recovery' });
+				if (error) {
+					verifyFailed = true;
+					verifyErrorMessage = error.message;
+				}
+			}
+		}
+
+		// Ambil session yang aktif.
+		// Jika percobaan pertama gagal di tahap updateUser (misal: password lama dan baru sama), 
+		// session sebenarnya SUDAH terbentuk dari exchangeCodeForSession di atas. 
+		// Sehingga pada percobaan kedua, kita bisa menggunakan session ini.
+		const { session } = await safeGetSession();
+
+		if (!session) {
+			// Jika tidak ada session dan verifikasi token gagal, berarti token benar-benar tidak valid
+			return fail(400, { error: verifyFailed ? verifyErrorMessage : 'Unauthorized or session expired.' });
+		}
+
+		// Update password di Supabase menggunakan session yang aktif
 		const { error } = await supabase.auth.updateUser({ password: newPassword! });
 
 		if (error) {

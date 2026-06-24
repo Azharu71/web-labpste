@@ -14,4 +14,6 @@
 
 <ModeWatcher defaultMode="light" />
 <Toaster />
-{@render children?.()}
+<div class="w-full min-h-screen">
+	{@render children?.()}
+</div>

@@ -40,6 +40,45 @@ export const load: PageServerLoad = async ({ locals: { supabase }, parent }) => 
 			totalAsisten,
 			totalPraktikan,
 			totalPraktikum
-		}
+		},
+
+		bestPraktikan: [
+			{
+				nim: '3332250005',
+				name: 'Shaeful Anam',
+				praktikum: 'Dasar Elektronika'
+			},
+			{
+				nim: '3332240022',
+				name: 'M. Riadhusholihin',
+				praktikum: 'Pengukuran Listrik'
+			},
+			{
+				nim: '3332240110',
+				name: 'Dewi Uma Angelina',
+				praktikum: 'Dasar Sistem Kendali'
+			},
+			{
+				nim: '3332230066',
+				name: 'Muhammad Rivaldy Pratama',
+				praktikum: 'Instrumentasi Kendali'
+			},
+			{
+				nim: '3332230050',
+				name: 'Daffa Nur Fauzan',
+				praktikum: 'Sistem Kendali Digital'
+			},
+			{
+				nim: '3332230025',
+				name: 'Valentino Pahotan Simamora',
+				praktikum: 'Mesin Listrik'
+			},
+			{
+				nim: '3332250188',
+				name: 'Maheswari Anindya Lituhayu Tuswandi',
+				praktikum: 'Komputasi Numerik'
+			}
+		]
+
 	};
 };

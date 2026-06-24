@@ -20,6 +20,12 @@ const dokumen = [
 		tipe: 'docx' as const,
 		url: 'https://dglpmddnwckzlvbvtzxn.supabase.co/storage/v1/object/public/Administrasi/contoh_laporan_praktikum2026.docx'
 	},
+	{
+		nama: 'ID Card',
+		deskripsi: 'Tanda pengenal praktikum',
+		tipe: 'docx' as const,
+		url: 'https://dglpmddnwckzlvbvtzxn.supabase.co/storage/v1/object/public/Administrasi/tanda_pengenal_praktikum.docx'
+	}
 ];
 // ─────────────────────────────────────────────────────────────────────────────
 

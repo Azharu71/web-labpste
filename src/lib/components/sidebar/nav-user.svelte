@@ -3,7 +3,6 @@
 	import * as DropdownMenu from '$lib/components/ui/dropdown-menu';
 	import * as Sidebar from '$lib/components/ui/sidebar';
 	import { useSidebar } from '$lib/components/ui/sidebar';
-	import { enhance } from '$app/forms';
 	import ChevronsUpDownIcon from '@lucide/svelte/icons/chevrons-up-down';
 	import LogOutIcon from '@lucide/svelte/icons/log-out';
 	import SunIcon from '@lucide/svelte/icons/sun';
@@ -17,7 +16,6 @@
 		$props();
 
 	const sidebar = useSidebar();
-	let isLoggingOut = $state(false);
 </script>
 
 <Sidebar.Menu>
@@ -31,7 +29,11 @@
 						{...props}
 					>
 						<Avatar.Root class="size-8 rounded-lg">
-							<Avatar.Fallback class="rounded-lg">LP</Avatar.Fallback>
+							{#if user.role === 'Asisten'}
+								<Avatar.Fallback class="rounded-lg">AS</Avatar.Fallback>
+							{:else}
+								<Avatar.Fallback class="rounded-lg">PR</Avatar.Fallback>
+							{/if}
 						</Avatar.Root>
 						<div class="grid flex-1 text-left text-sm leading-tight">
 							<span class="truncate font-medium">{user.email || 'No Email'}</span>

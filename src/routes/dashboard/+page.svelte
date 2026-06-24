@@ -4,19 +4,28 @@
 	import * as Sidebar from '$lib/components/ui/sidebar';
 	import type { PageData } from './$types';
 	import * as Card from '$lib/components/ui/card';
+	import * as Avatar from '$lib/components/ui/avatar';
 	import UsersIcon from '@lucide/svelte/icons/users';
 	import BookOpenIcon from '@lucide/svelte/icons/book-open';
 	import GraduationCapIcon from '@lucide/svelte/icons/graduation-cap';
-	import NotebookPenIcon from '@lucide/svelte/icons/notebook-pen';
-	import BriefcaseIcon from '@lucide/svelte/icons/briefcase-business';
-	import UsersRoundIcon from '@lucide/svelte/icons/users-round';
-	import BookTextIcon from '@lucide/svelte/icons/book-text';
-	import ChevronRightIcon from '@lucide/svelte/icons/chevron-right';
+	import TrophyIcon from '@lucide/svelte/icons/trophy';
 
 	let { data }: { data: PageData } = $props();
 
 	const userData = data.userData;
 	const stats = data.stats;
+	const bestPraktikan = data.bestPraktikan;
+
+	// Color palette for best praktikan cards
+	const cardColors = [
+		{ bg: 'bg-yellow-500', text: 'text-yellow-600', border: 'border-l-yellow-500' },
+		{ bg: 'bg-blue-500', text: 'text-blue-600', border: 'border-l-blue-500' },
+		{ bg: 'bg-green-500', text: 'text-green-600', border: 'border-l-green-500' },
+		{ bg: 'bg-purple-500', text: 'text-purple-600', border: 'border-l-purple-500' },
+		{ bg: 'bg-pink-500', text: 'text-pink-600', border: 'border-l-pink-500' },
+		{ bg: 'bg-orange-500', text: 'text-orange-600', border: 'border-l-orange-500' },
+		{ bg: 'bg-teal-500', text: 'text-teal-600', border: 'border-l-teal-500' }
+	];
 </script>
 
 <header
@@ -90,93 +99,42 @@
 		</div>
 	</div>
 
-	<!-- Quick Links (role-based) -->
-	{#if userData.role === 'Asisten'}
-		<Card.Root>
-			<Card.Header class="pb-3">
-				<Card.Title class="text-sm">Aksi Cepat</Card.Title>
-				<Card.Description class="text-xs">Kelola data praktikum dan nilai</Card.Description>
-			</Card.Header>
-			<Card.Content class="p-0">
-				<div class="divide-y divide-border">
-					<a
-						href="/dashboard/praktikum"
-						class="flex items-center gap-3 px-6 py-3 hover:bg-accent transition-colors group"
-					>
-						<div class="rounded-md bg-primary/10 p-1.5 shrink-0">
-							<BriefcaseIcon class="h-4 w-4 text-primary" />
-						</div>
-						<div class="flex-1 min-w-0">
-							<p class="text-sm font-medium">Kelola Praktikum</p>
-							<p class="text-xs text-muted-foreground">Tambah, edit, dan kelola mata kuliah praktikum</p>
-						</div>
-						<ChevronRightIcon class="h-4 w-4 text-muted-foreground group-hover:text-foreground transition-colors shrink-0" />
-					</a>
-					<a
-						href="/dashboard/nilai-praktikum"
-						class="flex items-center gap-3 px-6 py-3 hover:bg-accent transition-colors group"
-					>
-						<div class="rounded-md bg-chart-3/15 p-1.5 shrink-0">
-							<NotebookPenIcon class="h-4 w-4 text-chart-3" />
-						</div>
-						<div class="flex-1 min-w-0">
-							<p class="text-sm font-medium">Kelola Nilai</p>
-							<p class="text-xs text-muted-foreground">Input dan kelola nilai praktikan</p>
-						</div>
-						<ChevronRightIcon class="h-4 w-4 text-muted-foreground group-hover:text-foreground transition-colors shrink-0" />
-					</a>
+	<Card.Root>
+		<Card.Header>
+			<div class="flex items-center gap-2">
+				<TrophyIcon class="h-6 w-6 text-yellow-500" />
+				<div>
+					<Card.Title class="text-xl">Praktikan Terbaik</Card.Title>
+					<Card.Description>
+						Praktikan dengan performa terbaik dari masing-masing praktikum semester Genap 2026/2027
+					</Card.Description>
 				</div>
-			</Card.Content>
-		</Card.Root>
-	{:else}
-		<Card.Root>
-			<Card.Header class="pb-3">
-				<Card.Title class="text-sm">Akses Cepat</Card.Title>
-				<Card.Description class="text-xs">Halaman yang sering digunakan</Card.Description>
-			</Card.Header>
-			<Card.Content class="p-0">
-				<div class="divide-y divide-border">
-					<a
-						href="/dashboard/transparansi-nilai"
-						class="flex items-center gap-3 px-6 py-3 hover:bg-accent transition-colors group"
+			</div>
+		</Card.Header>
+		<Card.Content>
+			<div class="grid gap-3 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
+				{#each bestPraktikan as praktikan, index}
+					{@const color = cardColors[index % cardColors.length]}
+					<div
+						class="flex items-center gap-3 rounded-lg border border-l-4 {color.border} p-4 transition-all shadow-md"
 					>
-						<div class="rounded-md bg-primary/10 p-1.5 shrink-0">
-							<NotebookPenIcon class="h-4 w-4 text-primary" />
+						<Avatar.Root class="h-10 w-10 shrink-0">
+							<Avatar.Fallback class="text-sm font-bold text-white {color.bg}">
+								{praktikan.name
+									.split(' ')
+									.map((n: string) => n[0])
+									.join('')
+									.substring(0, 2)}
+							</Avatar.Fallback>
+						</Avatar.Root>
+						<div class="min-w-0">
+							<h3 class="text-sm font-semibold truncate">{praktikan.name}</h3>
+							<p class="text-xs text-muted-foreground">{praktikan.nim}</p>
+							<p class="text-xs font-medium {color.text} mt-0.5">{praktikan.praktikum}</p>
 						</div>
-						<div class="flex-1 min-w-0">
-							<p class="text-sm font-medium">Cek Nilai Praktikum</p>
-							<p class="text-xs text-muted-foreground">Lihat nilai dan transparansi hasil praktikum Anda</p>
-						</div>
-						<ChevronRightIcon class="h-4 w-4 text-muted-foreground group-hover:text-foreground transition-colors shrink-0" />
-					</a>
-					<a
-						href="/dashboard/kelompok-praktikum"
-						class="flex items-center gap-3 px-6 py-3 hover:bg-accent transition-colors group"
-					>
-						<div class="rounded-md bg-chart-4/15 p-1.5 shrink-0">
-							<UsersRoundIcon class="h-4 w-4 text-chart-4" />
-						</div>
-						<div class="flex-1 min-w-0">
-							<p class="text-sm font-medium">Kelompok & Jadwal</p>
-							<p class="text-xs text-muted-foreground">Lihat kelompok dan jadwal praktikum Anda</p>
-						</div>
-						<ChevronRightIcon class="h-4 w-4 text-muted-foreground group-hover:text-foreground transition-colors shrink-0" />
-					</a>
-					<a
-						href="/dashboard/modul-praktikum"
-						class="flex items-center gap-3 px-6 py-3 hover:bg-accent transition-colors group"
-					>
-						<div class="rounded-md bg-chart-3/15 p-1.5 shrink-0">
-							<BookTextIcon class="h-4 w-4 text-chart-3" />
-						</div>
-						<div class="flex-1 min-w-0">
-							<p class="text-sm font-medium">Modul Praktikum</p>
-							<p class="text-xs text-muted-foreground">Akses materi dan modul praktikum digital</p>
-						</div>
-						<ChevronRightIcon class="h-4 w-4 text-muted-foreground group-hover:text-foreground transition-colors shrink-0" />
-					</a>
-				</div>
-			</Card.Content>
-		</Card.Root>
-	{/if}
+					</div>
+				{/each}
+			</div>
+		</Card.Content>
+	</Card.Root>
 </div>
