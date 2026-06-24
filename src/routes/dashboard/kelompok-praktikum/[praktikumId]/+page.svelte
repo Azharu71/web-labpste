@@ -13,6 +13,7 @@
 					src={data.spreadsheetUrl}
 					class="block h-[80vh] sm:h-[70vh] min-h-[500px] sm:min-h-[400px] w-full border-none"
 					frameborder="0"
+					loading="lazy"
 					title="Jadwal Kelompok {data.praktikum.nama_praktikum}"
 				></iframe>
 			</div>

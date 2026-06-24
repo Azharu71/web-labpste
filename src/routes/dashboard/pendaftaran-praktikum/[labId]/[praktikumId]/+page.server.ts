@@ -3,9 +3,11 @@ import type { PageServerLoad, Actions } from './$types';
 import { fail, redirect, error } from '@sveltejs/kit';
 import { pendaftaranSchema } from '$lib/schemas/pendaftaran';
 
+// @ts-expect-error - SvelteKit's PageServerLoad type inference breaks because parent layout's unconditional redirect evaluates to 'never'.
 export const load: PageServerLoad = async ({ params, locals, parent }) => {
 	// Gunakan user dari parent layout — tidak perlu safeGetSession() ulang
-	const parentData = await parent();
+	// eslint-disable-next-line @typescript-eslint/no-explicit-any
+	const parentData = (await parent()) as any;
 	const user = await parentData.user;
 	if (!user) throw redirect(303, '/auth/login');
 

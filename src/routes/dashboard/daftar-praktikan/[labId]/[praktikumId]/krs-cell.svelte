@@ -8,5 +8,5 @@
 {#if !url}
 	<span>-</span>
 {:else}
-	<a href={url} target="_blank" class="text-blue-500 hover:underline">Lihat</a>
+	<a href={url} target="_blank" aria-label="Lihat KRS Mahasiswa" class="text-primary hover:underline">Lihat</a>
 {/if}

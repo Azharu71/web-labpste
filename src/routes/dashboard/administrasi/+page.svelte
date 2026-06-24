@@ -55,16 +55,16 @@
 						{#if doc.tipe === 'pdf'}
 							<FileText class="h-7 w-7 text-primary shrink-0" />
 						{:else}
-							<FileIcon class="h-7 w-7 text-blue-500 shrink-0" />
+							<FileIcon class="h-7 w-7 text-primary shrink-0" />
 						{/if}
 						<div class="flex-1 overflow-hidden">
 							<p class="text-xs text-muted-foreground truncate">{doc.nama}</p>
 						</div>
 					</div>
 					{#if doc.tipe === 'pdf'}
-						<Button href="/dashboard/administrasi/{i}" class="w-full">Buka Dokumen</Button>
+						<Button href="/dashboard/administrasi/{i}" aria-label="Buka dokumen {doc.nama}" class="w-full">Buka Dokumen</Button>
 					{:else}
-						<Button href={doc.url} download class="w-full">Unduh Dokumen</Button>
+						<Button href={doc.url} download aria-label="Unduh dokumen {doc.nama}" class="w-full">Unduh Dokumen</Button>
 					{/if}
 				</Card.Content>
 			</Card.Root>

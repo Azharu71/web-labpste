@@ -26,4 +26,6 @@ vite.config.ts.timestamp-*
 /static
 GEMINI.md
 /logs
+/.agents
+/.gemini
 

@@ -19,12 +19,20 @@ export type Intern = {
 		jumat: string | null;
 		sabtu: string | null;
 		minggu: string | null;
+	}[] | {
+		senin: string | null;
+		selasa: string | null;
+		rabu: string | null;
+		kamis: string | null;
+		jumat: string | null;
+		sabtu: string | null;
+		minggu: string | null;
 	} | null;
 	created_at: string;
 };
 
 // Helper to format JSON string array to readable string (e.g. "Shift 1, 2")
-const formatShifts = (jsonStr: string | null) => {
+const formatShifts = (jsonStr: string | null | undefined) => {
 	if (!jsonStr) return '-';
 	try {
 		const parsed = JSON.parse(jsonStr);
@@ -79,37 +87,58 @@ export const columns: ColumnDef<Intern>[] = [
             {
                 id: 'senin',
                 header: 'Senin',
-                accessorFn: (row) => formatShifts(row.jadwal_kosong?.senin ?? null)
+                accessorFn: (row) => {
+                    const jk = Array.isArray(row.jadwal_kosong) ? row.jadwal_kosong[0] : row.jadwal_kosong;
+                    return formatShifts(jk?.senin);
+                }
             },
             {
                 id: 'selasa',
                 header: 'Selasa',
-                accessorFn: (row) => formatShifts(row.jadwal_kosong?.selasa ?? null)
+                accessorFn: (row) => {
+                    const jk = Array.isArray(row.jadwal_kosong) ? row.jadwal_kosong[0] : row.jadwal_kosong;
+                    return formatShifts(jk?.selasa);
+                }
             },
             {
                 id: 'rabu',
                 header: 'Rabu',
-                accessorFn: (row) => formatShifts(row.jadwal_kosong?.rabu ?? null)
+                accessorFn: (row) => {
+                    const jk = Array.isArray(row.jadwal_kosong) ? row.jadwal_kosong[0] : row.jadwal_kosong;
+                    return formatShifts(jk?.rabu);
+                }
             },
             {
                 id: 'kamis',
                 header: 'Kamis',
-                accessorFn: (row) => formatShifts(row.jadwal_kosong?.kamis ?? null)
+                accessorFn: (row) => {
+                    const jk = Array.isArray(row.jadwal_kosong) ? row.jadwal_kosong[0] : row.jadwal_kosong;
+                    return formatShifts(jk?.kamis);
+                }
             },
             {
                 id: 'jumat',
                 header: 'Jumat',
-                accessorFn: (row) => formatShifts(row.jadwal_kosong?.jumat ?? null)
+                accessorFn: (row) => {
+                    const jk = Array.isArray(row.jadwal_kosong) ? row.jadwal_kosong[0] : row.jadwal_kosong;
+                    return formatShifts(jk?.jumat);
+                }
             },
             {
                 id: 'sabtu',
                 header: 'Sabtu',
-                accessorFn: (row) => formatShifts(row.jadwal_kosong?.sabtu ?? null)
+                accessorFn: (row) => {
+                    const jk = Array.isArray(row.jadwal_kosong) ? row.jadwal_kosong[0] : row.jadwal_kosong;
+                    return formatShifts(jk?.sabtu);
+                }
             },
             {
                 id: 'minggu',
                 header: 'Minggu',
-                accessorFn: (row) => formatShifts(row.jadwal_kosong?.minggu ?? null)
+                accessorFn: (row) => {
+                    const jk = Array.isArray(row.jadwal_kosong) ? row.jadwal_kosong[0] : row.jadwal_kosong;
+                    return formatShifts(jk?.minggu);
+                }
             }
         ]
     },

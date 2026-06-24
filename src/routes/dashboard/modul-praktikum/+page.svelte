@@ -81,7 +81,7 @@
 	<!-- Success banner -->
 	{#if showSuccess}
 		<div
-			class="flex items-center gap-3 rounded-lg border border-green-200 bg-green-50 px-4 py-3 text-green-800 dark:border-green-800 dark:bg-green-950 dark:text-green-200"
+			class="flex items-center gap-3 rounded-lg border border-chart-3/20 bg-chart-3/10 px-4 py-3 text-chart-3"
 		>
 			<CheckCircle class="h-5 w-5 shrink-0" />
 			<p class="text-sm font-medium">{form?.message ?? 'Berhasil!'}</p>

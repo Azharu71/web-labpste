@@ -28,9 +28,8 @@
 		<Breadcrumb.Root class="hidden md:block">
 			<Breadcrumb.List>
 				<Breadcrumb.Item>
-					<Breadcrumb.Link href="/dashboard">Dashboard</Breadcrumb.Link>
+					<Breadcrumb.Page>Dashboard</Breadcrumb.Page>
 				</Breadcrumb.Item>
-				<Breadcrumb.Separator />
 			</Breadcrumb.List>
 		</Breadcrumb.Root>
 	</div>
@@ -46,46 +45,49 @@
 		</p>
 	</div>
 
-	<!-- Stats Cards -->
-	<div class="grid gap-4 lg:grid-cols-3">
-		<Card.Root>
-			<Card.Header class="flex flex-row items-center justify-between space-y-0 pb-2">
-				<Card.Title class="text-sm font-medium">Total Asisten</Card.Title>
-				<div class="rounded-md bg-primary/10 p-1.5">
-					<GraduationCapIcon class="h-4 w-4 text-primary" />
+	<!-- Stats Section -->
+	<div class="grid gap-6 lg:grid-cols-3 border border-border bg-card rounded-xl p-6 divide-y lg:divide-y-0 lg:divide-x divide-border">
+		<!-- Stat 1 -->
+		<div class="flex items-center gap-4 py-4 lg:py-0 lg:px-6 first:pl-0">
+			<div class="text-primary bg-primary/8 rounded-lg p-2.5 shrink-0">
+				<GraduationCapIcon class="h-6 w-6" />
+			</div>
+			<div class="flex-1 min-w-0">
+				<p class="text-xs font-semibold uppercase tracking-wider text-muted-foreground">Total Asisten</p>
+				<div class="flex items-baseline gap-1.5 mt-1">
+					<span class="text-3xl font-bold font-mono tracking-tight">{stats.totalAsisten}</span>
+					<span class="text-xs text-muted-foreground">asisten aktif</span>
 				</div>
-			</Card.Header>
-			<Card.Content>
-				<div class="text-2xl font-bold">{stats.totalAsisten}</div>
-				<p class="text-xs text-muted-foreground">Asisten aktif semester ini</p>
-			</Card.Content>
-		</Card.Root>
+			</div>
+		</div>
 
-		<Card.Root>
-			<Card.Header class="flex flex-row items-center justify-between space-y-0 pb-2">
-				<Card.Title class="text-sm font-medium">Total Praktikan</Card.Title>
-				<div class="rounded-md bg-chart-3/15 p-1.5">
-					<UsersIcon class="h-4 w-4 text-chart-3" />
+		<!-- Stat 2 -->
+		<div class="flex items-center gap-4 py-4 lg:py-0 lg:px-6">
+			<div class="text-chart-3 bg-chart-3/10 rounded-lg p-2.5 shrink-0">
+				<UsersIcon class="h-6 w-6" />
+			</div>
+			<div class="flex-1 min-w-0">
+				<p class="text-xs font-semibold uppercase tracking-wider text-muted-foreground">Total Praktikan</p>
+				<div class="flex items-baseline gap-1.5 mt-1">
+					<span class="text-3xl font-bold font-mono tracking-tight">{stats.totalPraktikan}</span>
+					<span class="text-xs text-muted-foreground">praktikan terdaftar</span>
 				</div>
-			</Card.Header>
-			<Card.Content>
-				<div class="text-2xl font-bold">{stats.totalPraktikan}</div>
-				<p class="text-xs text-muted-foreground">Praktikan terdaftar</p>
-			</Card.Content>
-		</Card.Root>
+			</div>
+		</div>
 
-		<Card.Root>
-			<Card.Header class="flex flex-row items-center justify-between space-y-0 pb-2">
-				<Card.Title class="text-sm font-medium">Total Praktikum</Card.Title>
-				<div class="rounded-md bg-chart-4/15 p-1.5">
-					<BookOpenIcon class="h-4 w-4 text-chart-4" />
+		<!-- Stat 3 -->
+		<div class="flex items-center gap-4 py-4 lg:py-0 lg:px-6 last:pr-0">
+			<div class="text-chart-4 bg-chart-4/10 rounded-lg p-2.5 shrink-0">
+				<BookOpenIcon class="h-6 w-6" />
+			</div>
+			<div class="flex-1 min-w-0">
+				<p class="text-xs font-semibold uppercase tracking-wider text-muted-foreground">Total Praktikum</p>
+				<div class="flex items-baseline gap-1.5 mt-1">
+					<span class="text-3xl font-bold font-mono tracking-tight">{stats.totalPraktikum}</span>
+					<span class="text-xs text-muted-foreground">mata kuliah</span>
 				</div>
-			</Card.Header>
-			<Card.Content>
-				<div class="text-2xl font-bold">{stats.totalPraktikum}</div>
-				<p class="text-xs text-muted-foreground">Mata kuliah semester ini</p>
-			</Card.Content>
-		</Card.Root>
+			</div>
+		</div>
 	</div>
 
 	<!-- Quick Links (role-based) -->

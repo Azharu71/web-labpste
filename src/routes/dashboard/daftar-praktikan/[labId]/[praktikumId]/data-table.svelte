@@ -84,6 +84,7 @@
 	<div class="flex items-center py-4">
 		<Input
 			placeholder="Search..."
+			aria-label="Cari praktikan..."
 			value={globalFilter}
 			oninput={(e) => {
 				globalFilter = e.currentTarget.value;

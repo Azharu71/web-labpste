@@ -6,6 +6,9 @@
 	import { enhance } from '$app/forms';
 	import ChevronsUpDownIcon from '@lucide/svelte/icons/chevrons-up-down';
 	import LogOutIcon from '@lucide/svelte/icons/log-out';
+	import SunIcon from '@lucide/svelte/icons/sun';
+	import MoonIcon from '@lucide/svelte/icons/moon';
+	import { toggleMode, mode } from 'mode-watcher';
 	import Loading from '$lib/components/loading.svelte';
 
 	let {
@@ -53,6 +56,16 @@
 						</div>
 					</div>
 				</DropdownMenu.Label>
+				<DropdownMenu.Separator />
+				<DropdownMenu.Item onclick={toggleMode} class="cursor-pointer flex items-center gap-2 px-2 py-1.5 text-sm">
+					{#if mode.current === 'dark'}
+						<SunIcon class="size-4" />
+						<span>Mode Terang</span>
+					{:else}
+						<MoonIcon class="size-4" />
+						<span>Mode Gelap</span>
+					{/if}
+				</DropdownMenu.Item>
 				<DropdownMenu.Separator />
 				<DropdownMenu.Item class="p-0">
 					<form action="/auth/logout" method="POST" class="w-full">

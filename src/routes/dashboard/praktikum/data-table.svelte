@@ -71,6 +71,7 @@
 	<div class="flex items-center py-4">
         <Input
 			placeholder="Search all columns..."
+			aria-label="Cari praktikum..."
 			value={globalFilter}
 			oninput={(e) => {
 				globalFilter = e.currentTarget.value;
