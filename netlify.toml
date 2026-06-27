@@ -1,5 +1,5 @@
 [[redirects]]
-  from = "https://labpset-untirta.netlify.app/*"
+  from = "https://labpste-untirta.netlify.app/*"
   to = "https://labpsteuntirta.web.id/"
   status = 301
   force = true   
