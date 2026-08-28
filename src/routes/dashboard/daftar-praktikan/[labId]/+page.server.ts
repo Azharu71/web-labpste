@@ -26,7 +26,7 @@ export const load: PageServerLoad = async ({ params, locals: { supabase }, paren
 		.from('list_praktikum')
 		.select('id, nama_praktikum, semester, tahun')
 		.eq('nama_lab', labName)
-		.eq('semester', 'Genap')
+		.eq('semester', 'Ganjil')
 		.order('nama_praktikum', { ascending: true });
 
 	if (dbError) {

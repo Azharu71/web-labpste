@@ -9,16 +9,15 @@
 	let { data }: { data: PageData } = $props();
 
 	// Mengambil data dari load function (+page.server.ts) dan layout
-	const { userData, labName, praktikum, labId } = data;
-
+	const { labName, praktikum, labId } = data;
 	const praktikumId = [
-		{ nama: 'Dasar Elektronika', slug: 'dasel' },
-		{ nama: 'Pengukuran Listrik', slug: 'penglis' },
-		{ nama: 'Mesin Listrik', slug: 'meli' },
+		{ nama: 'Teknik Digital', slug: 'td' },
+		{ nama: 'Dasar Telekomunikasi', slug: 'dastel' },
+		{ nama: 'Antena Dan Propagasi', slug: 'antena' },
+		{ nama: 'Rangkaian Listrik', slug: 'rl' },
+		{ nama: 'Elektronika Daya', slug: 'elday' },
+		{ nama: 'Pengolahan Sinyal Digital', slug: 'psd' },
 		{ nama: 'Dasar Sistem Kendali', slug: 'dsk' },
-		{ nama: 'Instrumentasi Dan Kendali', slug: 'ik' },
-		{ nama: 'Sistem Kendali Digital', slug: 'skd' },
-		{ nama: 'Komputasi Numerik', slug: 'komnum' }
 	];
 
 	const praktikumList = praktikum.map((item) => {
@@ -28,6 +27,7 @@
 			slug: matched?.slug ?? ''
 		};
 	});
+	console.log(praktikumList)
 </script>
 
 <header class="flex h-16 shrink-0 items-center gap-2 px-4">

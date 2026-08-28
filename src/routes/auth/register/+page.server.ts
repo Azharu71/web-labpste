@@ -31,7 +31,7 @@ export const actions: Actions = {
 		if (existingUser) {
 			return fail(400, {
 				...returnData,
-				error: 'Failed to register: NIM already exists!'
+				error: 'Gagal mendaftar: NIM sudah terdaftar!'
 			});
 		}
 
@@ -42,7 +42,7 @@ export const actions: Actions = {
 		});
 
 		if (authError) {
-			return fail(400, { ...returnData, error: 'Failed to register: ' + authError.message });
+			return fail(400, { ...returnData, error: 'Gagal mendaftar: ' + authError.message });
 		}
 
 		// 2. Insert ke tabel profiles (public.profiles)
@@ -55,7 +55,7 @@ export const actions: Actions = {
 			if (profileError) {
 				return fail(400, {
 					...returnData,
-					error: 'Failed to save profile data: ' + profileError.message
+					error: 'Gagal menyimpan data profil: ' + profileError.message
 				});
 			}
 		}

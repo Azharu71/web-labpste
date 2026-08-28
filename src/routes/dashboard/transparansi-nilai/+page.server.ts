@@ -30,7 +30,7 @@ export const load: PageServerLoad = async ({ locals: { supabase }, parent }) => 
                 supabase
                     .from('list_praktikum')
                     .select('id, nama_praktikum, nama_lab, semester')
-                    .eq('semester', 'Genap')
+                    .eq('semester', 'Ganjil')
                     .order('nama_praktikum', { ascending: true })
             ]);
 

@@ -73,15 +73,15 @@
 			Pilih laboratorium untuk melakukan pendaftaran ulang praktikum.
 		</p>
 	</div>
-	<Card.Root class="border-destructive/50 bg-destructive/10">
+	<!-- <Card.Root class="border-destructive/50 bg-destructive/10">
 		<Card.Header>
 			<Card.Description class="text-destructive/80">
 				Mohon maaf, pendaftaran praktikum periode saat ini telah ditutup.
 			</Card.Description>
 		</Card.Header>
-	</Card.Root>
+	</Card.Root> -->
 
-	{#if false}
+	<!-- {#if false} -->
 		<div class="grid gap-4 md:grid-cols-2 lg:grid-cols-3">
 			{#each labs as lab}
 				<Card.Root class="flex flex-col justify-around transition-all hover:shadow-md">
@@ -98,5 +98,5 @@
 				</Card.Root>
 			{/each}
 		</div>
-	{/if}
+	<!-- {/if} -->
 </div>

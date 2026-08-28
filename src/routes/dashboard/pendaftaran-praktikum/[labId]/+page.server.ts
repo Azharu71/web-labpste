@@ -9,7 +9,7 @@ const labNameMap: Record<string, string> = {
 	lab_kom: 'Laboratorium Komputer'
 };
 
-// @ts-expect-error - SvelteKit's PageServerLoad type inference breaks (expects session, user) 
+// ts-expect-error - SvelteKit's PageServerLoad type inference breaks (expects session, user) 
 // because the parent layout's unconditional redirect evaluates to 'never', corrupting the type union.
 export const load: PageServerLoad = async ({ params, locals: { supabase } }) => {
 	const { labId } = params;
@@ -25,7 +25,7 @@ export const load: PageServerLoad = async ({ params, locals: { supabase } }) => 
 			.from('list_praktikum')
 			.select('id, nama_praktikum, semester, tahun')
 			.eq('nama_lab', labName)
-			.eq('semester', 'Genap')
+			.eq('semester', 'Ganjil')
 			.order('nama_praktikum', { ascending: true });
 
 		if (dbError) {

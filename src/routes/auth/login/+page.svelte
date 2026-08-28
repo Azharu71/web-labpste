@@ -12,14 +12,9 @@
 	<div class="w-full max-w-md">
 		{#if resetSuccess}
 			<div class="mb-4 rounded-md bg-green-50 p-4 text-sm text-green-700 border border-green-200">
-				Password reset successfully! Please login with your new password.
+				Password berhasil direset! Silakan masuk dengan password baru Anda.
 			</div>
 		{/if}
-		{#if form?.error}
-			<div class="mb-4 rounded-md bg-red-50 p-4 text-sm text-red-600 border border-red-200">
-				{form.error}
-			</div>
-		{/if}
-		<LoginForm />
+		<LoginForm {form} />
 	</div>
 </div>

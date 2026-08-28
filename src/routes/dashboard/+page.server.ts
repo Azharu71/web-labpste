@@ -17,14 +17,15 @@ export const load: PageServerLoad = async ({ locals: { supabase }, parent }) => 
 			// Count Praktikan (role_id = 2)
 			supabase.from('profiles').select('count', { count: 'exact', head: true }).eq('role_id', '2'),
 
-			// Count Praktikum (semester = Genap)
+			// Count Praktikum (semester = Ganjil)
 			supabase
 				.from('list_praktikum')
 				.select('count', { count: 'exact', head: true })
-				.eq('semester', 'Genap'),
+				.eq('semester', 'Ganjil'),
 
 			// Count Asisten (role_id = 1)
 			supabase.from('profiles').select('count', { count: 'exact', head: true }).eq('role_id', '1')
+
 		]);
 
 		if (!praktikanError && praktikanCount !== null) totalPraktikan = praktikanCount;
@@ -34,6 +35,24 @@ export const load: PageServerLoad = async ({ locals: { supabase }, parent }) => 
 		console.error('Error fetching stats:', err);
 	}
 
+	// Fetch myPraktikums
+	let myPraktikums: any[] = [];
+	try {
+		const { data: myPraktikumData, error: myPraktikumError } = await supabase
+			.from('daftar_praktikan')
+			.select(`
+				*,
+				list_praktikum(nama_praktikum, nama_lab, semester)
+			`)
+			.eq('user_id', userData.id);
+
+		if (!myPraktikumError && myPraktikumData) {
+			myPraktikums = myPraktikumData;
+		}
+	} catch (err) {
+		console.error('Error fetching my praktikum:', err);
+	}
+
 	return {
 		userData,
 		stats: {
@@ -41,44 +60,7 @@ export const load: PageServerLoad = async ({ locals: { supabase }, parent }) => 
 			totalPraktikan,
 			totalPraktikum
 		},
-
-		bestPraktikan: [
-			{
-				nim: '3332250005',
-				name: 'Shaeful Anam',
-				praktikum: 'Dasar Elektronika'
-			},
-			{
-				nim: '3332240022',
-				name: 'M. Riadhusholihin',
-				praktikum: 'Pengukuran Listrik'
-			},
-			{
-				nim: '3332240110',
-				name: 'Dewi Uma Angelina',
-				praktikum: 'Dasar Sistem Kendali'
-			},
-			{
-				nim: '3332230066',
-				name: 'Muhammad Rivaldy Pratama',
-				praktikum: 'Instrumentasi Kendali'
-			},
-			{
-				nim: '3332230050',
-				name: 'Daffa Nur Fauzan',
-				praktikum: 'Sistem Kendali Digital'
-			},
-			{
-				nim: '3332230025',
-				name: 'Valentino Pahotan Simamora',
-				praktikum: 'Mesin Listrik'
-			},
-			{
-				nim: '3332250188',
-				name: 'Maheswari Anindya Lituhayu Tuswandi',
-				praktikum: 'Komputasi Numerik'
-			}
-		]
-
+		myPraktikums,
+		bestPraktikan: []
 	};
 };

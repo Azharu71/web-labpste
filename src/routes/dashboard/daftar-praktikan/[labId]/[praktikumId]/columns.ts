@@ -1,7 +1,6 @@
 import type { ColumnDef } from '@tanstack/table-core';
 import { renderComponent } from '$lib/components/ui/data-table';
 import DataTableColumnHeader from './data-table-column-header.svelte';
-import ScheduleCell from './schedule-cell.svelte'; // Reuse sched cell for individual tasks if needed, or simple text
 import KrsCell from './krs-cell.svelte';
 
 export type Intern = {
@@ -18,7 +17,6 @@ export type Intern = {
 		kamis: string | null;
 		jumat: string | null;
 		sabtu: string | null;
-		minggu: string | null;
 	} | null;
 	created_at: string;
 };
@@ -48,7 +46,8 @@ export const columns: ColumnDef<Intern>[] = [
 		header: ({ column }) =>
 			renderComponent(DataTableColumnHeader, {
 				column: column as any,
-				title: 'NIM'
+				title: 'NIM',
+				class: 'justify-center'
 			})
 	},
 	{
@@ -56,7 +55,8 @@ export const columns: ColumnDef<Intern>[] = [
 		header: ({ column }) =>
 			renderComponent(DataTableColumnHeader, {
 				column: column as any,
-				title: 'IPK'
+				title: 'IPK',
+				class: 'justify-center'
 			})
 	},
 	{
@@ -106,11 +106,6 @@ export const columns: ColumnDef<Intern>[] = [
                 header: 'Sabtu',
                 accessorFn: (row) => formatShifts(row.jadwal_kosong?.sabtu ?? null)
             },
-            {
-                id: 'minggu',
-                header: 'Minggu',
-                accessorFn: (row) => formatShifts(row.jadwal_kosong?.minggu ?? null)
-            }
         ]
     },
 	{
@@ -118,7 +113,8 @@ export const columns: ColumnDef<Intern>[] = [
 		header: ({ column }) =>
 			renderComponent(DataTableColumnHeader, {
 				column: column as any,
-				title: 'Tanggal Daftar'
+				title: 'Tanggal Daftar',
+				class: 'justify-center'
 			}),
 		cell: ({ row }) => {
 			const date = new Date(row.getValue('created_at'));

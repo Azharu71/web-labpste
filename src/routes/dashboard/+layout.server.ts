@@ -5,7 +5,8 @@ import { getCachedProfile, setCachedProfile } from '$lib/profile-cache';
 export const load: LayoutServerLoad = async ({
 	locals: { supabase },
 	setHeaders,
-	parent
+	parent,
+	url
 }) => {
 	// Get user session from parent (root layout)
 	const parentData = await parent();
@@ -16,11 +17,13 @@ export const load: LayoutServerLoad = async ({
 		throw redirect(303, '/auth/login');
 	}
 
-	// Set cache headers to prevent unnecessary requests
-	setHeaders({
-		'Cache-Control': 'private, max-age=300, stale-while-revalidate=60',
-		Vary: 'Cookie'
-	});
+	// Set cache headers to prevent unnecessary requests, except for dynamic registration pages
+	if (!url.pathname.includes('/pendaftaran-praktikum/')) {
+		setHeaders({
+			'Cache-Control': 'private, max-age=300, stale-while-revalidate=60',
+			Vary: 'Cookie'
+		});
+	}
 
 	const userId = user.id;
 
@@ -40,6 +43,7 @@ export const load: LayoutServerLoad = async ({
 	const roleName = Array.isArray(roleData) ? roleData[0]?.name : (roleData as any)?.name;
 
 	const userData = {
+		id: userId,
 		nim: user.user_metadata?.nim || profile?.nim || null,
 		email: user.email || null,
 		role: roleName || null

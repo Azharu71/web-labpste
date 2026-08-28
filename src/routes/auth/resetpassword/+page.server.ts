@@ -49,7 +49,7 @@ export const actions: Actions = {
 		if (secondsLeft > 0) {
 			return fail(429, {
 				email,
-				error: `For security purposes, you can only request this after ${secondsLeft} seconds.`,
+				error: `Untuk tujuan keamanan, Anda hanya dapat melakukan request ini setelah ${secondsLeft} detik.`,
 				secondsLeft
 			});
 		}
@@ -68,7 +68,7 @@ export const actions: Actions = {
 
 		return {
 			success: true,
-			message: 'Check your email if it is registered for a reset password link.',
+			message: 'Periksa email Anda jika terdaftar untuk mendapatkan link reset password.',
 			secondsLeft: COOLDOWN_SECONDS
 		};
 	},
@@ -101,7 +101,7 @@ export const actions: Actions = {
 				if (error) {
 					verifyFailed = true;
 					verifyErrorMessage = error.message.includes('code verifier')
-						? 'Please open the reset link in the SAME browser/device where you requested it.'
+						? 'Harap buka link reset di browser/perangkat yang SAMA tempat Anda memintanya.'
 						: error.message;
 				}
 			} else {
@@ -121,7 +121,7 @@ export const actions: Actions = {
 
 		if (!session) {
 			// Jika tidak ada session dan verifikasi token gagal, berarti token benar-benar tidak valid
-			return fail(400, { error: verifyFailed ? verifyErrorMessage : 'Unauthorized or session expired.' });
+			return fail(400, { error: verifyFailed ? verifyErrorMessage : 'Tidak diizinkan atau sesi telah berakhir.' });
 		}
 
 		// Update password di Supabase menggunakan session yang aktif

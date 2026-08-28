@@ -6,6 +6,7 @@
 	import UsersRoundIcon from '@lucide/svelte/icons/users-round';
 	import BookText from '@lucide/svelte/icons/book-text';
 	import ClipboardList from '@lucide/svelte/icons/clipboard-list';
+	import FileTextIcon from '@lucide/svelte/icons/file-text';
 	import RefreshCwIcon from '@lucide/svelte/icons/refresh-cw';
 
 	const allNavItems = [
@@ -13,6 +14,12 @@
 			name: 'Dashboard',
 			url: '/dashboard',
 			icon: LayoutDashboardIcon,
+			roles: ['Asisten', 'Praktikan']
+		},
+		{
+			name: 'Daftar ulang ',
+			url: '/dashboard/pendaftaran-praktikum',
+			icon: RefreshCwIcon,
 			roles: ['Asisten', 'Praktikan']
 		},
 		{
@@ -46,15 +53,15 @@
 			roles: ['Asisten', 'Praktikan']
 		},
 		{
-			name: 'Transparansi Nilai',
-			url: '/dashboard/transparansi-nilai',
-			icon: NotebookPenIcon,
+			name: 'Pengumpulan Laporan',
+			url: '/dashboard/pengumpulan-laporan',
+			icon: FileTextIcon,
 			roles: ['Asisten', 'Praktikan']
 		},
 		{
-			name: 'Daftar ulang ',
-			url: '/dashboard/pendaftaran-praktikum',
-			icon: RefreshCwIcon,
+			name: 'Transparansi Nilai',
+			url: '/dashboard/transparansi-nilai',
+			icon: NotebookPenIcon,
 			roles: ['Asisten', 'Praktikan']
 		}
 	];
@@ -102,7 +109,7 @@
 			</div>
 			<div class="grid flex-1 text-left text-sm leading-tight">
 				<span class="truncate font-medium"> Lab. PSTE Untirta </span>
-				<span class="truncate text-xs">Genap 2026/2027</span>
+				<span class="truncate text-xs">Ganjil 2026/2027</span>
 			</div>
 		</Sidebar.MenuButton>
 	</Sidebar.Header>

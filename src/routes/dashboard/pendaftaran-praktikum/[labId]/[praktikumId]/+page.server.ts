@@ -3,7 +3,15 @@ import type { PageServerLoad, Actions } from './$types';
 import { fail, redirect, error } from '@sveltejs/kit';
 import { pendaftaranSchema } from '$lib/schemas/pendaftaran';
 
-export const load: PageServerLoad = async ({ params, locals, parent }) => {
+export const load: PageServerLoad = async ({ params, locals, parent, setHeaders }) => {
+	// Prevent browser caching for this specific page to avoid showing the registration form again
+	setHeaders({
+		'Cache-Control': 'no-store, no-cache, must-revalidate, proxy-revalidate',
+		'Pragma': 'no-cache',
+		'Expires': '0'
+	});
+	
+
 	// Gunakan user dari parent layout — tidak perlu safeGetSession() ulang
 	const parentData = await parent();
 	const user = await parentData.user;
@@ -30,6 +38,35 @@ export const load: PageServerLoad = async ({ params, locals, parent }) => {
 		.eq('praktikum_id', praktikumData.id)
 		.single();
 
+	// 3. Cek Waktu Pendaftaran (Registration Window)
+	const { data: timeData } = await locals.supabase
+		.from('Time')
+		.select('start, end')
+		.order('id', { ascending: false })
+		.limit(1)
+		.maybeSingle();
+
+	let isRegistrationOpen = false;
+	let registrationMessage = 'Pendaftaran belum dibuka atau telah ditutup.';
+
+	if (timeData && timeData.start) {
+		const now = new Date();
+		// Supabase mengembalikan ISO string UTC, JS Date mem-parsingnya ke timezone lokal secara otomatis
+		const startDate = new Date(timeData.start);
+		const endDate = timeData.end ? new Date(timeData.end) : null;
+
+		if (now < startDate) {
+			registrationMessage = `Pendaftaran belum dibuka. Akan dibuka pada ${startDate.toLocaleString('id-ID')} WIB.`;
+		} else if (endDate && now > endDate) {
+			registrationMessage = `Pendaftaran telah ditutup pada ${endDate.toLocaleString('id-ID')} WIB.`;
+		} else {
+			isRegistrationOpen = true;
+			registrationMessage = endDate 
+				? `Pendaftaran akan ditutup pada ${endDate.toLocaleString('id-ID')} WIB.` 
+				: 'Pendaftaran sedang dibuka.';
+		}
+	}
+
 	return {
 		labId,
 		praktikumId,
@@ -37,7 +74,9 @@ export const load: PageServerLoad = async ({ params, locals, parent }) => {
 		realPraktikumId: praktikumData.id,
 		praktikumName: praktikumData.nama_praktikum,
 		isRegistered: !!existingReg,
-		existingData: existingReg
+		existingData: existingReg,
+		isRegistrationOpen,
+		registrationMessage
 	};
 };
 
@@ -48,6 +87,26 @@ export const actions: Actions = {
 
 		const formData = await request.formData();
 		const { praktikumId } = params;
+
+		// 0. Cek apakah pendaftaran dibuka
+		const { data: timeData } = await locals.supabase
+			.from('Time')
+			.select('start, end')
+			.order('id', { ascending: false })
+			.limit(1)
+			.maybeSingle();
+
+		if (!timeData || !timeData.start) {
+			return fail(400, { message: 'Akses ditolak: Pendaftaran ditutup atau jadwal belum diatur.' });
+		}
+
+		const now = new Date();
+		const startDate = new Date(timeData.start);
+		const endDate = timeData.end ? new Date(timeData.end) : null;
+
+		if (now < startDate || (endDate && now > endDate)) {
+			return fail(400, { message: 'Akses ditolak: Waktu pendaftaran tidak valid atau sudah ditutup.' });
+		}
 
 		// Ambil data form
 		const fullNameRaw = formData.get('fullName') as string;
@@ -74,6 +133,18 @@ export const actions: Actions = {
 
 		if (!realPraktikumId) return fail(404, { message: 'Praktikum tidak ditemukan' });
 
+		// Cek apakah user SUDAH terdaftar di praktikum ini (Cek Server-Side)
+		const { data: existingReg } = await locals.supabase
+			.from('daftar_praktikan')
+			.select('id')
+			.eq('user_id', user.id)
+			.eq('praktikum_id', realPraktikumId)
+			.maybeSingle();
+
+		if (existingReg) {
+			return fail(400, { message: 'Anda sudah terdaftar pada praktikum ini.' });
+		}
+
 		// Validasi Input dengan Joi
 		const validationResult = pendaftaranSchema.validate(
 			{ fullName, nim, ipk, krsType, schedule: availableSchedule },
@@ -93,7 +164,7 @@ export const actions: Actions = {
 		const fileName = `${nim}_${praktikumId}_${Date.now()}.${fileExt}`;
 
 		const { error: uploadError } = await locals.supabase.storage
-			.from('krs-uploads')
+			.from('krs-uploads/KRS_Ganjil')
 			.upload(fileName, krsFile);
 
 		if (uploadError) return fail(500, { message: 'Gagal upload KRS' });
@@ -149,7 +220,6 @@ export const actions: Actions = {
 			kamis: scheduleMap.kamis.length ? JSON.stringify(scheduleMap.kamis) : null,
 			jumat: scheduleMap.jumat.length ? JSON.stringify(scheduleMap.jumat) : null,
 			sabtu: scheduleMap.sabtu.length ? JSON.stringify(scheduleMap.sabtu) : null,
-			minggu: scheduleMap.minggu.length ? JSON.stringify(scheduleMap.minggu) : null
 		};
 
 		const { error: jadwalError } = await locals.supabase.from('jadwal_kosong').insert(jadwalPayload);

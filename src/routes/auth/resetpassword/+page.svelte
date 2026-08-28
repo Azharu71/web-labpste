@@ -37,12 +37,12 @@
 						</div>
 					</a>
 					<h2 class="text-xl font-bold">
-						{data.mode === 'request' ? 'Forget Password' : 'Create new password'}
+						{data.mode === 'request' ? 'Lupa Password' : 'Buat password baru'}
 					</h2>
 					<p class="text-center text-sm text-muted-foreground">
 						{data.mode === 'request'
-							? 'Insert your email to receive a reset password link.'
-							: 'Insert your new password for your account.'}
+							? 'Masukkan email Anda untuk menerima link reset password.'
+							: 'Masukkan password baru untuk akun Anda.'}
 					</p>
 				</div>
 
@@ -77,7 +77,7 @@
 
 						<Button type="submit" class="w-full" disabled={isLoading}>
 							{#if isLoading}
-								<Loading variant="inline" message="Sending..." />
+								<Loading variant="inline" message="Mengirim..." />
 							{:else}
 								Reset Password
 							{/if}
@@ -85,7 +85,7 @@
 
 						<div class="text-center text-sm">
 							<a href="/auth/login" class="text-blue-500 underline-offset-4 hover:underline">
-								Back to login page
+								Kembali ke halaman login
 							</a>
 						</div>
 					</div>
@@ -98,13 +98,13 @@
 					{/if}
 					<div class="flex flex-col gap-4">
 						<div class="grid gap-3">
-							<Label for="newPassword">New Password</Label>
+							<Label for="newPassword">Password Baru</Label>
 							<div class="relative">
 								<Input
 									name="newPassword"
 									id="newPassword"
 									type={showNewPassword ? 'text' : 'password'}
-									placeholder="Insert your new password"
+									placeholder="Masukkan password baru Anda"
 									required
 									class="pr-10"
 								/>
@@ -123,13 +123,13 @@
 						</div>
 
 						<div class="grid gap-3">
-							<Label for="confirmPassword">Confirm Password</Label>
+							<Label for="confirmPassword">Konfirmasi Password</Label>
 							<div class="relative">
 								<Input
 									name="confirmPassword"
 									id="confirmPassword"
 									type={showNewPassword ? 'text' : 'password'}
-									placeholder="Confirm new password"
+									placeholder="Konfirmasi password baru"
 									required
 									class="pr-10"
 								/>
@@ -149,18 +149,13 @@
 
 						<Button type="submit" class="w-full" disabled={isLoading}>
 							{#if isLoading}
-								<Loading variant="inline" message="Saving..." />
+								<Loading variant="inline" message="Menyimpan..." />
 							{:else}
-								Save New Password
+								Simpan Password Baru
 							{/if}
 						</Button>
 					</div>
 				{/if}
-
-				<div class="after:border-border relative text-center text-sm after:absolute after:inset-0 after:top-1/2 after:z-0 after:flex after:items-center after:border-t"></div>
-				<div class="text-muted-foreground *:[a]:hover:text-primary *:[a]:underline *:[a]:underline-offset-4 text-balance text-center text-xs">
-					Copyright &copy; 2026 Lab. PSTE Untirta
-				</div>
 			</div>
 		</form>
 	</div>

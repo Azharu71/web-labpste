@@ -15,9 +15,9 @@
 
 	let {
 		ref = $bindable(null),
-		class: className,
+		class: className, form,
 		...restProps
-	}: WithElementRef<HTMLAttributes<HTMLDivElement>> = $props();
+	}: WithElementRef<HTMLAttributes<HTMLDivElement>> & { form?: any } = $props();
 
 	const id = $props.id();
 </script>
@@ -33,6 +33,7 @@
 			};
 		}}
 	>
+	
 		<div class="flex flex-col gap-6 border-2 p-8 rounded-2xl">
 			<div class="flex flex-col items-center gap-2">
 				<a href="/" class="flex flex-col items-center gap-2 font-medium">
@@ -42,10 +43,15 @@
 				</a>
 				<h2 class="text-xl font-bold">Laboratorium PSTE Untirta</h2>
 				<div class="text-center text-sm">
-					Don&apos;t have an account?
-					<a href="/auth/register" class="underline underline-offset-4"> Sign up </a>
+					Belum punya akun?
+					<a href="/auth/register" class="underline underline-offset-4"> Daftar </a>
 				</div>
 			</div>
+			{#if form?.error}
+				<div class="mb-4 rounded-md bg-red-50 p-4 text-sm text-red-600 border border-red-200">
+					{form.error}
+				</div>
+			{/if}
 			<div class="flex flex-col gap-6">
 				<div class="grid gap-3">
 					<Label for="email-{id}">Email</Label>
@@ -64,7 +70,7 @@
 							href="/auth/resetpassword"
 							class="text-sm text-blue-500 underline-offset-4 hover:underline"
 						>
-							Forget password?
+							Lupa password?
 						</a>
 					</div>
 					<div class="relative">
@@ -72,7 +78,7 @@
 							name="password"
 							id="password-{id}"
 							type={showPassword ? 'text' : 'password'}
-							placeholder="Enter your password"
+							placeholder="Masukkan password Anda"
 							required
 							class="pr-10"
 						/>
@@ -93,17 +99,9 @@
 					{#if isLoading}
 						<Loading variant="inline" message="Sedang memproses..." />
 					{:else}
-						Login
+						Masuk
 					{/if}
 				</Button>
-			</div>
-			<div
-				class="after:border-border relative text-center text-sm after:absolute after:inset-0 after:top-1/2 after:z-0 after:flex after:items-center after:border-t"
-			></div>
-			<div
-				class="text-muted-foreground *:[a]:hover:text-primary *:[a]:underline *:[a]:underline-offset-4 text-balance text-center text-xs"
-			>
-				Copyright &copy; 2026 Lab. PSTE Untirta
 			</div>
 		</div>
 	</form>

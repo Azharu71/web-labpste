@@ -6,25 +6,37 @@ const dokumen = [
 		nama: 'Panduan Laporan Praktikum',
 		deskripsi: 'Panduan untuk membuat laporan praktikum',
 		tipe: 'pdf' as const,
-		url: 'https://dglpmddnwckzlvbvtzxn.supabase.co/storage/v1/object/public/Administrasi/panduan_laporan_praktikum2026.pdf'
+		url: ''
 	},
 	{
 		nama: 'Contoh Laporan (PDF)',
 		deskripsi: 'Contoh laporan praktikum dalam format PDF',
 		tipe: 'pdf' as const,
-		url: 'https://dglpmddnwckzlvbvtzxn.supabase.co/storage/v1/object/public/Administrasi/contoh_laporan_praktikum2026.pdf'
+		url: ''
 	},
 	{
 		nama: 'Contoh Laporan (DOCX)',
 		deskripsi: 'Contoh laporan praktikum',
 		tipe: 'docx' as const,
-		url: 'https://dglpmddnwckzlvbvtzxn.supabase.co/storage/v1/object/public/Administrasi/contoh_laporan_praktikum2026.docx'
+		url: ''
 	},
 	{
 		nama: 'ID Card',
 		deskripsi: 'Tanda pengenal praktikum',
 		tipe: 'docx' as const,
-		url: 'https://dglpmddnwckzlvbvtzxn.supabase.co/storage/v1/object/public/Administrasi/tanda_pengenal_praktikum.docx'
+		url: ''
+	},
+	{
+		nama: 'Pedoman LAB',
+		deskripsi: 'Pedoman laboratorium PSTE',
+		tipe: 'pdf' as const,
+		url: ''
+	},
+	{
+		nama: 'K3 Laboratorium',
+		deskripsi: 'Buku panduan K3 Laboratorium PSTE',
+		tipe: 'pdf' as const,
+		url: ''
 	}
 ];
 // ─────────────────────────────────────────────────────────────────────────────

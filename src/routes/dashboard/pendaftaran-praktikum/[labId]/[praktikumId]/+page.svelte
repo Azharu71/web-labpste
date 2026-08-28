@@ -1,5 +1,6 @@
 <script lang="ts">
 	import { enhance } from '$app/forms';
+	import { invalidateAll } from '$app/navigation';
 	import * as Sidebar from '$lib/components/ui/sidebar';
 	import * as Breadcrumb from '$lib/components/ui/breadcrumb';
 	import { Button } from '$lib/components/ui/button';
@@ -13,18 +14,11 @@
 	let { data, form } = $props();
 
 	const groupLinks: Record<string, string> = {
-		komnum: 'https://chat.whatsapp.com/FXlQAotkg3t1ZfoLzm5onn?mode=gi_t',
-		dasel: 'https://chat.whatsapp.com/C2IfVAMeWxoDEXo0nMvkuB?mode=gi_t',
-		penglis: 'https://chat.whatsapp.com/FQnR9mzXMqVBweiN1stAup?mode=hq1tcla',
-		meli: 'https://chat.whatsapp.com/EO0nsN40PVZ31YB1Bu9Uxl?mode=gi_t',
-		dsk: 'https://chat.whatsapp.com/JGKeZPWraPDAU4xkbVt5u8?mode=gi_t',
-		ik: 'https://chat.whatsapp.com/BGsivJ7Attg7Hd4IMuNeEt?mode=gi_t',
-		skd: 'https://chat.whatsapp.com/F28c0Zbzu7tC547iyxyUGU?mode=gi_t'
 	};
 
 	let currentGroupLink = $derived(groupLinks[data.praktikumId]);
 
-	const days = ['Senin', 'Selasa', 'Rabu', 'Kamis', 'Jumat', 'Sabtu', 'Minggu'];
+	const days = ['Senin', 'Selasa', 'Rabu', 'Kamis', 'Jumat', 'Sabtu'];
 	const sessions = [
 		{ id: 1, time: '08:00-10:00' },
 		{ id: 2, time: '10:00-12:00' },
@@ -38,6 +32,12 @@
 	let checkedSchedules = $state(new Set<string>());
 	let selectedCount = $derived(checkedSchedules.size);
 	let confirmed = $state(false);
+
+	function toggleDayAll(day: string) {
+		const isAll = sessions.every((s) => checkedSchedules.has(`${day}_${s.id}`));
+		sessions.forEach((s) => checkedSchedules[isAll ? 'delete' : 'add'](`${day}_${s.id}`));
+		checkedSchedules = new Set(checkedSchedules);
+	}
 
 	async function handleFileChange(event: Event) {
 		const target = event.target as HTMLInputElement;
@@ -103,7 +103,6 @@
 	<Card.Root>
 		<Card.Header>
 			<Card.Title>Pendaftaran praktikum: {data.praktikumName}</Card.Title>
-			<Card.Description>Lengkapi data di bawah ini.</Card.Description>
 		</Card.Header>
 		<Card.Content>
 			{#if data.isRegistered}
@@ -123,6 +122,15 @@
 						<p class="text-sm italic opacity-80">*Link grup belum tersedia untuk praktikum ini.</p>
 					{/if}
 				</div>
+			{:else if !data.isRegistrationOpen}
+				<div class="flex flex-col gap-4 bg-yellow-50 p-4 rounded text-yellow-800 border border-yellow-200">
+					<div>
+						<strong class="text-lg">Informasi Pendaftaran</strong>
+						<p class="mt-2">
+							{data.registrationMessage}
+						</p>
+					</div>
+				</div>
 			{:else}
 				{#if form?.message}
 					<div
@@ -137,9 +145,12 @@
 					enctype="multipart/form-data"
 					use:enhance={() => {
 						isLoading = true;
-						return async ({ update }) => {
+						return async ({ update, result }) => {
 							isLoading = false;
 							await update();
+							if (result.type === 'success') {
+								await invalidateAll();
+							}
 						};
 					}}
 					class="space-y-6"
@@ -185,9 +196,6 @@
 							onchange={handleFileChange}
 							disabled={isScanning}
 						/>
-						<p class="text-xs text-muted-foreground">
-							Upload file KRS Anda untuk mengisi jadwal kosong secara otomatis.
-						</p>
 					</div>
 
 					<div class="space-y-2">
@@ -231,7 +239,18 @@
 						<div class="grid grid-cols-1 gap-4 md:grid-cols-2 lg:grid-cols-3">
 							{#each days as day}
 								<div class="rounded-lg border p-4 shadow-sm">
-									<h3 class="mb-3 font-semibold text-primary">{day}</h3>
+									<div class="mb-3 flex items-center justify-between">
+										<h3 class="font-semibold text-primary">{day}</h3>
+										<label class="flex items-center gap-1.5 text-xs text-muted-foreground hover:text-foreground cursor-pointer select-none">
+											<input
+												type="checkbox"
+												class="h-4 w-4 rounded border-gray-300 accent-primary cursor-pointer"
+												checked={sessions.every((s) => checkedSchedules.has(`${day}_${s.id}`))}
+												onchange={() => toggleDayAll(day)}
+											/>
+											<span>Pilih Semua</span>
+										</label>
+									</div>
 									<div class="flex flex-col gap-2">
 										{#each sessions as session}
 											{@const value = `${day}_${session.id}`}
@@ -252,8 +271,7 @@
 													class="hidden"
 													checked={isChecked}
 													onchange={(e) => {
-														if (e.currentTarget.checked) checkedSchedules.add(value);
-														else checkedSchedules.delete(value);
+														checkedSchedules[e.currentTarget.checked ? 'add' : 'delete'](value);
 														checkedSchedules = new Set(checkedSchedules);
 													}}
 												/>
@@ -287,14 +305,14 @@
 							<strong>valid dan akurat</strong>.
 						</span>
 					</label>
-
-					<Button type="submit" class="w-full" disabled={isLoading || !confirmed}>
+					<Button type="submit" class="w-full" disabled={isLoading || !confirmed || selectedCount < 15}>
 						{#if isLoading}
 							Memproses...
 						{:else}
 							Daftar Sekarang
 						{/if}
 					</Button>
+					
 				</form>
 			{/if}
 		</Card.Content>

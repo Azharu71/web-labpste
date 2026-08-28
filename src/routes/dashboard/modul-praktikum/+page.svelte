@@ -214,7 +214,7 @@
 
 		{#if data.praktikumList.length === 0}
 			<div class="col-span-full py-10 text-center text-muted-foreground text-sm">
-				Tidak ada data praktikum semester genap.
+				Tidak ada data praktikum semester Ganjil.
 			</div>
 		{/if}
 	</div>

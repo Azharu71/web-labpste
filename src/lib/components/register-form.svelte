@@ -9,6 +9,8 @@
 	import Loading from '$lib/components/loading.svelte';
 
 	let isLoading = $state(false);
+	let confirmed = $state(false);
+
 
 	let {
 		ref = $bindable(null),
@@ -40,8 +42,8 @@
 				</a>
 				<h2 class="text-xl font-bold">Laboratorium PSTE Untirta</h2>
 				<div class="text-center text-sm">
-					Already have an account?
-					<a href="/auth/login" class="underline underline-offset-4"> Login </a>
+					Sudah punya akun?
+					<a href="/auth/login" class="underline underline-offset-4"> Masuk </a>
 				</div>
 			</div>
 			{#if form?.error}
@@ -71,7 +73,7 @@
 						value={form?.email || ''}
 						required
 					/>
-					<p class="text-muted-foreground text-sm">*Disarankan menggunakan email untirta!</p>
+					<p class="text-muted-foreground text-sm">*Kami sarankan menggunakan email Untirta Anda!</p>
 				</div>
 				<div class="grid gap-3">
 					<Label for="password-{id}">Password</Label>
@@ -79,37 +81,39 @@
 						id="password-{id}"
 						name="password"
 						type="password"
-						placeholder="Enter your password"
+						placeholder="Masukkan password Anda"
 						required
 						min="8"
 					/>
 				</div>
 				<div class="grid gap-3">
-					<Label for="confirmPassword-{id}">Confirmation Password</Label>
+					<Label for="confirmPassword-{id}">Konfirmasi Password</Label>
 					<Input
 						id="confirmPassword-{id}"
 						name="confirmPassword"
 						type="password"
-						placeholder="Confirmation password"
+						placeholder="Konfirmasi password Anda"
 						required
 					/>
 				</div>
+				<label class="flex items-start gap-3 cursor-pointer">
+						<input
+							type="checkbox"
+							bind:checked={confirmed}
+							class="mt-0.5 h-4 w-4 shrink-0 accent-primary"
+						/>
+						<span class="text-sm leading-relaxed">
+							NIM dan Email saya telah sesuai dan akurat.
+						</span>
+					</label>
 
-				<Button type="submit" class="w-full" disabled={isLoading}>
+				<Button type="submit" class="w-full" disabled={!confirmed || isLoading}>
 					{#if isLoading}
 						<Loading variant="inline" message="Sedang memproses..." />
 					{:else}
-						Sign Up
+						Daftar
 					{/if}
 				</Button>
-			</div>
-			<div
-				class="after:border-border relative text-center text-sm after:absolute after:inset-0 after:top-1/2 after:z-0 after:flex after:items-center after:border-t"
-			></div>
-			<div
-				class="text-muted-foreground *:[a]:hover:text-primary *:[a]:underline *:[a]:underline-offset-4 text-balance text-center text-xs"
-			>
-				Copyright &copy; 2026 Lab. PSTE Untirta
 			</div>
 		</div>
 	</form>

@@ -6,7 +6,7 @@ export const load: PageServerLoad = async ({ locals: { supabase } }) => {
 	const { data: praktikumList, error: err } = await supabase
 		.from('list_praktikum')
 		.select('id, nama_praktikum, nama_lab, semester, url_modul')
-		.eq('semester', 'Genap')
+		.eq('semester', 'Ganjil')
 		.order('nama_praktikum', { ascending: true });
 
 	if (err) {

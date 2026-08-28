@@ -327,8 +327,9 @@
 	{/if}
 	-->
 
-	<!-- All praktikan results for asisten -->
-	{#if isAsisten && allScores.length > 0}
+	{#if false}
+		<!-- All praktikan results for asisten -->
+		{#if isAsisten && allScores.length > 0}
 		<!-- Asisten: Tabel Semua Nilai -->
 		<Card.Root class="p-6">
 			<Card.Header>
@@ -486,53 +487,49 @@
 		</div>
 	{/if}
 	{#if !isAsisten}
-		<!-- {#if false} -->
 		<!-- Student Profile Card -->
-		<div
-			class="bg-gradient-to-r from-primary/10 via-primary/5 to-background p-6 rounded-lg shadow-sm hover:shadow-md transition-shadow"
-		>
-			<div class="flex flex-col sm:flex-row sm:items-center gap-6">
-				<!-- Avatar and Basic Info -->
-				<div class="flex items-center gap-4">
-					<Avatar.Root class="h-20 w-20 border-4 border-background shadow-lg">
-						<Avatar.Fallback class="text-xl font-bold bg-primary text-primary-foreground">
-							{praktikumScores[0]?.nama
-								? praktikumScores[0]?.nama.substring(0, 2).toUpperCase()
-								: 'UN'}
-						</Avatar.Fallback>
-					</Avatar.Root>
-					<div class="space-y-2">
-						<h2 class="text-2xl font-bold">
-							{praktikumScores[0]?.nama?.toUpperCase() || 'NAMA TIDAK TERSEDIA'}
-						</h2>
-						<div class="flex items-center gap-2">
-							<Badge variant="secondary" class="bg-blue-500 text-white">
-								{userData.nim || 'NIM tidak tersedia'}
-							</Badge>
-						</div>
-					</div>
-				</div>
-
-				<!-- Quick Stats -->
-				{#if praktikumScores.length > 0}
-					<div class="flex-1 flex justify-center sm:justify-end sm:ml-auto">
-						<div class="text-center">
-							<div class="text-2xl font-bold text-primary">
-								{praktikumScores.length}
+			<div
+				class="bg-gradient-to-r from-primary/10 via-primary/5 to-background p-6 rounded-lg shadow-sm hover:shadow-md transition-shadow"
+			>
+				<div class="flex flex-col sm:flex-row sm:items-center gap-6">
+					<!-- Avatar and Basic Info -->
+					<div class="flex items-center gap-4">
+						<Avatar.Root class="h-20 w-20 border-4 border-background shadow-lg">
+							<Avatar.Fallback class="text-xl font-bold bg-primary text-primary-foreground">
+								{praktikumScores[0]?.nama
+									? praktikumScores[0]?.nama.substring(0, 2).toUpperCase()
+									: 'UN'}
+							</Avatar.Fallback>
+						</Avatar.Root>
+						<div class="space-y-2">
+							<h2 class="text-2xl font-bold">
+								{praktikumScores[0]?.nama?.toUpperCase() || 'NAMA TIDAK TERSEDIA'}
+							</h2>
+							<div class="flex items-center gap-2">
+								<Badge variant="secondary" class="bg-blue-500 text-white">
+									{userData.nim || 'NIM tidak tersedia'}
+								</Badge>
 							</div>
-							<p class="text-xs text-muted-foreground">Praktikum Diambil</p>
 						</div>
 					</div>
-				{/if}
-			</div>
-		</div>
-	{/if}
-	<!-- {/if} -->
 
-	{#if !isAsisten}
-		<!-- Praktikum Scores Section -->
-		<div class="space-y-4">
-			{#if praktikumScores.length > 0}
+					<!-- Quick Stats -->
+					{#if praktikumScores.length > 0}
+						<div class="flex-1 flex justify-center sm:justify-end sm:ml-auto">
+							<div class="text-center">
+								<div class="text-2xl font-bold text-primary">
+									{praktikumScores.length}
+								</div>
+								<p class="text-xs text-muted-foreground">Praktikum Diambil</p>
+							</div>
+						</div>
+					{/if}
+				</div>
+			</div>
+
+			<!-- Praktikum Scores Section -->
+			<div class="space-y-4">
+				{#if praktikumScores.length > 0}
 				<div class="flex items-center gap-2 mb-6">
 					<BookOpenIcon class="h-6 w-6 text-primary" />
 					<h2 class="text-xl font-semibold">Detail Nilai Praktikum</h2>
@@ -776,13 +773,14 @@
 						</Card.Root>
 					{/each}
 				</Accordion.Root>
-			{:else}
-				<div class="text-center py-8">
-					<p class="text-muted-foreground">
-						Transparansi nilai akan dibagikan pada saat semua unit praktikum telah diselesaikan
-					</p>
-				</div>
 			{/if}
+		</div>
+	{/if}
+	{:else}
+		<div class="text-center py-8">
+			<p class="text-muted-foreground">
+				Transparansi nilai akan dibagikan pada saat semua unit praktikum telah diselesaikan
+			</p>
 		</div>
 	{/if}
 </div>
