@@ -69,9 +69,6 @@
 <div class="flex flex-1 flex-col gap-6 p-6 pt-0">
 	<div class="flex flex-col gap-1">
 		<h2 class="text-3xl font-bold tracking-tight">Pendaftaran Praktikum</h2>
-		<p class="text-muted-foreground">
-			Pilih laboratorium untuk melakukan pendaftaran ulang praktikum.
-		</p>
 	</div>
 	<!-- <Card.Root class="border-destructive/50 bg-destructive/10">
 		<Card.Header>

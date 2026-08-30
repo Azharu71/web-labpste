@@ -13,10 +13,6 @@
 
 	let { data, form } = $props();
 
-	const groupLinks: Record<string, string> = {
-	};
-
-	let currentGroupLink = $derived(groupLinks[data.praktikumId]);
 
 	const days = ['Senin', 'Selasa', 'Rabu', 'Kamis', 'Jumat', 'Sabtu'];
 	const sessions = [
@@ -99,7 +95,7 @@
 		</Breadcrumb.List>
 	</Breadcrumb.Root>
 </header>
-<div class="flex flex-1 flex-col gap-6 p-6 pt-0">
+<div class="flex flex-1 flex-col gap-6 p-6 pt-5">
 	<Card.Root>
 		<Card.Header>
 			<Card.Title>Pendaftaran praktikum: {data.praktikumName}</Card.Title>
@@ -114,8 +110,8 @@
 							informasi lebih lanjut.
 						</p>
 					</div>
-					{#if currentGroupLink}
-						<Button class="w-fit" href={currentGroupLink} target="_blank">
+					{#if data.groupLink}
+						<Button class="w-fit" href={data.groupLink} target="_blank">
 							Gabung Grup Praktikum
 						</Button>
 					{:else}
@@ -214,6 +210,7 @@
 						</div>
 					</div>
 
+					
 					<div class="space-y-2">
 						<div class="flex items-center justify-between">
 							<Label>Jadwal Kosong</Label>
@@ -293,12 +290,21 @@
 					<p class="text-sm text-muted-foreground text-right">
 						Shift dipilih: <span class="font-semibold text-foreground">{selectedCount}</span>
 					</p>
+					<div class="space-y-2">
+						<Label>Keterangan Tambahan</Label>
+						<textarea
+							name="keterangan"
+							class="flex min-h-[80px] w-full rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50"
+							placeholder="(Opsional) contoh: Saya sedang melaksanakan KP semester ini, jadi mohon pengertiannya"
+							rows="3"
+						></textarea>
+					</div>
 
 					<label class="flex items-start gap-3 cursor-pointer">
 						<input
-							type="checkbox"
-							bind:checked={confirmed}
-							class="mt-0.5 h-4 w-4 shrink-0 accent-primary"
+						type="checkbox"
+						bind:checked={confirmed}
+						class="mt-0.5 h-4 w-4 shrink-0 accent-primary"
 						/>
 						<span class="text-sm leading-relaxed">
 							Dengan ini saya telah yakin bahwa data yang saya masukan benar-benar

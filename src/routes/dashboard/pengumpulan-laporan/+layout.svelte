@@ -3,15 +3,13 @@
 	import * as Breadcrumb from '$lib/components/ui/breadcrumb';
 	import { Separator } from '$lib/components/ui/separator';
 	import type { LayoutData } from './$types';
+	import Info from '@lucide/svelte/icons/info';
 
 	let { data, children }: { data: LayoutData; children: import('svelte').Snippet } = $props();
 
 	// Google Form URLs mapped by praktikum ID
 	// Replace these placeholder URLs with actual Google Form links
-	const googleFormUrls: Record<string, string> = {
-		
-		'prak-td-2627': 'https://tally.so/embed/rjMZZM?dynamicHeight=1',
-	};
+	const googleFormUrls: Record<string, string> = {};
 
 	let selectedId = $state('');
 	let formUrl = $derived(selectedId ? (googleFormUrls[selectedId] || '') : '');
@@ -47,7 +45,6 @@
 <div class="flex flex-1 flex-col gap-4 p-4 pt-0">
 	<div class="flex flex-col gap-1">
 		<h2 class="text-3xl font-bold tracking-tight">Pengumpulan Laporan</h2>
-		<p class="text-muted-foreground">Pilih praktikum lalu isi form pengumpulan laporan di bawah.</p>
 	</div>
 
 	<!-- Dropdown Pilih Praktikum -->
@@ -87,9 +84,7 @@
 		<div
 			class="flex flex-col items-center justify-center py-16 text-center text-muted-foreground gap-3 rounded-lg border border-dashed border-border"
 		>
-			<svg xmlns="http://www.w3.org/2000/svg" class="size-12 opacity-50" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.5">
-				<path stroke-linecap="round" stroke-linejoin="round" d="M12 9v3.75m9-.75a9 9 0 1 1-18 0 9 9 0 0 1 18 0Zm-9 3.75h.008v.008H12v-.008Z" />
-			</svg>
+			<Info class="size-12 opacity-50" />
 			<p>Form pengumpulan laporan untuk <span class="font-semibold">{selectedName}</span> belum tersedia.</p>
 			<p class="text-xs">Hubungi asisten untuk informasi lebih lanjut.</p>
 		</div>

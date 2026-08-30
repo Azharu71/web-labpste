@@ -26,15 +26,13 @@
 					>
 						<Avatar.Root class="size-8 rounded-lg">
 							{#if user.role === 'Asisten'}
-								<Avatar.Fallback class="rounded-lg">AS</Avatar.Fallback>
+								<Avatar.Fallback class="rounded-lg bg-blue-100">AS</Avatar.Fallback>
 							{:else}
-								<Avatar.Fallback class="rounded-lg">PR</Avatar.Fallback>
+								<Avatar.Fallback class="rounded-lg bg-blue-200">PR</Avatar.Fallback>
 							{/if}
 						</Avatar.Root>
 						<div class="grid flex-1 text-left text-sm leading-tight">
 							<span class="truncate font-medium">{user.email || 'No Email'}</span>
-							<span class="truncate text-xs">{user.nim || 'No NIM'} • {user.role || 'No Role'}</span
-							>
 						</div>
 						<ChevronsUpDownIcon class="ml-auto size-4" />
 					</Sidebar.MenuButton>

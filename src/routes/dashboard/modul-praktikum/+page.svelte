@@ -70,7 +70,6 @@
 <div class="flex flex-1 flex-col gap-4 p-4 pt-0">
 	<div class="flex flex-col gap-1">
 		<h2 class="text-3xl font-bold tracking-tight">Modul Praktikum</h2>
-		<p class="text-muted-foreground">Unduh modul praktikum yang akan dilaksanakan.</p>
 	</div>
 
 	<!-- Success banner -->

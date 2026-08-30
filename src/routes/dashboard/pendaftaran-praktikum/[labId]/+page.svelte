@@ -55,9 +55,6 @@
 <div class="flex flex-1 flex-col gap-6 p-6 pt-0">
 	<div class="flex flex-col gap-1">
 		<h2 class="text-3xl font-bold tracking-tight">{labName}</h2>
-		<p class="text-muted-foreground">
-			Daftar praktikum yang tersedia untuk pendaftaran di {labName}.
-		</p>
 	</div>
 
 	{#if praktikumList.length === 0}

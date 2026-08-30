@@ -16,7 +16,7 @@
 	import UsersRoundIcon from '@lucide/svelte/icons/users-round';
 	import ChevronDownIcon from '@lucide/svelte/icons/chevron-down';
 	import ChevronRightIcon from '@lucide/svelte/icons/chevron-right';
-
+	import Omega from '@lucide/svelte/icons/omega';
 	import * as Breadcrumb from '$lib/components/ui/breadcrumb';
 	import { Separator } from '$lib/components/ui/separator';
 	import * as Sidebar from '$lib/components/ui/sidebar';
@@ -233,9 +233,6 @@
 	<!-- Header Section -->
 	<div class="flex flex-col gap-2">
 		<h1 class="text-3xl font-bold tracking-tight">Transparansi Nilai Praktikum</h1>
-		<p class="text-muted-foreground">
-			Lihat detail nilai dan progress praktikum Anda secara transparan
-		</p>
 	</div>
 	<!-- [DISABLED] Upload nilai feature disabled - no longer needed
 	{#if isAsisten}
@@ -778,6 +775,7 @@
 	{/if}
 	{:else}
 		<div class="text-center py-8">
+			<Omega class="h-12 w-12 text-muted-foreground mx-auto mb-3 opacity-50" />
 			<p class="text-muted-foreground">
 				Transparansi nilai akan dibagikan pada saat semua unit praktikum telah diselesaikan
 			</p>

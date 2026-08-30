@@ -1,5 +1,6 @@
 <script lang="ts">
 	import type { PageData } from './$types';
+	import  Info from '@lucide/svelte/icons/info'
 
 	let { data }: { data: PageData } = $props();
 </script>
@@ -16,9 +17,10 @@
 		</div>
 	{:else}
 		<div
-			class="flex flex-col items-center justify-center py-16 text-center text-muted-foreground gap-3"
+			class="flex flex-col items-center justify-center py-16 text-center text-muted-foreground gap-3 rounded-lg border border-dashed border-border"
 		>
-			<p>Data jadwal dan kelompok belum tersedia</p>
+			<Info class="size-12 opacity-50" />
+			<p>Data jadwal dan kelompok untuk praktikum <span class="font-semibold">{data.praktikum.nama_praktikum}</span> belum tersedia.</p>
 		</div>
 	{/if}
 </div>

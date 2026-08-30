@@ -71,6 +71,7 @@
 				{ key: 'jumat', width: 15 },
 				{ key: 'sabtu', width: 15 },
 				{ key: 'minggu', width: 15 },
+				{ key: 'keterangan', width: 25 },
 				{ key: 'created_at', width: 20 }
 			];
 
@@ -91,6 +92,7 @@
 				'',
 				'',
 				'', // Jadwal Kosong takes G1..M1
+				'Keterangan',
 				'Tanggal Daftar'
 			];
 
@@ -112,7 +114,8 @@
 			worksheet.mergeCells('E1:E2'); // Tipe KRS
 			worksheet.mergeCells('F1:F2'); // URL KRS
 			worksheet.mergeCells('G1:M1'); // Jadwal Kosong (Main Header)
-			worksheet.mergeCells('N1:N2'); // Tanggal Daftar
+			worksheet.mergeCells('N1:N2'); // Keterangan
+			worksheet.mergeCells('O1:O2'); // Tanggal Daftar
 
 			// Style headers (Center alignment, Bold, Borders)
 			[1, 2].forEach((r) => {
@@ -145,6 +148,7 @@
 					jumat: getDaySchedule(intern.jadwal_kosong, 'jumat'),
 					sabtu: getDaySchedule(intern.jadwal_kosong, 'sabtu'),
 					minggu: getDaySchedule(intern.jadwal_kosong, 'minggu'),
+					keterangan: intern.keterangan || '-',
 					created_at: new Date(intern.created_at).toLocaleString('id-ID')
 				});
 			});
@@ -202,7 +206,6 @@
 	<div class="flex items-center justify-between">
 		<div class="flex flex-col gap-1">
 			<h2 class="text-3xl font-bold tracking-tight">{data.praktikumName}</h2>
-			<p class="text-muted-foreground">Daftar praktikan yang terdaftar.</p>
 		</div>
 		<Button onclick={handleExport}>
 			<FileSpreadsheet class="mr-2 h-4 w-4" />

@@ -18,6 +18,7 @@ export type Intern = {
 		jumat: string | null;
 		sabtu: string | null;
 	} | null;
+	keterangan: string | null;
 	created_at: string;
 };
 
@@ -108,6 +109,14 @@ export const columns: ColumnDef<Intern>[] = [
             },
         ]
     },
+	{
+		accessorKey: 'keterangan',
+		header: 'Keterangan',
+		cell: ({ row }) => {
+			const val = row.getValue('keterangan') as string | null;
+			return val || '-';
+		}
+	},
 	{
 		accessorKey: 'created_at',
 		header: ({ column }) =>

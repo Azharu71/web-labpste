@@ -34,7 +34,6 @@
 <div class="flex flex-1 flex-col gap-4 p-4 pt-0">
 	<div class="flex flex-col gap-1">
 		<h2 class="text-3xl font-bold tracking-tight">Administrasi</h2>
-		<p class="text-muted-foreground">Unduh atau lihat dokumen administrasi praktikum.</p>
 	</div>
 
 	<div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
@@ -57,11 +56,12 @@
 							<p class="text-xs text-muted-foreground truncate">{doc.nama}</p>
 						</div>
 					</div>
-					{#if doc.tipe === 'pdf'}
+					<Button href="/dashboard/administrasi/{i}/" class="w-full" disabled>Belum Tersedia</Button>
+					<!-- {#if doc.tipe === 'pdf'}
 						<Button href="/dashboard/administrasi/{i}" class="w-full">Buka Dokumen</Button>
 					{:else}
 						<Button href={doc.url} download class="w-full">Unduh Dokumen</Button>
-					{/if}
+					{/if} -->
 				</Card.Content>
 			</Card.Root>
 		{/each}

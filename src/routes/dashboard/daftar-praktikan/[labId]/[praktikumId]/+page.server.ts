@@ -34,7 +34,7 @@ export const load: PageServerLoad = async ({ params, locals: { supabase }, paren
 			supabase
 				.from('daftar_praktikan')
 				.select(
-					'id, full_name, nim, ipk, krs_type, krs_url, created_at, jadwal_kosong(senin,selasa,rabu,kamis,jumat,sabtu,minggu)'
+					'id, full_name, nim, ipk, krs_type, krs_url, keterangan, created_at, jadwal_kosong(senin,selasa,rabu,kamis,jumat,sabtu,minggu)'
 				)
 				.eq('praktikum_id', praktikumId)
 				.order('created_at', { ascending: false })

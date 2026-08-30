@@ -57,11 +57,8 @@
 	<!-- Welcome Section -->
 	<div class="flex flex-col gap-2">
 		<h1 class="text-3xl font-bold tracking-tight">
-			Selamat Datang, {userData.role === 'Asisten' ? 'Asisten' : 'Praktikan'}!
+			Dashboard Praktikum
 		</h1>
-		<p class="text-muted-foreground">
-			Dashboard Laboratorium Program Studi Teknik Elektro - Semester Ganjil 2026/2027
-		</p>
 	</div>
 
 	<!-- Stats Cards (Single Card, Mobile Friendly) -->

@@ -37,7 +37,6 @@
 <div class="flex flex-1 flex-col gap-6 p-6 pt-0">
 	<div class="flex flex-col gap-1">
 		<h2 class="text-3xl font-bold tracking-tight">{data.labName}</h2>
-		<p class="text-muted-foreground">Pilih praktikum untuk melihat daftar praktikan.</p>
 	</div>
 
 	<div class="grid gap-4 md:grid-cols-2 lg:grid-cols-3">

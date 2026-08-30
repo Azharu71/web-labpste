@@ -22,7 +22,7 @@ export const load: PageServerLoad = async ({ params, locals, parent, setHeaders 
 	// 1. Validasi praktikumId dari database (MANDATORY)
 	const { data: praktikumData, error: praktikumError } = await locals.supabase
 		.from('list_praktikum')
-		.select('id, nama_praktikum')
+		.select('id, nama_praktikum, group_link')
 		.ilike('id', `%${praktikumId}%`)
 		.single();
 
@@ -56,13 +56,13 @@ export const load: PageServerLoad = async ({ params, locals, parent, setHeaders 
 		const endDate = timeData.end ? new Date(timeData.end) : null;
 
 		if (now < startDate) {
-			registrationMessage = `Pendaftaran belum dibuka. Akan dibuka pada ${startDate.toLocaleString('id-ID')} WIB.`;
+			registrationMessage = `Pendaftaran belum dibuka. Akan dibuka pada ${startDate.toLocaleString('id-ID', { timeZone: 'Asia/Jakarta' })} WIB.`;
 		} else if (endDate && now > endDate) {
-			registrationMessage = `Pendaftaran telah ditutup pada ${endDate.toLocaleString('id-ID')} WIB.`;
+			registrationMessage = `Pendaftaran telah ditutup pada ${endDate.toLocaleString('id-ID', { timeZone: 'Asia/Jakarta' })} WIB.`;
 		} else {
 			isRegistrationOpen = true;
 			registrationMessage = endDate 
-				? `Pendaftaran akan ditutup pada ${endDate.toLocaleString('id-ID')} WIB.` 
+				? `Pendaftaran akan ditutup pada ${endDate.toLocaleString('id-ID', { timeZone: 'Asia/Jakarta' })} WIB.` 
 				: 'Pendaftaran sedang dibuka.';
 		}
 	}
@@ -75,6 +75,7 @@ export const load: PageServerLoad = async ({ params, locals, parent, setHeaders 
 		praktikumName: praktikumData.nama_praktikum,
 		isRegistered: !!existingReg,
 		existingData: existingReg,
+		groupLink: praktikumData.group_link || null,
 		isRegistrationOpen,
 		registrationMessage
 	};
@@ -115,6 +116,7 @@ export const actions: Actions = {
 		const krsType = formData.get('krsType') as string;
 		const krsFile = formData.get('krsFile') as File;
 		const availableSchedule = formData.getAll('schedule');
+		const keterangan = (formData.get('keterangan') as string)?.trim() || '';
 
 		// Normalisasi: konversi nama ke UPPERCASE
 		const fullName = fullNameRaw?.trim().toUpperCase();
@@ -181,7 +183,8 @@ export const actions: Actions = {
 				nim,
 				ipk,
 				krs_type: krsType,
-				krs_url: urlData.publicUrl
+				krs_url: urlData.publicUrl,
+				keterangan
 			})
 			.select()
 			.single();
