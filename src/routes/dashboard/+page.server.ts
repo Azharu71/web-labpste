@@ -25,7 +25,6 @@ export const load: PageServerLoad = async ({ locals: { supabase }, parent }) => 
 
 			// Count Asisten (role_id = 1)
 			supabase.from('profiles').select('count', { count: 'exact', head: true }).eq('role_id', '1')
-
 		]);
 
 		if (!praktikanError && praktikanCount !== null) totalPraktikan = praktikanCount;
@@ -37,14 +36,20 @@ export const load: PageServerLoad = async ({ locals: { supabase }, parent }) => 
 
 	// Fetch myPraktikums
 	let myPraktikums: any[] = [];
+
+	console.log(userData);
+	console.log(myPraktikums);
 	try {
 		const { data: myPraktikumData, error: myPraktikumError } = await supabase
 			.from('daftar_praktikan')
-			.select(`
+			.select(
+				`
 				*,
 				list_praktikum(nama_praktikum, nama_lab, semester)
-			`)
-			.eq('user_id', userData.id);
+			`
+			)
+			.eq('user_id', userData.id)
+			.eq('list_praktikum.semester', 'Ganjil');
 
 		if (!myPraktikumError && myPraktikumData) {
 			myPraktikums = myPraktikumData;
