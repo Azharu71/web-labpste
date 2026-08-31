@@ -27,8 +27,7 @@ const SHIFTS = [
 	{ id: 'S4', name: 'SHIFT 4', start: '15:00', end: '17:00' },
 	{ id: 'S5', name: 'SHIFT 5', start: '17:00', end: '19:00' }
 ];
-
-const DAYS = ['Senin', 'Selasa', 'Rabu', 'Kamis', 'Jumat', 'Sabtu', 'Minggu'];
+const DAYS = ['Senin', 'Selasa', 'Rabu', 'Kamis', 'Jumat', 'Sabtu'];
 
 interface ClassSchedule {
 	day: string;
