@@ -49,12 +49,26 @@ export const load: PageServerLoad = async ({ params, locals: { supabase }, paren
 		console.error('Error fetching interns:', dbError);
 		return { labId, labName, praktikumId, praktikumName: praktikumData?.nama_praktikum, interns: [] };
 	}
+		const processedInterns = (interns || []).map((intern) => {
+		let krs_url = intern.krs_url;
+		// Jika krs_url valid dan belum memiliki folder KRS_Ganjil
+		if (krs_url && typeof krs_url === 'string' && !krs_url.includes('KRS_Ganjil')) {
+			const lastSlashIndex = krs_url.lastIndexOf('/');
+			if (lastSlashIndex !== -1) {
+				// Sisipkan 'KRS_Ganjil/' sebelum nama file
+				krs_url = krs_url.substring(0, lastSlashIndex + 1) + 'KRS_Ganjil/' + krs_url.substring(lastSlashIndex + 1);
+			}
+		}
+		return { ...intern, krs_url };
+	});
+	
+	
 
 	return {
 		labId,
 		labName,
 		praktikumId,
 		praktikumName: praktikumData?.nama_praktikum,
-		interns: interns || []
+		interns: processedInterns
 	};
 };
