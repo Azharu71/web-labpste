@@ -7,19 +7,11 @@ const SIGNED_URL_EXPIRY = 60 * 60;
 export const load: PageServerLoad = async ({ params, locals: { supabase }, parent }) => {
 	const { userData } = await parent();
 
-	// Jalankan DB query dan signed URL generation secara parallel
-	// — keduanya tidak saling bergantung, fileName cukup dari params.id
-	const fileName = `Modul-${params.id}`;
-
-	const [{ data: praktikum, error: err }, { data: signedData, error: signError }] =
-		await Promise.all([
-			supabase
-				.from('list_praktikum')
-				.select('id, nama_praktikum, nama_lab, semester, url_modul')
-				.eq('id', params.id)
-				.single(),
-			supabase.storage.from('Modul_praktikum').createSignedUrl(fileName, SIGNED_URL_EXPIRY)
-		]);
+	const { data: praktikum, error: err } = await supabase
+		.from('list_praktikum')
+		.select('id, nama_praktikum, nama_lab, semester, url_modul')
+		.eq('id', params.id)
+		.single();
 
 	if (err || !praktikum) {
 		throw error(404, 'Praktikum tidak ditemukan');
@@ -29,15 +21,20 @@ export const load: PageServerLoad = async ({ params, locals: { supabase }, paren
 		throw redirect(303, '/dashboard/modul-praktikum');
 	}
 
-	if (signError || !signedData?.signedUrl) {
-		console.error('Signed URL error:', signError);
-		throw error(500, 'Gagal mengakses file modul');
+	const fileName = `Modul-${params.id}`;
+	const { data: signedData, error: signError } = await supabase.storage
+		.from('Modul_praktikum')
+		.createSignedUrl(fileName, SIGNED_URL_EXPIRY);
+
+	if (signError) {
+		console.warn(`Signed URL warning for modul ${params.id}:`, signError.message);
 	}
 
 	return {
 		praktikum: {
 			...praktikum,
-			signedUrl: signedData.signedUrl
+			signedUrl: signedData?.signedUrl ?? null,
+			fileNotFound: !signedData?.signedUrl
 		},
 		userData
 	};

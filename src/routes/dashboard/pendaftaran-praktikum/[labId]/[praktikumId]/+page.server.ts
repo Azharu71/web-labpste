@@ -7,10 +7,9 @@ export const load: PageServerLoad = async ({ params, locals, parent, setHeaders 
 	// Prevent browser caching for this specific page to avoid showing the registration form again
 	setHeaders({
 		'Cache-Control': 'no-store, no-cache, must-revalidate, proxy-revalidate',
-		'Pragma': 'no-cache',
-		'Expires': '0'
+		Pragma: 'no-cache',
+		Expires: '0'
 	});
-	
 
 	// Gunakan user dari parent layout — tidak perlu safeGetSession() ulang
 	const parentData = await parent();
@@ -58,11 +57,11 @@ export const load: PageServerLoad = async ({ params, locals, parent, setHeaders 
 		if (now < startDate) {
 			registrationMessage = `Pendaftaran belum dibuka. Akan dibuka pada ${startDate.toLocaleString('id-ID', { timeZone: 'Asia/Jakarta' })} WIB.`;
 		} else if (endDate && now > endDate) {
-			registrationMessage = `Pendaftaran telah ditutup pada ${endDate.toLocaleString('id-ID', { timeZone: 'Asia/Jakarta' })} WIB.`;
+			registrationMessage = `Pendaftaran telah ditutup!`;
 		} else {
 			isRegistrationOpen = true;
-			registrationMessage = endDate 
-				? `Pendaftaran akan ditutup pada ${endDate.toLocaleString('id-ID', { timeZone: 'Asia/Jakarta' })} WIB.` 
+			registrationMessage = endDate
+				? `Pendaftaran akan ditutup pada ${endDate.toLocaleString('id-ID', { timeZone: 'Asia/Jakarta' })} WIB.`
 				: 'Pendaftaran sedang dibuka.';
 		}
 	}
@@ -106,7 +105,9 @@ export const actions: Actions = {
 		const endDate = timeData.end ? new Date(timeData.end) : null;
 
 		if (now < startDate || (endDate && now > endDate)) {
-			return fail(400, { message: 'Akses ditolak: Waktu pendaftaran tidak valid atau sudah ditutup.' });
+			return fail(400, {
+				message: 'Akses ditolak: Waktu pendaftaran tidak valid atau sudah ditutup.'
+			});
 		}
 
 		// Ambil data form
@@ -222,10 +223,12 @@ export const actions: Actions = {
 			rabu: scheduleMap.rabu.length ? JSON.stringify(scheduleMap.rabu) : null,
 			kamis: scheduleMap.kamis.length ? JSON.stringify(scheduleMap.kamis) : null,
 			jumat: scheduleMap.jumat.length ? JSON.stringify(scheduleMap.jumat) : null,
-			sabtu: scheduleMap.sabtu.length ? JSON.stringify(scheduleMap.sabtu) : null,
+			sabtu: scheduleMap.sabtu.length ? JSON.stringify(scheduleMap.sabtu) : null
 		};
 
-		const { error: jadwalError } = await locals.supabase.from('jadwal_kosong').insert(jadwalPayload);
+		const { error: jadwalError } = await locals.supabase
+			.from('jadwal_kosong')
+			.insert(jadwalPayload);
 
 		if (jadwalError) {
 			console.error('[pendaftaran] Jadwal error:', jadwalError);

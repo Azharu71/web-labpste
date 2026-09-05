@@ -2,78 +2,19 @@ import type { PageServerLoad, Actions } from './$types';
 // [DISABLED] Upload nilai feature disabled - no longer needed
 // import { fail } from '@sveltejs/kit';
 
-export const load: PageServerLoad = async ({ locals: { supabase }, parent }) => {
+export const load: PageServerLoad = async ({ parent }) => {
     const { userData } = await parent();
-    const isAsisten = userData.role === 'Asisten';
+    const isAsisten = userData.role === 'Asisten' || userData.role === 'SU';
 
-    // Asisten: fetch semua nilai + daftar praktikum untuk filter
-    if (isAsisten) {
-        try {
-            const [scoresResult, praktikumResult] = await Promise.all([
-                supabase
-                    .from('nilai_praktikum')
-                    .select(`
-                        id, praktikum_id, nim, nama,
-                        praktikum_u1, laporan_u1, total_nilai_u1,
-                        praktikum_u2, laporan_u2, total_nilai_u2,
-                        praktikum_u3, laporan_u3, total_nilai_u3,
-                        praktikum_u4, laporan_u4, total_nilai_u4,
-                        praktikum_u5, laporan_u5, total_nilai_u5,
-                        praktikum_u6, laporan_u6, total_nilai_u6,
-                        praktikum_u7, laporan_u7, total_nilai_u7,
-                        praktikum_u8, laporan_u8, total_nilai_u8,
-                        sosialisasi, responsi, absolut, grade,
-                        list_praktikum:praktikum_id ( id, nama_praktikum, nama_lab, semester )
-                    `)
-                    .order('praktikum_id', { ascending: true })
-                    .order('nama', { ascending: true }),
-                supabase
-                    .from('list_praktikum')
-                    .select('id, nama_praktikum, nama_lab, semester')
-                    .eq('semester', 'Ganjil')
-                    .order('nama_praktikum', { ascending: true })
-            ]);
-
-            return {
-                praktikumScores: [],
-                allScores: scoresResult.data || [],
-                listPraktikum: praktikumResult.data || []
-            };
-        } catch (error) {
-            console.error('Unexpected error (Asisten):', error);
-            return { praktikumScores: [], allScores: [], listPraktikum: [] };
-        }
-    }
-
-    // Praktikan: hanya fetch nilai sendiri berdasarkan NIM
-    if (!userData.nim) {
-        return { praktikumScores: [], allScores: [], listPraktikum: [] };
-    }
-
-    try {
-        const { data: scores, error } = await supabase
-            .from('nilai_praktikum')
-            .select(`
-                id, praktikum_id, nim, nama,
-                praktikum_u1, laporan_u1, total_nilai_u1,
-                praktikum_u2, laporan_u2, total_nilai_u2,
-                praktikum_u3, laporan_u3, total_nilai_u3,
-                praktikum_u4, laporan_u4, total_nilai_u4,
-                praktikum_u5, laporan_u5, total_nilai_u5,
-                praktikum_u6, laporan_u6, total_nilai_u6,
-                praktikum_u7, laporan_u7, total_nilai_u7,
-                praktikum_u8, laporan_u8, total_nilai_u8,
-                sosialisasi, responsi, absolut, grade,
-                list_praktikum:praktikum_id ( id, nama_praktikum, nama_lab, semester )
-            `)
-            .eq('nim', userData.nim)
-            .order('praktikum_id', { ascending: true });
-
-        return { praktikumScores: scores || [], allScores: [], listPraktikum: [] };
-    } catch (error) {
-        console.error('Unexpected error:', error);
-        return { praktikumScores: [], allScores: [], listPraktikum: [] };
-    }
+    // Catatan: Tampilan transparansi nilai di +page.svelte saat ini ditutup ({#if false})
+    // hingga seluruh unit praktikum selesai.
+    // Mengembalikan array kosong untuk menghemat bandwidth dan kapasitas query Supabase.
+    return {
+        isAsisten,
+        praktikumScores: [],
+        allScores: [],
+        listPraktikum: []
+    };
 };
 
 // [DISABLED] Upload nilai feature disabled - no longer needed

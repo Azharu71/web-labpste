@@ -149,7 +149,6 @@
 		return praktikum;
 	}
 
-	console.log(praktikumScores);
 
 	// Helper function to get unit scores
 	function getUnitScores(score: PraktikumScore, unitNumber: number) {

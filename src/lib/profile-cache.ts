@@ -56,4 +56,57 @@ if (typeof setInterval !== 'undefined') {
     setInterval(cleanupExpiredCache, 10 * 60 * 1000);
 }
 
+/**
+ * Mendapatkan role pengguna: cek in-memory cache terlebih dahulu,
+ * jika cache miss (misal karena serverless cold-start / restart), query database profiles.
+ */
+export async function getUserRole(
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    supabase: any,
+    userId: string
+): Promise<string | null> {
+    const cached = getCachedProfile(userId);
+    if (cached?.role) {
+        return cached.role;
+    }
+
+    try {
+        const { data: profile } = await supabase
+            .from('profiles')
+            .select('nim, roles ( name )')
+            .eq('id', userId)
+            .single();
+
+        if (!profile) return null;
+
+        const roleData = profile.roles;
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
+        const roleName = Array.isArray(roleData) ? roleData[0]?.name : (roleData as any)?.name;
+
+        const userData: UserData = {
+            nim: profile.nim || null,
+            email: null,
+            role: roleName || null
+        };
+        setCachedProfile(userId, userData);
+
+        return roleName || null;
+    } catch {
+        return null;
+    }
+}
+
+/**
+ * Cek apakah pengguna memiliki hak akses Asisten atau Superuser (SU)
+ * Aman untuk lingkungan serverless (Netlify Functions).
+ */
+export async function isAsistenOrSU(
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    supabase: any,
+    userId: string
+): Promise<boolean> {
+    const role = await getUserRole(supabase, userId);
+    return role === 'Asisten' || role === 'SU';
+}
+
 export type { UserData };

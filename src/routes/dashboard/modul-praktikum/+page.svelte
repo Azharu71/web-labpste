@@ -14,7 +14,7 @@
 	import Loading from '$lib/components/loading.svelte';
 
 	let { data, form }: { data: PageData; form: ActionData } = $props();
-	const isAsisten = data.userData.role === 'Asisten';
+	const isAsisten = data.userData?.role === 'Asisten' || data.userData?.role === 'SU';
 
 	// Upload form state
 	let selectedPraktikumId = $state('');

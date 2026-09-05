@@ -60,6 +60,6 @@ export const actions: Actions = {
 			}
 		}
 
-
+		throw redirect(303, '/auth/login?registered=success');
 	}
 };

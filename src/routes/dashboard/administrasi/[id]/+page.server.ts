@@ -1,42 +1,44 @@
-import { error } from '@sveltejs/kit';
+import { error, redirect } from '@sveltejs/kit';
 import type { PageServerLoad } from './$types';
 
-// ─── Sama dengan daftar di +page.server.ts parent ────────────────────────────
-const dokumen = [
-	{
-		nama: 'Panduan Laporan Praktikum',
-		deskripsi: 'Panduan untuk membuat laporan praktikum',
-		tipe: 'pdf' as const,
-		url: ''
-	},
-	
-	{
-		nama: 'Contoh Laporan (PDF)',
-		deskripsi: 'Contoh laporan praktikum dalam format PDF',
-		tipe: 'pdf' as const,
-		url: ''
-	},
-	{
-		nama: 'Contoh Laporan',
-		deskripsi: 'Contoh laporan praktikum',
-		tipe: 'docx' as const,
-		url: ''
-	},
-	{
-		nama: 'Tanda Pengenal',
-		deskripsi: 'Tanda pengenal praktikum',
-		tipe: 'docx' as const,
-		url: ''
-	}
-];
-// ─────────────────────────────────────────────────────────────────────────────
+const SIGNED_URL_EXPIRY = 60 * 60; // 1 jam
 
-export const load: PageServerLoad = async ({ params }) => {
-	const index = parseInt(params.id);
+export const load: PageServerLoad = async ({ params, locals: { supabase }, parent }) => {
+	const { userData } = await parent();
 
-	if (isNaN(index) || index < 0 || index >= dokumen.length) {
+	const docId = parseInt(params.id, 10);
+	if (isNaN(docId)) {
 		throw error(404, 'Dokumen tidak ditemukan');
 	}
 
-	return { doc: dokumen[index] };
+	const { data: doc, error: err } = await supabase
+		.from('dokumen_administrasi')
+		.select('id, nama, deskripsi, tipe, url')
+		.eq('id', docId)
+		.single();
+
+	if (err || !doc) {
+		throw error(404, 'Dokumen tidak ditemukan');
+	}
+
+	if (!doc.url) {
+		throw redirect(303, '/dashboard/administrasi');
+	}
+
+	const { data: signedData, error: signError } = await supabase.storage
+		.from('Administrasi')
+		.createSignedUrl(doc.url, SIGNED_URL_EXPIRY);
+
+	if (signError) {
+		console.warn(`Signed URL warning for doc ${docId} (${doc.url}):`, signError.message);
+	}
+
+	return {
+		doc: {
+			...doc,
+			signedUrl: signedData?.signedUrl ?? null,
+			fileNotFound: !signedData?.signedUrl
+		},
+		userData
+	};
 };

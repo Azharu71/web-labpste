@@ -17,10 +17,11 @@ export const load: LayoutServerLoad = async ({
 		throw redirect(303, '/auth/login');
 	}
 
-	// Set cache headers to prevent unnecessary requests, except for dynamic registration pages
+	// Header cache privat untuk dashboard: cegah browser menahan cache basi saat ada pembaruan data
+	// (Kecuali halaman pendaftaran-praktikum yang mengatur header no-store sendiri)
 	if (!url.pathname.includes('/pendaftaran-praktikum/')) {
 		setHeaders({
-			'Cache-Control': 'private, max-age=300, stale-while-revalidate=60',
+			'Cache-Control': 'private, no-cache, must-revalidate',
 			Vary: 'Cookie'
 		});
 	}

@@ -38,26 +38,46 @@
 </header>
 
 <div class="flex flex-1 flex-col gap-4 p-4 pt-0">
-	<!-- Toolbar Khusus Mobile / Fallback Render PDF -->
-	<div class="flex items-center justify-between rounded-lg border bg-muted/50 p-3">
-		<a
-			href={praktikum.signedUrl}
-			target="_blank"
-			rel="noopener noreferrer"
-			class="inline-flex h-9 items-center justify-center rounded-md border border-input bg-background px-3 text-sm font-medium shadow-sm transition-colors hover:bg-accent hover:text-accent-foreground focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring disabled:pointer-events-none disabled:opacity-50 shrink-0 gap-2"
-		>
-			<ScanEye class="h-4 w-4" />
-			Buka Dokumen
-		</a>
-	</div>
+	{#if praktikum.signedUrl}
+		<!-- Toolbar Khusus Mobile / Fallback Render PDF -->
+		<div class="flex items-center justify-between rounded-lg border bg-muted/50 p-3">
+			<a
+				href={praktikum.signedUrl}
+				target="_blank"
+				rel="noopener noreferrer"
+				class="inline-flex h-9 items-center justify-center rounded-md border border-input bg-background px-3 text-sm font-medium shadow-sm transition-colors hover:bg-accent hover:text-accent-foreground focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring disabled:pointer-events-none disabled:opacity-50 shrink-0 gap-2"
+			>
+				<ScanEye class="h-4 w-4" />
+				Buka Dokumen
+			</a>
+		</div>
 
-	<div class="flex-1 rounded-lg border bg-background overflow-hidden" style="min-height: 80vh;">
-		<iframe
-			src={praktikum.signedUrl}
-			width="100%"
-			height="100%"
-			style="min-height: 80vh;"
-			title="Modul {praktikum.nama_praktikum}"
-		></iframe>
-	</div>
+		<div class="flex-1 rounded-lg border bg-background overflow-hidden" style="min-height: 80vh;">
+			<iframe
+				src={praktikum.signedUrl}
+				width="100%"
+				height="100%"
+				style="min-height: 80vh;"
+				title="Modul {praktikum.nama_praktikum}"
+			></iframe>
+		</div>
+	{:else}
+		<div class="flex flex-1 flex-col items-center justify-center rounded-lg border border-dashed p-8 text-center gap-4 bg-muted/30 my-auto">
+			<div class="rounded-full bg-amber-100 p-4 text-amber-600 dark:bg-amber-950 dark:text-amber-400">
+				<ScanEye class="h-8 w-8" />
+			</div>
+			<div class="space-y-2 max-w-md">
+				<h3 class="text-lg font-semibold">Berkas Modul Tidak Ditemukan</h3>
+				<p class="text-sm text-muted-foreground">
+					Berkas modul praktikum untuk <span class="font-medium text-foreground">{praktikum.nama_praktikum}</span> belum tersedia atau telah dipindahkan dari penyimpanan server.
+				</p>
+			</div>
+			<a
+				href="/dashboard/modul-praktikum"
+				class="inline-flex h-9 items-center justify-center rounded-md bg-primary px-4 text-sm font-medium text-primary-foreground shadow transition-colors hover:bg-primary/90"
+			>
+				Kembali ke Modul Praktikum
+			</a>
+		</div>
+	{/if}
 </div>

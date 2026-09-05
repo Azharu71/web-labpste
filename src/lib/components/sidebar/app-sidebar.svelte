@@ -14,55 +14,55 @@
 			name: 'Dashboard',
 			url: '/dashboard',
 			icon: LayoutDashboardIcon,
-			roles: ['Asisten', 'Praktikan']
+			roles: ['Asisten', 'Praktikan', 'SU']
 		},
 		{
 			name: 'Daftar ulang ',
 			url: '/dashboard/pendaftaran-praktikum',
 			icon: RefreshCwIcon,
-			roles: ['Asisten', 'Praktikan']
+			roles: ['Asisten', 'Praktikan', 'SU']
 		},
 		{
 			name: 'Praktikum',
 			url: '/dashboard/praktikum',
 			icon: BriefcaseBusinessIcon,
-			roles: ['Asisten']
+			roles: ['Asisten', 'SU']
 		},
 		{
 			name: 'Daftar praktikan',
 			url: '/dashboard/daftar-praktikan',
 			icon: TablePropertiesIcon,
-			roles: ['Asisten']
+			roles: ['Asisten', 'SU']
 		},
 		{
 			name: 'Kelompok & Jadwal',
 			url: '/dashboard/kelompok-praktikum',
 			icon: UsersRoundIcon,
-			roles: ['Asisten', 'Praktikan']
+			roles: ['Asisten', 'Praktikan', 'SU']
 		},
 		{
 			name: 'Modul Praktikum',
 			url: '/dashboard/modul-praktikum',
 			icon: BookText,
-			roles: ['Asisten', 'Praktikan']
+			roles: ['Asisten', 'Praktikan', 'SU']
 		},
 		{
 			name: 'Administrasi',
 			url: '/dashboard/administrasi',
 			icon: ClipboardList,
-			roles: ['Asisten', 'Praktikan']
+			roles: ['Asisten', 'Praktikan', 'SU']
 		},
 		{
 			name: 'Pengumpulan Laporan',
 			url: '/dashboard/pengumpulan-laporan',
 			icon: FileTextIcon,
-			roles: ['Asisten', 'Praktikan']
+			roles: ['Asisten', 'Praktikan', 'SU']
 		},
 		{
 			name: 'Transparansi Nilai',
 			url: '/dashboard/transparansi-nilai',
 			icon: NotebookPenIcon,
-			roles: ['Asisten', 'Praktikan']
+			roles: ['Asisten', 'Praktikan', 'SU']
 		}
 	];
 

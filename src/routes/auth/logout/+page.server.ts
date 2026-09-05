@@ -16,7 +16,7 @@ export const load: PageServerLoad = async ({ locals: { safeGetSession } }) => {
 };
 
 export const actions: Actions = {
-	default: async ({ locals, cookies }) => {
+	default: async ({ locals }) => {
 		const supabase = locals.supabase;
 
 		try {
@@ -29,7 +29,7 @@ export const actions: Actions = {
 				clearCachedProfile(userId);
 			}
 
-			// Sign out from Supabase
+			// Sign out from Supabase (membersihkan cookie auth via setAll di hooks)
 			const { error } = await supabase.auth.signOut();
 
 			if (error) {
@@ -38,15 +38,6 @@ export const actions: Actions = {
 					error: 'Failed to logout. Please try again.'
 				});
 			}
-
-			// Clear all auth-related cookies
-			const cookieOptions = {
-				path: '/',
-				maxAge: 0
-			};
-
-			cookies.delete('sb-access-token', cookieOptions);
-			cookies.delete('sb-refresh-token', cookieOptions);
 		} catch (error) {
 			console.error('Unexpected logout error:', error);
 			return fail(500, {

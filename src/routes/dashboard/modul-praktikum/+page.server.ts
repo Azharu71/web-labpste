@@ -1,6 +1,6 @@
 import { fail, error } from '@sveltejs/kit';
 import type { PageServerLoad, Actions } from './$types';
-import { getCachedProfile } from '$lib/profile-cache';
+import { isAsistenOrSU } from '$lib/profile-cache';
 
 export const load: PageServerLoad = async ({ locals: { supabase } }) => {
 	const { data: praktikumList, error: err } = await supabase
@@ -19,18 +19,13 @@ export const load: PageServerLoad = async ({ locals: { supabase } }) => {
 	};
 };
 
-// Helper: cek role dari in-memory cache (tidak ada DB query)
-function isAsisten(userId: string): boolean {
-	const profile = getCachedProfile(userId);
-	return profile?.role === 'Asisten';
-}
-
 export const actions: Actions = {
 	upload: async ({ request, locals }) => {
 		const { user } = await locals.safeGetSession();
 		if (!user) return fail(401, { message: 'Unauthorized' });
 
-		if (!isAsisten(user.id)) {
+		const allowed = await isAsistenOrSU(locals.supabase, user.id);
+		if (!allowed) {
 			return fail(403, { message: 'Forbidden. Hanya Asisten yang diizinkan.' });
 		}
 
@@ -85,7 +80,8 @@ export const actions: Actions = {
 		const { user } = await locals.safeGetSession();
 		if (!user) return fail(401, { message: 'Unauthorized' });
 
-		if (!isAsisten(user.id)) {
+		const allowed = await isAsistenOrSU(locals.supabase, user.id);
+		if (!allowed) {
 			return fail(403, { message: 'Forbidden. Hanya Asisten yang diizinkan.' });
 		}
 
