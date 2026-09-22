@@ -7,7 +7,7 @@
 	import { Input } from '$lib/components/ui/input';
 	import { enhance } from '$app/forms';
 	import Trash2 from '@lucide/svelte/icons/trash-2';
-	import Upload from '@lucide/svelte/icons/upload';
+	import Link2 from '@lucide/svelte/icons/link-2';
 	import FileText from '@lucide/svelte/icons/file-text';
 	import CheckCircle from '@lucide/svelte/icons/circle-check';
 	import type { PageData, ActionData } from './$types';
@@ -16,8 +16,9 @@
 	let { data, form }: { data: PageData; form: ActionData } = $props();
 	const isAsisten = data.userData?.role === 'Asisten' || data.userData?.role === 'SU';
 
-	// Upload form state
+	// Form state
 	let selectedPraktikumId = $state('');
+	let inputUrl = $state('');
 	let isUploading = $state(false);
 
 	// Per-card delete state
@@ -35,7 +36,7 @@
 		}
 	});
 
-	// Praktikum tanpa modul (dropdown upload)
+	// Praktikum tanpa modul (dropdown)
 	const praktikumTanpaModul = $derived(data.praktikumList.filter((p) => !p.url_modul));
 
 	// List tersortir: yang sudah ada modul tampil duluan
@@ -47,6 +48,7 @@
 		})
 	);
 </script>
+
 <header
 	class="group-has-data-[collapsible=icon]/sidebar-wrapper:h-12 flex h-16 shrink-0 items-center gap-2 transition-[width,height] ease-linear"
 >
@@ -82,24 +84,24 @@
 		</div>
 	{/if}
 
-	<!-- Upload Section: hanya untuk Asisten & ada praktikum tanpa modul -->
+	<!-- Section Tambah Tautan: hanya untuk Asisten & ada praktikum tanpa modul -->
 	{#if isAsisten && praktikumTanpaModul.length > 0}
 		<Card.Root>
 			<Card.Header class="pb-3">
-				<Card.Title class="text-base">Unggah Modul Baru</Card.Title>
-				<Card.Description>Pilih praktikum dan unggah file PDF modul.</Card.Description>
+				<Card.Title class="text-base">Tautkan Modul Baru</Card.Title>
+				<Card.Description>Pilih praktikum dan masukkan tautan dokumen publik dari Google Drive.</Card.Description>
 			</Card.Header>
 			<Card.Content>
 				<form
 					method="POST"
 					action="?/upload"
-					enctype="multipart/form-data"
 					use:enhance={() => {
 						isUploading = true;
 						return async ({ update }) => {
 							await update();
 							isUploading = false;
 							selectedPraktikumId = '';
+							inputUrl = '';
 						};
 					}}
 					class="flex flex-col gap-3 sm:flex-row sm:items-end"
@@ -121,15 +123,15 @@
 					</div>
 
 					<div class="flex flex-col gap-1.5 sm:flex-1">
-						<label for="modul-file" class="text-sm font-medium">File PDF</label>
+						<label for="modul-url" class="text-sm font-medium">Link Dokumen Google Drive</label>
 						<Input
-							id="modul-file"
-							type="file"
-							name="modul"
-							accept="application/pdf"
-							multiple={false}
+							id="modul-url"
+							type="url"
+							name="url_modul"
+							placeholder="https://drive.google.com/file/d/.../view"
+							bind:value={inputUrl}
 							required
-							class="cursor-pointer text-xs"
+							class="text-xs"
 						/>
 					</div>
 
@@ -140,10 +142,10 @@
 						disabled={isUploading || !selectedPraktikumId}
 					>
 						{#if isUploading}
-							<Loading variant="inline" message="Mengunggah..." />
+							<Loading variant="inline" message="Menyimpan..." />
 						{:else}
-							<Upload class="h-4 w-4" />
-							Unggah PDF
+							<Link2 class="h-4 w-4" />
+							Simpan Link
 						{/if}
 					</Button>
 				</form>
@@ -169,7 +171,7 @@
 								<p class="text-xs font-medium">Modul tersedia</p>
 							</div>
 						</div>
-						<Button href="/dashboard/modul-praktikum/{praktikum.id}">Buka/Unduh Dokumen</Button>
+						<Button href={praktikum.url_modul} target="_blank" rel="noopener noreferrer">Buka Dokumen</Button>
 
 						{#if isAsisten}
 							<form

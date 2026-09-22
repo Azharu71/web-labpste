@@ -32,47 +32,28 @@ export const actions: Actions = {
 		}
 
 		const formData = await request.formData();
-		const files = formData.getAll('file');
-		const file = files[0] as File;
 		const docId = formData.get('doc_id') as string;
+		const url = (formData.get('url') as string)?.trim();
 
-		// Tolak jika ada lebih dari satu file dikirim
-		if (files.length > 1) {
-			return fail(400, { message: 'Hanya boleh mengunggah satu file.' });
+		if (!docId || !url) {
+			return fail(400, { message: 'ID Dokumen dan Link Google Drive diperlukan.' });
 		}
 
-		if (!file || !docId || file.size === 0) {
-			return fail(400, { message: 'File dan ID Dokumen diperlukan.' });
-		}
-
-		const MAX_SIZE = 25 * 1024 * 1024; // 25 MB
-		if (file.size > MAX_SIZE) {
-			return fail(400, { message: 'Ukuran file tidak boleh lebih dari 25 MB.' });
-		}
-
-		const fileExt = file.name.includes('.') ? file.name.split('.').pop()?.toLowerCase() : '';
-		const fileName = fileExt ? `doc-${docId}.${fileExt}` : `doc-${docId}`;
-
-		const { error: uploadError } = await locals.supabase.storage
-			.from('Administrasi')
-			.upload(fileName, file, { upsert: true, cacheControl: '3600' });
-
-		if (uploadError) {
-			console.error('Upload error:', uploadError);
-			return fail(500, { message: `Gagal mengunggah file: ${uploadError.message}` });
+		if (!url.startsWith('http://') && !url.startsWith('https://')) {
+			return fail(400, { message: 'URL harus diawali dengan http:// atau https://' });
 		}
 
 		const { error: updateError } = await locals.supabase
 			.from('dokumen_administrasi')
-			.update({ url: fileName, updated_at: new Date().toISOString() })
+			.update({ url, updated_at: new Date().toISOString() })
 			.eq('id', docId);
 
 		if (updateError) {
 			console.error('Update DB error:', updateError);
-			return fail(500, { message: 'Gagal menyimpan URL ke database.' });
+			return fail(500, { message: 'Gagal menyimpan link dokumen ke database.' });
 		}
 
-		return { success: true, message: 'Berhasil mengunggah Dokumen!' };
+		return { success: true, message: 'Berhasil menyimpan link dokumen!' };
 	},
 
 	delete: async ({ request, locals }) => {
@@ -89,22 +70,6 @@ export const actions: Actions = {
 
 		if (!docId) {
 			return fail(400, { message: 'Data tidak lengkap.' });
-		}
-
-		const { data: doc } = await locals.supabase
-			.from('dokumen_administrasi')
-			.select('url')
-			.eq('id', docId)
-			.single();
-
-		if (doc?.url) {
-			const { error: deleteError } = await locals.supabase.storage
-				.from('Administrasi')
-				.remove([doc.url]);
-
-			if (deleteError) {
-				console.warn('Storage delete warning:', deleteError.message);
-			}
 		}
 
 		const { error: updateError } = await locals.supabase

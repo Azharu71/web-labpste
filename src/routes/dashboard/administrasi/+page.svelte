@@ -7,7 +7,7 @@
 	import { Input } from '$lib/components/ui/input';
 	import { enhance } from '$app/forms';
 	import Trash2 from '@lucide/svelte/icons/trash-2';
-	import Upload from '@lucide/svelte/icons/upload';
+	import Link2 from '@lucide/svelte/icons/link-2';
 	import FileText from '@lucide/svelte/icons/file-text';
 	import CheckCircle from '@lucide/svelte/icons/circle-check';
 	import type { PageData, ActionData } from './$types';
@@ -16,8 +16,9 @@
 	let { data, form }: { data: PageData; form: ActionData } = $props();
 	const isAsisten = data.userData?.role === 'Asisten' || data.userData?.role === 'SU';
 
-	// Upload form state
+	// Form state
 	let selectedDocId = $state('');
+	let inputUrl = $state('');
 	let isUploading = $state(false);
 
 	// Per-card delete state
@@ -35,7 +36,7 @@
 		}
 	});
 
-	// Dokumen tanpa file (dropdown upload)
+	// Dokumen tanpa link (dropdown)
 	const dokumenTanpaFile = $derived(data.dokumenList.filter((d: any) => !d.url));
 
 	// List tersortir: yang sudah ada dokumen tampil duluan (sama persis modul-praktikum)
@@ -87,24 +88,24 @@
 		</div>
 	{/if}
 
-	<!-- Upload Section: hanya untuk Asisten & ada dokumen tanpa file -->
+	<!-- Section Tambah Tautan: hanya untuk Asisten & ada dokumen tanpa link -->
 	{#if isAsisten && dokumenTanpaFile.length > 0}
 		<Card.Root>
 			<Card.Header class="pb-3">
-				<Card.Title class="text-base">Unggah Dokumen Baru</Card.Title>
-				<Card.Description>Pilih dokumen dan unggah file dokumen.</Card.Description>
+				<Card.Title class="text-base">Tautkan Dokumen Baru</Card.Title>
+				<Card.Description>Pilih dokumen dan masukkan tautan publik dari Google Drive.</Card.Description>
 			</Card.Header>
 			<Card.Content>
 				<form
 					method="POST"
 					action="?/upload"
-					enctype="multipart/form-data"
 					use:enhance={() => {
 						isUploading = true;
 						return async ({ update }) => {
 							await update();
 							isUploading = false;
 							selectedDocId = '';
+							inputUrl = '';
 						};
 					}}
 					class="flex flex-col gap-3 sm:flex-row sm:items-end"
@@ -126,14 +127,15 @@
 					</div>
 
 					<div class="flex flex-col gap-1.5 sm:flex-1">
-						<label for="doc-file" class="text-sm font-medium">File Dokumen</label>
+						<label for="doc-url" class="text-sm font-medium">Link Dokumen Google Drive</label>
 						<Input
-							id="doc-file"
-							type="file"
-							name="file"
-							multiple={false}
+							id="doc-url"
+							type="url"
+							name="url"
+							placeholder="https://drive.google.com/file/d/.../view"
+							bind:value={inputUrl}
 							required
-							class="cursor-pointer text-xs"
+							class="text-xs"
 						/>
 					</div>
 
@@ -144,10 +146,10 @@
 						disabled={isUploading || !selectedDocId}
 					>
 						{#if isUploading}
-							<Loading variant="inline" message="Mengunggah..." />
+							<Loading variant="inline" message="Menyimpan..." />
 						{:else}
-							<Upload class="h-4 w-4" />
-							Unggah Dokumen
+							<Link2 class="h-4 w-4" />
+							Simpan Link
 						{/if}
 					</Button>
 				</form>
@@ -173,7 +175,7 @@
 								<p class="text-xs font-medium">Dokumen tersedia</p>
 							</div>
 						</div>
-						<Button href="/dashboard/administrasi/{doc.id}">Buka/Unduh Dokumen</Button>
+						<Button href={doc.url} target="_blank" rel="noopener noreferrer">Buka Dokumen</Button>
 
 						{#if isAsisten}
 							<form

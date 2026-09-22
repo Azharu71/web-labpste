@@ -30,50 +30,28 @@ export const actions: Actions = {
 		}
 
 		const formData = await request.formData();
-		const files = formData.getAll('modul');
-		const file = files[0] as File;
 		const praktikumId = formData.get('praktikum_id') as string;
+		const urlModul = (formData.get('url_modul') as string)?.trim();
 
-		// Tolak jika ada lebih dari satu file dikirim
-		if (files.length > 1) {
-			return fail(400, { message: 'Hanya boleh mengunggah satu file.' });
+		if (!praktikumId || !urlModul) {
+			return fail(400, { message: 'ID Praktikum dan Link Google Drive diperlukan.' });
 		}
 
-		if (!file || !praktikumId || file.size === 0) {
-			return fail(400, { message: 'File dan ID Praktikum diperlukan' });
-		}
-
-		if (file.type !== 'application/pdf') {
-			return fail(400, { message: 'Hanya file PDF yang diperbolehkan' });
-		}
-
-		const MAX_SIZE = 15 * 1024 * 1024; // 15 MB
-		if (file.size > MAX_SIZE) {
-			return fail(400, { message: 'Ukuran file tidak boleh lebih dari 15 MB' });
-		}
-
-		const fileName = `Modul-${praktikumId}`;
-
-		const { error: uploadError } = await locals.supabase.storage
-			.from('Modul_praktikum')
-			.upload(fileName, file, { upsert: true, cacheControl: '3600' });
-
-		if (uploadError) {
-			console.error('Upload error:', uploadError);
-			return fail(500, { message: `Gagal mengunggah file: ${uploadError.message}` });
+		if (!urlModul.startsWith('http://') && !urlModul.startsWith('https://')) {
+			return fail(400, { message: 'URL harus diawali dengan http:// atau https://' });
 		}
 
 		const { error: updateError } = await locals.supabase
 			.from('list_praktikum')
-			.update({ url_modul: fileName })
+			.update({ url_modul: urlModul })
 			.eq('id', praktikumId);
 
 		if (updateError) {
 			console.error('Update DB error:', updateError);
-			return fail(500, { message: 'Gagal menyimpan URL ke database' });
+			return fail(500, { message: 'Gagal menyimpan link modul ke database.' });
 		}
 
-		return { success: true, message: 'Berhasil mengunggah Modul!' };
+		return { success: true, message: 'Berhasil menyimpan link modul!' };
 	},
 
 	delete: async ({ request, locals }) => {
@@ -89,19 +67,7 @@ export const actions: Actions = {
 		const praktikumId = formData.get('praktikum_id') as string;
 
 		if (!praktikumId) {
-			return fail(400, { message: 'Data tidak lengkap' });
-		}
-
-		const fileName = `Modul-${praktikumId}`;
-
-		// Hapus dari storage — log jika gagal (misal belum ada RLS policy),
-		// tapi tetap lanjutkan untuk membersihkan DB
-		const { error: deleteError } = await locals.supabase.storage
-			.from('Modul_praktikum')
-			.remove([fileName]);
-
-		if (deleteError) {
-			console.warn('Storage delete warning (file mungkin perlu dibersihkan manual):', deleteError.message);
+			return fail(400, { message: 'Data tidak lengkap.' });
 		}
 
 		const { error: updateError } = await locals.supabase
@@ -111,9 +77,9 @@ export const actions: Actions = {
 
 		if (updateError) {
 			console.error('Update DB error:', updateError);
-			return fail(500, { message: 'Gagal mengupdate database' });
+			return fail(500, { message: 'Gagal mengupdate database.' });
 		}
 
-		return { success: true };
+		return { success: true, message: 'Link modul berhasil dihapus!' };
 	}
 };
